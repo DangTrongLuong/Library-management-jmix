@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Độc giả"
+      focusComponent="searchField">
+    <data>
+        <collection id="membersDc"
+                    class="com.company.librarymanagementsystem.entity.Member">
+            <fetchPlan extends="_base">
+                <property name="user" fetchPlan="_base"/>
+                <property name="memberType" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="membersDl" readOnly="true">
+                <query>
+                    <![CDATA[select m from LibraryMember m
+                    left join m.user u
+                    where m.deletedAt is null
+                    and (:statusFilter is null or m.status = :statusFilter)
+                    and (:searchText is null or :searchText = ''
+                         or lower(m.memberCode) like lower(concat('%', :searchText, '%'))
+                         or lower(m.fullName) like lower(concat('%', :searchText, '%'))
+                         or lower(u.username) like lower(concat('%', :searchText, '%'))
+                         or lower(m.idNumber) like lower(concat('%', :searchText, '%')))
+                    order by m.id desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="false"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <hbox id="filterPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+            <textField id="searchField"
+                       placeholder="Nhập mã thẻ, họ tên, CCCD..."
+                       width="20em"
+                       clearButtonVisible="true"/>
+            <select id="statusFilterSelect"
+                    placeholder="Lọc theo trạng thái..."
+                    width="14em"/>
+            <button id="searchBtn" text="Tìm kiếm" icon="SEARCH" themeNames="primary"/>
+            <button id="clearFilterBtn" text="Xóa bộ lọc" icon="CLOSE"/>
+            <hbox width="100%" justifyContent="END" spacing="true">
+                <button id="createButton" action="membersDataGrid.createAction" text="Cấp thẻ mới" icon="PLUS" themeNames="primary"/>
+                <button id="editButton" action="membersDataGrid.editAction" text="Chỉnh sửa" icon="PENCIL"/>
+                <button id="removeButton" action="membersDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error" visible="false"/>
+                <button id="refreshButton" action="membersDataGrid.refreshAction" text="Làm mới" icon="REFRESH"/>
+            </hbox>
+        </hbox>
+
+        <dataGrid id="membersDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  minHeight="25em"
+                  dataContainer="membersDc">
+            <actions>
+                <action id="createAction" type="list_create" viewId="LibraryMember.detail" text="Cấp thẻ mới"/>
+                <action id="editAction" type="list_edit" viewId="LibraryMember.detail" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+                <action id="refreshAction" type="list_refresh" text="Làm mới"/>
+            </actions>
+            <columns resizable="true">
+                <column property="memberCode" header="Mã thẻ" autoWidth="true"/>
+                <column key="fullNameCol" header="Họ và tên" autoWidth="true" flexGrow="1"/>
+                <column key="usernameCol" header="Tên đăng nhập" autoWidth="true"/>
+                <column key="memberTypeCol" header="Loại độc giả" autoWidth="true"/>
+                <column property="cardIssuedDate" header="Ngày cấp" autoWidth="true"/>
+                <column property="cardExpiryDate" header="Ngày hết hạn" autoWidth="true"/>
+                <column key="statusCol" header="Trạng thái" autoWidth="true" textAlign="CENTER"/>
+            </columns>
+        </dataGrid>
+
+        <hbox id="cardManagementPanel" width="100%" spacing="true" padding="true" alignItems="CENTER">
+            <button id="renewCardBtn" text="Gia hạn thẻ" icon="CALENDAR" themeNames="success"/>
+            <button id="suspendBtn" text="Tạm khóa thẻ" icon="BAN" themeNames="error"/>
+            <button id="activateBtn" text="Duyệt / Mở khóa thẻ" icon="CHECK_CIRCLE" themeNames="contrast"/>
+            <button id="checkEligibilityBtn" text="Kiểm tra tư cách mượn" icon="INFO_CIRCLE_O"/>
+            <simplePagination id="pagination" dataLoader="membersDl" classNames="ms-auto"/>
+        </hbox>
+    </layout>
+</view>

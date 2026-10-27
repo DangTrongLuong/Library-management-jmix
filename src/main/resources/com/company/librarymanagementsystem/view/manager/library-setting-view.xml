@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Cấu hình Quy tắc &amp; Tham số Thư viện">
+    <data>
+        <collection id="settingsDc"
+                    class="com.company.librarymanagementsystem.entity.LibrarySetting">
+            <fetchPlan extends="_base"/>
+            <loader id="settingsDl" readOnly="true">
+                <query>
+                    <![CDATA[select s from LibrarySetting s order by s.category, s.key]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <layout classNames="p-m flex flex-col gap-m" width="100%">
+        <!-- Header -->
+        <div classNames="flex justify-between items-center pb-s border-b border-contrast-10 w-full">
+            <div classNames="flex flex-col">
+                <div classNames="flex items-center gap-s">
+                    <span classNames="text-primary text-xl font-bold">Cấu hình Quy tắc &amp; Tham số Thư viện</span>
+                    <span classNames="badge primary small">Dành cho Trưởng Thư viện</span>
+                </div>
+                <span classNames="text-secondary text-s">Thiết lập ngưỡng nợ phạt, ngày ân hạn, hệ số đền bù sách mất và thời gian giữ chỗ</span>
+            </div>
+            <div classNames="flex gap-s">
+                <button id="refreshBtn" text="Làm mới" icon="REFRESH" themeNames="tertiary"/>
+                <button id="saveAllBtn" text="Lưu Cấu Hình" icon="CHECK" themeNames="primary success"/>
+            </div>
+        </div>
+
+        <!-- Form Cards Container -->
+        <div id="settingsContainer" classNames="flex flex-col gap-l w-full"/>
+    </layout>
+</view>

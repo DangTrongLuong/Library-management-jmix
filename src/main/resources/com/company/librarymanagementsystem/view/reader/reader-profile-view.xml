@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Hồ sơ &amp; Thẻ thư viện"
+      focusComponent="refreshBtn">
+
+    <layout classNames="p-m bg-contrast-5 box-border overflow-x-hidden" spacing="false" padding="false" width="100%">
+        <vbox width="100%" spacing="m" padding="false" classNames="mx-auto box-border" maxWidth="75em">
+
+            <!-- Nút làm mới ở góc phải -->
+            <hbox width="100%" justifyContent="END" alignItems="CENTER" classNames="mb-s box-border">
+                <button id="refreshBtn" text="Làm mới" icon="vaadin:refresh" themeNames="secondary small"/>
+            </hbox>
+
+            <!-- VÙNG 1: KHI ĐÃ CÓ THẺ LIÊN KẾT (Linked Member) -->
+            <vbox id="linkedMemberContainer" width="100%" spacing="m" padding="false" visible="false" classNames="box-border">
+                <div id="cardAndDetailsWrapper" width="100%" classNames="box-border"/>
+            </vbox>
+
+            <!-- VÙNG 2: KHI CHƯA CÓ THẺ LIÊN KẾT (Unlinked Member - Form tra cứu & Liên kết) -->
+            <vbox id="unlinkedMemberContainer" width="100%" spacing="m" padding="false" visible="false" classNames="box-border">
+                <div id="unlinkedIntroBanner" width="100%" classNames="box-border"/>
+                
+                <!-- Khung form tìm kiếm thẻ -->
+                <vbox width="100%" spacing="m" padding="true" classNames="bg-base rounded-m border border-contrast-10 shadow-xs box-border">
+                    <span text="Tra cứu hồ sơ thẻ để liên kết vào tài khoản" classNames="font-bold text-m text-primary"/>
+                    <span text="Nhập Mã thẻ thư viện (đã được thủ thư cấp tại quầy) và Số CCCD/CMND để xác thực chính chủ:" classNames="text-secondary text-s"/>
+
+                    <hbox width="100%" spacing="m" alignItems="END" classNames="flex-wrap gap-s box-border align-items-end">
+                        <textField id="searchMemberCodeField"
+                                   label="Mã thẻ thư viện"
+                                   placeholder="Ví dụ: LIB2026-000002"
+                                   clearButtonVisible="true"
+                                   width="18em"/>
+                        <textField id="searchIdNumberField"
+                                   label="Số CCCD / CMND"
+                                   placeholder="Ví dụ: 001200001234"
+                                   clearButtonVisible="true"
+                                   width="18em"/>
+                        <button id="searchCardBtn" text="Tìm thẻ thư viện" icon="vaadin:search" themeNames="primary"/>
+                        <button id="clearSearchBtn" text="Xóa" icon="vaadin:close" themeNames="tertiary"/>
+                    </hbox>
+
+                    <!-- Kết quả tra cứu thẻ dạng Preview Card -->
+                    <div id="searchResultWrapper" width="100%" classNames="mt-s box-border"/>
+                </vbox>
+            </vbox>
+
+        </vbox>
+    </layout>
+</view>

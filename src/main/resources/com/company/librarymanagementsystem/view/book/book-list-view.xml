@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Đầu sách"
+      focusComponent="booksDataGrid">
+    <data>
+        <collection id="booksDc"
+                    class="com.company.librarymanagementsystem.entity.Book">
+            <fetchPlan extends="_base">
+                <property name="publisher" fetchPlan="_base"/>
+                <property name="authors" fetchPlan="_base"/>
+                <property name="categories" fetchPlan="_base"/>
+                <property name="copies" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="booksDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Book e order by e.title]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+            <button id="createButton" action="booksDataGrid.createAction" text="Thêm mới" icon="PLUS" themeNames="primary"/>
+            <button id="editButton" action="booksDataGrid.editAction" text="Chỉnh sửa" icon="PENCIL"/>
+            <button id="removeButton" action="booksDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error"/>
+            <button id="refreshButton" action="booksDataGrid.refreshAction" text="Làm mới" icon="REFRESH"/>
+            
+            <textField id="searchField"
+                       placeholder="Tìm kiếm sách theo tên, ISBN..."
+                       clearButtonVisible="true"
+                       prefixComponent="vaadin-icon:search"
+                       width="26em"
+                       classNames="ms-m"/>
+
+            <simplePagination id="pagination" dataLoader="booksDl" classNames="ms-auto"/>
+        </hbox>
+
+        <dataGrid id="booksDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  minHeight="24em"
+                  dataContainer="booksDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+                <action id="refreshAction" type="list_refresh" text="Làm mới"/>
+            </actions>
+            <columns resizable="true">
+                <column key="coverImage" header="Ảnh bìa" autoWidth="true" flexGrow="0"/>
+                <column property="isbn" header="ISBN" autoWidth="true" flexGrow="0"/>
+                <column property="ddc" header="Mã DDC" autoWidth="true" flexGrow="0"/>
+                <column property="title" header="Nhan đề sách" autoWidth="true" flexGrow="2"/>
+                <column property="copiesCountInfo" header="Bản sao (Sẵn sàng/Tổng)" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+                <column property="authors" header="Tác giả" autoWidth="true" flexGrow="1"/>
+                <column property="categories" header="Thể loại" autoWidth="true" flexGrow="1"/>
+                <column property="publisher" header="Nhà xuất bản" autoWidth="true" flexGrow="0"/>
+                <column property="publishYear" header="Năm XB" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+                <column property="price" header="Giá bìa" autoWidth="true" flexGrow="0" textAlign="END"/>
+                <column property="status" header="Trạng thái" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+            </columns>
+        </dataGrid>
+
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction" text="Chọn" themeNames="primary" icon="CHECK"/>
+            <button id="discardButton" action="discardAction" text="Bỏ qua" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Tra cứu Sách Trực Tuyến"
+      focusComponent="searchKeywordField">
+
+    <data>
+        <collection id="booksDc"
+                    class="com.company.librarymanagementsystem.entity.Book">
+            <fetchPlan extends="_base">
+                <property name="authors" fetchPlan="_base"/>
+                <property name="categories" fetchPlan="_base"/>
+                <property name="publisher" fetchPlan="_base"/>
+                <property name="copies" fetchPlan="_base">
+                    <property name="location" fetchPlan="_base"/>
+                </property>
+            </fetchPlan>
+            <loader id="booksDl" readOnly="true">
+                <query>
+                    <![CDATA[select b from Book b
+                             where b.status = 'ACTIVE'
+                               and (:category is null or :category member of b.categories)
+                               and (:author is null or :author member of b.authors)
+                               and (:onlyAvailable is null or :onlyAvailable = false or exists (select bc from BookCopy bc where bc.book = b and bc.status = 'AVAILABLE'))
+                               and (:keyword is null or (
+                                      lower(b.title) like lower(concat('%', :keyword, '%'))
+                                   or lower(b.subtitle) like lower(concat('%', :keyword, '%'))
+                                   or lower(b.isbn) like lower(concat('%', :keyword, '%'))
+                                   or lower(b.ddc) like lower(concat('%', :keyword, '%'))
+                                   or exists (select a from b.authors a where lower(a.fullName) like lower(concat('%', :keyword, '%')))
+                                   or exists (select c from b.categories c where lower(c.name) like lower(concat('%', :keyword, '%')))
+                                   or lower(b.publisher.name) like lower(concat('%', :keyword, '%'))
+                               ))
+                             order by b.id desc]]>
+                </query>
+            </loader>
+        </collection>
+
+        <collection id="categoriesDc"
+                    class="com.company.librarymanagementsystem.entity.Category">
+            <fetchPlan extends="_base"/>
+            <loader id="categoriesDl">
+                <query><![CDATA[select c from Category c order by c.name asc]]></query>
+            </loader>
+        </collection>
+
+        <collection id="authorsDc"
+                    class="com.company.librarymanagementsystem.entity.Author">
+            <fetchPlan extends="_base"/>
+            <loader id="authorsDl">
+                <query><![CDATA[select a from Author a order by a.fullName asc]]></query>
+            </loader>
+        </collection>
+    </data>
+
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+
+    <layout padding="false" spacing="false" width="100%">
+        <vbox width="100%" spacing="true" padding="true" classNames="centered-page-container mx-auto box-border" maxWidth="100%">
+
+            <!-- Modern KPI Ribbon -->
+            <div id="kpiContainer" width="100%" classNames="mb-s box-border"/>
+
+            <!-- Thanh công cụ: Tabs khám phá bên trái & Nút chuyển chế độ xem bên phải -->
+            <hbox width="100%" alignItems="CENTER" justifyContent="BETWEEN" classNames="mb-s">
+                <hbox spacing="true" alignItems="CENTER">
+                    <button id="tabAllBtn" text="Tất cả đầu sách" icon="vaadin:book" themeNames="primary"/>
+                    <button id="tabRecentBtn" text="Sách mới nhập" icon="vaadin:sparkles" themeNames="tertiary"/>
+                    <button id="tabPopularBtn" text="Top mượn nhiều nhất" icon="vaadin:fire" themeNames="tertiary"/>
+                </hbox>
+                <hbox spacing="true" alignItems="CENTER">
+                    <button id="viewModeCardBtn" text="Dạng Thẻ Bìa" icon="vaadin:grid-big" themeNames="primary small"/>
+                    <button id="viewModeTableBtn" text="Dạng Bảng" icon="vaadin:table" themeNames="tertiary small"/>
+                </hbox>
+            </hbox>
+
+            <!-- Khung Tìm kiếm & Bộ lọc căn chỉnh hoàn hảo -->
+            <details summaryText="Tìm kiếm nâng cao &amp; Bộ lọc đầu sách" opened="true" width="100%" classNames="mb-s">
+                <vbox width="100%" spacing="true" padding="true" classNames="bg-contrast-5 rounded border">
+                    <!-- Hàng 1: Ô tìm kiếm từ khóa + Nút Tìm kiếm + Nút Xóa lọc -->
+                    <hbox width="100%" alignItems="CENTER" spacing="true">
+                        <textField id="searchKeywordField"
+                                   placeholder="Nhập tên sách, tác giả, thể loại, ISBN, mã phân loại DDC..."
+                                   clearButtonVisible="true"
+                                   width="100%"/>
+                        <button id="searchBtn" text="Tìm kiếm" icon="SEARCH" themeNames="primary"/>
+                        <button id="clearFilterBtn" text="Xóa lọc" icon="CLOSE"/>
+                    </hbox>
+
+                    <!-- Hàng 2: Bộ lọc thể loại, tác giả & checkbox chỉ còn trên kệ -->
+                    <hbox width="100%" alignItems="CENTER" spacing="true">
+                        <entityComboBox id="categoryFilter"
+                                        metaClass="Category"
+                                        itemsContainer="categoriesDc"
+                                        placeholder="Tất cả thể loại"
+                                        clearButtonVisible="true"
+                                        width="18em"/>
+                        <entityComboBox id="authorFilter"
+                                        metaClass="Author"
+                                        itemsContainer="authorsDc"
+                                        placeholder="Tất cả tác giả"
+                                        clearButtonVisible="true"
+                                        width="18em"/>
+                        <checkbox id="onlyAvailableCheckbox"
+                                  label="Chỉ sách còn trên kệ"
+                                  classNames="font-medium text-success whitespace-nowrap ms-s"/>
+                        <span id="filterHintLabel" classNames="text-secondary text-s ms-auto"/>
+                    </hbox>
+                </vbox>
+            </details>
+
+            <!-- Vùng hiển thị DẠNG THẺ (CARD GRID) -->
+            <vbox id="cardContainer" width="100%" spacing="true" padding="false">
+                <div id="bookCardsGrid" width="100%"/>
+            </vbox>
+
+            <!-- Vùng hiển thị DẠNG BẢNG (DATA GRID) -->
+            <vbox id="tableContainer" width="100%" spacing="true" padding="false" visible="false">
+                <dataGrid id="booksDataGrid"
+                          width="100%"
+                          minHeight="28em"
+                          dataContainer="booksDc"
+                          columnReorderingAllowed="true">
+                    <columns resizable="true">
+                        <column key="coverCol" header="Ảnh bìa" autoWidth="true" textAlign="CENTER"/>
+                        <column property="title" header="Nhan đề sách" autoWidth="true" flexGrow="2"/>
+                        <column key="authorsCol" header="Tác giả" autoWidth="true" flexGrow="1"/>
+                        <column key="categoriesCol" header="Thể loại" autoWidth="true"/>
+                        <column property="publisher.name" header="Nhà xuất bản" autoWidth="true"/>
+                        <column property="publishYear" header="Năm XB" autoWidth="true" textAlign="CENTER"/>
+                        <column key="availabilityCol" header="Tình trạng trên kệ" autoWidth="true" textAlign="CENTER"/>
+                        <column key="actionCol" header="Thao tác" autoWidth="true" textAlign="CENTER"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+
+            <!-- Phân trang -->
+            <hbox width="100%" alignItems="CENTER" justifyContent="BETWEEN" classNames="mt-s">
+                <span id="resultsCountLabel" text="Đang tải dữ liệu..." classNames="text-secondary text-s font-medium"/>
+                <simplePagination id="pagination"
+                                  dataLoader="booksDl"
+                                  itemsPerPageVisible="true"
+                                  itemsPerPageDefaultValue="12"
+                                  itemsPerPageOptions="12, 24, 48"/>
+            </hbox>
+
+        </vbox>
+    </layout>
+</view>

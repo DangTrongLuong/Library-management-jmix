@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Phiếu Mượn Sách">
+    <data>
+        <instance id="loanDc"
+                  class="com.company.librarymanagementsystem.entity.Loan">
+            <fetchPlan extends="_base">
+                <property name="member" fetchPlan="_base">
+                    <property name="memberType" fetchPlan="_base"/>
+                    <property name="user" fetchPlan="_base"/>
+                </property>
+                <property name="issuedBy" fetchPlan="_base"/>
+                <property name="loanItems" fetchPlan="_base">
+                    <property name="bookCopy" fetchPlan="_base">
+                        <property name="book" fetchPlan="_base">
+                            <property name="authors" fetchPlan="_base"/>
+                        </property>
+                        <property name="location" fetchPlan="_base"/>
+                    </property>
+                    <property name="receivedBy" fetchPlan="_base"/>
+                </property>
+            </fetchPlan>
+            <loader/>
+        </instance>
+        <collection id="loanItemsDc"
+                    class="com.company.librarymanagementsystem.entity.LoanItem">
+            <fetchPlan extends="_base">
+                <property name="bookCopy" fetchPlan="_base">
+                    <property name="book" fetchPlan="_base">
+                        <property name="authors" fetchPlan="_base"/>
+                    </property>
+                    <property name="location" fetchPlan="_base"/>
+                </property>
+                <property name="receivedBy" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="loanItemsDl">
+                <query>
+                    <![CDATA[select li from LoanItem li where li.loan = :container_loanDc order by li.id asc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng" icon="CHECK"/>
+        <action id="closeAction" type="detail_close" text="Đóng" icon="CLOSE"/>
+    </actions>
+    <layout>
+        <vbox id="mainContainer" width="100%" maxWidth="85em" classNames="centered-page-container mx-auto" spacing="true" padding="true">
+            <!-- Header -->
+            <hbox width="100%" justifyContent="BETWEEN" alignItems="CENTER">
+                <vbox spacing="false" padding="false">
+                    <h2 id="headerTitle" text="Chi tiết Phiếu Mượn Sách"/>
+                    <span text="Thông tin giao dịch mượn sách, danh sách bản sao và trạng thái hoàn trả."
+                          classNames="text-secondary"/>
+                </vbox>
+                <hbox spacing="true">
+                    <button id="saveCloseBtn" text="Lưu và Đóng" icon="CHECK" themeNames="primary"/>
+                    <button id="closeBtn" text="Đóng" icon="CLOSE"/>
+                </hbox>
+            </hbox>
+
+            <!-- Thông tin chung của phiếu -->
+            <details summaryText="Thông tin phiếu mượn" opened="true" width="100%">
+                <formLayout id="form" dataContainer="loanDc" width="100%">
+                    <responsiveSteps>
+                        <responsiveStep minWidth="0" columns="1"/>
+                        <responsiveStep minWidth="40em" columns="2"/>
+                        <responsiveStep minWidth="60em" columns="3"/>
+                    </responsiveSteps>
+
+                    <textField id="loanCodeField" property="loanCode" label="Số phiếu mượn" readOnly="true"/>
+                    <textField id="memberNameField" label="Độc giả" readOnly="true"/>
+                    <textField id="memberTypeField" label="Loại độc giả" readOnly="true"/>
+
+                    <textField id="issuedByField" label="Thủ thư lập phiếu" readOnly="true"/>
+                    <textField id="loanDateField" label="Thời điểm lập phiếu" readOnly="true"/>
+                    <textField id="totalBooksField" label="Tổng số cuốn sách" readOnly="true"/>
+
+                    <textField id="noteField" property="note" label="Ghi chú phiếu mượn" colspan="3"
+                               placeholder="Thủ thư có thể cập nhật ghi chú cho phiếu mượn tại đây..."/>
+                </formLayout>
+            </details>
+
+            <!-- Danh sách cuốn sách trong phiếu -->
+            <details summaryText="Danh sách cuốn sách trong phiếu mượn" opened="true" width="100%">
+                <vbox width="100%" spacing="true" padding="false">
+                    <hbox width="100%" justifyContent="END" spacing="true">
+                        <button id="detailReturnBtn" text="Nhận trả cuốn đang chọn" icon="CHECK_CIRCLE" themeNames="primary success"/>
+                        <button id="detailRenewBtn" text="Gia hạn cuốn đang chọn" icon="CALENDAR_CLOCK" themeNames="secondary"/>
+                    </hbox>
+
+                    <dataGrid id="loanItemsDataGrid"
+                              dataContainer="loanItemsDc"
+                              width="100%"
+                              minHeight="18em"
+                              columnReorderingAllowed="true">
+                        <columns>
+                            <column property="bookCopy.barcode" header="Mã vạch" autoWidth="true" textAlign="CENTER"/>
+                            <column property="bookCopy.book.title" header="Tên đầu sách" autoWidth="true" flexGrow="2"/>
+                            <column property="bookCopy.location.name" header="Vị trí kệ" autoWidth="true"/>
+                            <column property="dueDate" header="Hạn trả" autoWidth="true" textAlign="CENTER"/>
+                            <column key="overdueStatus" header="Tình trạng hạn" autoWidth="true" textAlign="CENTER"/>
+                            <column property="renewCount" header="Lần gia hạn" autoWidth="true" textAlign="CENTER"/>
+                            <column key="itemStatus" header="Trạng thái" autoWidth="true" textAlign="CENTER"/>
+                            <column property="returnCondition" header="Tình trạng khi trả" autoWidth="true" textAlign="CENTER"/>
+                            <column property="returnedAt" header="Ngày trả" autoWidth="true" textAlign="CENTER"/>
+                            <column property="receivedBy.username" header="Thủ thư nhận trả" autoWidth="true" textAlign="CENTER"/>
+                        </columns>
+                    </dataGrid>
+                </vbox>
+            </details>
+        </vbox>
+    </layout>
+</view>

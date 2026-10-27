@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Sách Đang Đặt Trước"
+      focusComponent="refreshBtn">
+
+    <layout classNames="p-s bg-contrast-5 box-border overflow-x-hidden" spacing="false" padding="false" width="100%">
+        <vbox width="100%" spacing="s" padding="false" classNames="mx-auto box-border" maxWidth="100%">
+
+            <!-- Thanh công cụ điều hướng & thao tác -->
+            <hbox width="100%" justifyContent="BETWEEN" alignItems="CENTER" classNames="mb-xs flex-wrap gap-xs box-border">
+                <hbox spacing="xs" alignItems="CENTER">
+                    <button id="viewModeActiveBtn" text="Đang Đặt &amp; Sẵn Sàng" icon="vaadin:clock" themeNames="primary small"/>
+                    <button id="viewModeHistoryBtn" text="Lịch Sử Đặt Trước" icon="vaadin:history" themeNames="tertiary small"/>
+                </hbox>
+                <hbox spacing="xs" alignItems="CENTER">
+                    <button id="exploreBooksBtn" text="Tìm sách đặt trước" icon="vaadin:search" themeNames="secondary small"/>
+                    <button id="refreshBtn" text="Làm mới" icon="vaadin:refresh" themeNames="tertiary small"/>
+                </hbox>
+            </hbox>
+
+            <!-- Khung thống kê nhanh chỉ số đặt trước -->
+            <div id="kpiContainer" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Vùng hiển thị SÁCH ĐANG ĐẶT TRƯỚC (Active) -->
+            <vbox id="activeContainer" width="100%" spacing="true" padding="false" classNames="box-border">
+                <div id="activeCardsGrid" width="100%" classNames="box-border"/>
+                <div id="emptyActiveState" width="100%" visible="false" classNames="box-border"/>
+            </vbox>
+
+            <!-- Vùng hiển thị LỊCH SỬ ĐẶT TRƯỚC (History) -->
+            <vbox id="historyContainer" width="100%" spacing="true" padding="false" visible="false" classNames="box-border">
+                <div id="historyGridWrapper" width="100%" classNames="bg-base rounded-m border border-contrast-10 shadow-s overflow-x-auto box-border"/>
+                <div id="emptyHistoryState" width="100%" visible="false" classNames="box-border"/>
+            </vbox>
+
+        </vbox>
+    </layout>
+</view>

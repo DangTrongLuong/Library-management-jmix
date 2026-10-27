@@ -1,0 +1,1668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- ChangeSet 1: Create LOCATIONS table with shelf coordinates, capacity, audit & versioning -->
+    <changeSet id="20261021-01-create-locations" author="Library-Management-System">
+        <createTable tableName="LOCATIONS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CODE" type="VARCHAR(30)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UC_LOCATIONS_CODE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FLOOR" type="INT"/>
+            <column name="ROOM_OR_ZONE" type="VARCHAR(50)"/>
+            <column name="AISLE" type="VARCHAR(30)"/>
+            <column name="SHELF_LEVEL" type="INT"/>
+            <column name="MAX_CAPACITY" type="INT" defaultValueNumeric="100"/>
+            <column name="STATUS" type="VARCHAR(20)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="CREATED_BY" type="VARCHAR(50)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(50)"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_BY" type="VARCHAR(50)"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="IDX_LOCATIONS_ON_CODE" tableName="LOCATIONS" unique="true">
+            <column name="CODE"/>
+        </createIndex>
+        <createIndex indexName="IDX_LOCATIONS_ON_STATUS" tableName="LOCATIONS">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 2: Seed all 120 Library Shelf Locations with specific book group zones -->
+    <changeSet id="20261021-02-seed-locations" author="Library-Management-System">
+        <validCheckSum>ANY</validCheckSum>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="1"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K1-N1"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="2"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K1-N2"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="3"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K1-N3"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="4"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K1-N4"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="5"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K1-N5"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="6"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K1-N6"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="7"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K2-N1"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="8"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K2-N2"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="9"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K2-N3"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="10"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K2-N4"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="11"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K2-N5"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="12"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D01-K2-N6"/>
+            <column name="NAME" value="Tầng 1 - Dãy 01 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="AISLE" value="Dãy 01 (DDC 000)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm (Tầng 1, Dãy 01 (DDC 000), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="13"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K1-N1"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="14"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K1-N2"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="15"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K1-N3"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="16"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K1-N4"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="17"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K1-N5"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="18"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K1-N6"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="19"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K2-N1"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="20"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K2-N2"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="21"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K2-N3"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="22"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K2-N4"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="23"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K2-N5"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="24"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T1-D02-K2-N6"/>
+            <column name="NAME" value="Tầng 1 - Dãy 02 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="1"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="AISLE" value="Dãy 02 (DDC 100)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy (Tầng 1, Dãy 02 (DDC 100), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="25"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K1-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="26"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K1-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="27"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K1-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="28"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K1-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="29"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K1-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="30"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K1-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="31"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K2-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="32"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K2-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="33"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K2-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="34"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K2-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="35"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K2-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="36"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D03-K2-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 03 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="AISLE" value="Dãy 03 (DDC 200)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh (Tầng 2, Dãy 03 (DDC 200), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="37"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K1-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="38"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K1-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="39"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K1-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="40"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K1-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="41"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K1-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="42"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K1-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="43"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K2-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="44"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K2-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="45"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K2-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="46"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K2-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="47"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K2-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="48"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D04-K2-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 04 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="AISLE" value="Dãy 04 (DDC 300)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật (Tầng 2, Dãy 04 (DDC 300), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="49"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K1-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="50"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K1-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="51"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K1-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="52"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K1-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="53"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K1-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="54"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K1-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="55"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K2-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="56"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K2-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="57"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K2-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="58"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K2-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="59"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K2-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="60"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D05-K2-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 05 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="AISLE" value="Dãy 05 (DDC 400)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển (Tầng 2, Dãy 05 (DDC 400), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="61"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K1-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="62"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K1-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="63"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K1-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="64"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K1-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="65"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K1-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="66"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K1-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="67"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K2-N1"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="68"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K2-N2"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="69"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K2-N3"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="70"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K2-N4"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="71"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K2-N5"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="72"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T2-D06-K2-N6"/>
+            <column name="NAME" value="Tầng 2 - Dãy 06 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="2"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="AISLE" value="Dãy 06 (DDC 500)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học (Tầng 2, Dãy 06 (DDC 500), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="73"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K1-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="74"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K1-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="75"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K1-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="76"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K1-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="77"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K1-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="78"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K1-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="79"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K2-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="80"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K2-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="81"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K2-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="82"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K2-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="83"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K2-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="84"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D07-K2-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 07 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="AISLE" value="Dãy 07 (DDC 600)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp (Tầng 3, Dãy 07 (DDC 600), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="85"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K1-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="86"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K1-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="87"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K1-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="88"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K1-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="89"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K1-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="90"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K1-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="91"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K2-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="92"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K2-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="93"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K2-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="94"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K2-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="95"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K2-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="96"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D08-K2-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 08 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="AISLE" value="Dãy 08 (DDC 700)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao (Tầng 3, Dãy 08 (DDC 700), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="97"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K1-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="98"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K1-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="99"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K1-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="100"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K1-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="101"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K1-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="102"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K1-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="103"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K2-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="104"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K2-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="105"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K2-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="106"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K2-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="107"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K2-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="108"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D09-K2-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 09 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="AISLE" value="Dãy 09 (DDC 800)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca (Tầng 3, Dãy 09 (DDC 800), Kệ 02, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="109"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K1-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 01 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 01, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="110"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K1-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 01 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 01, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="111"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K1-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 01 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 01, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="112"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K1-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 01 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 01, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="113"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K1-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 01 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 01, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="114"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K1-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 01 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 01, Ngăn 06)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="115"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K2-N1"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 02 - Ngăn 01"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="1"/>
+            <column name="MAX_CAPACITY" valueNumeric="150"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 02, Ngăn 01)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="116"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K2-N2"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 02 - Ngăn 02"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="2"/>
+            <column name="MAX_CAPACITY" valueNumeric="125"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 02, Ngăn 02)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="117"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K2-N3"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 02 - Ngăn 03"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="3"/>
+            <column name="MAX_CAPACITY" valueNumeric="135"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 02, Ngăn 03)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="118"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K2-N4"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 02 - Ngăn 04"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="4"/>
+            <column name="MAX_CAPACITY" valueNumeric="120"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 02, Ngăn 04)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="119"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K2-N5"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 02 - Ngăn 05"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="5"/>
+            <column name="MAX_CAPACITY" valueNumeric="130"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 02, Ngăn 05)"/>
+        </insert>
+        <insert tableName="LOCATIONS">
+            <column name="ID" valueNumeric="120"/>
+            <column name="VERSION" valueNumeric="1"/>
+            <column name="CODE" value="LOC-T3-D10-K2-N6"/>
+            <column name="NAME" value="Tầng 3 - Dãy 10 - Kệ 02 - Ngăn 06"/>
+            <column name="FLOOR" valueNumeric="3"/>
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="AISLE" value="Dãy 10 (DDC 900)"/>
+            <column name="SHELF_LEVEL" valueNumeric="6"/>
+            <column name="MAX_CAPACITY" valueNumeric="140"/>
+            <column name="STATUS" value="ACTIVE"/>
+            <column name="DESCRIPTION" value="Lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân (Tầng 3, Dãy 10 (DDC 900), Kệ 02, Ngăn 06)"/>
+        </insert>
+    </changeSet>
+
+    <!-- ChangeSet 3: Update existing LOCATIONS roomOrZone and descriptions to book groups -->
+    <changeSet id="20261022-03-update-locations-zones" author="Library-Management-System">
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Tin học &amp; Công nghệ thông tin"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Khoa học máy tính, Tin học &amp; Công nghệ phần mềm"/>
+            <where>CODE LIKE 'LOC-T%-D01%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Triết học &amp; Tâm lý học"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Triết học, Tâm lý học &amp; Kỹ năng phát triển tư duy"/>
+            <where>CODE LIKE 'LOC-T%-D02%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Tôn giáo &amp; Tín ngưỡng"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Tôn giáo, Tín ngưỡng &amp; Văn hóa tâm linh"/>
+            <where>CODE LIKE 'LOC-T%-D03%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học xã hội &amp; Kinh tế"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Khoa học xã hội, Kinh tế, Quản trị kinh doanh &amp; Pháp luật"/>
+            <where>CODE LIKE 'LOC-T%-D04%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Ngôn ngữ &amp; Ngoại ngữ"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Ngôn ngữ học, Phương pháp học ngoại ngữ &amp; Từ điển"/>
+            <where>CODE LIKE 'LOC-T%-D05%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Khoa học tự nhiên &amp; Toán học"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Khoa học tự nhiên, Toán học, Vật lý, Hóa học &amp; Sinh học"/>
+            <where>CODE LIKE 'LOC-T%-D06%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Công nghệ &amp; Khoa học ứng dụng"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Kỹ thuật công nghệ, Y học, Sức khỏe &amp; Nông nghiệp"/>
+            <where>CODE LIKE 'LOC-T%-D07%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Nghệ thuật, Mỹ thuật &amp; Thể thao"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Mỹ thuật, Hội họa, Kiến trúc, Âm nhạc, Nhiếp ảnh &amp; Thể thao"/>
+            <where>CODE LIKE 'LOC-T%-D08%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Văn học &amp; Tiểu thuyết"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Văn học Việt Nam, Văn học kinh điển thế giới, Tiểu thuyết &amp; Thơ ca"/>
+            <where>CODE LIKE 'LOC-T%-D09%'</where>
+        </update>
+        <update tableName="LOCATIONS">
+            <column name="ROOM_OR_ZONE" value="Khu vực Lịch sử &amp; Địa lý"/>
+            <column name="DESCRIPTION" value="Khu vực lưu trữ và tra cứu sách chuyên đề Lịch sử thế giới, Lịch sử Việt Nam, Địa lý du khảo &amp; Danh nhân"/>
+            <where>CODE LIKE 'LOC-T%-D10%'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

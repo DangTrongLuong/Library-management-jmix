@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Tiền Phạt &amp; Phí Dịch Vụ"
+      focusComponent="refreshBtn">
+
+    <layout classNames="p-s bg-contrast-5 box-border overflow-x-hidden" spacing="false" padding="false" width="100%">
+        <vbox width="100%" spacing="s" padding="false" classNames="mx-auto box-border" maxWidth="100%">
+
+            <!-- Thanh công cụ điều hướng -->
+            <hbox width="100%" justifyContent="BETWEEN" alignItems="CENTER" classNames="mb-xs flex-wrap gap-xs box-border">
+                <hbox spacing="xs" alignItems="CENTER">
+                    <button id="viewModeFinesBtn" text="Khoản Phạt Cần Nộp" icon="vaadin:invoice" themeNames="primary small"/>
+                    <button id="viewModePaymentsBtn" text="Biên Lai &amp; Lịch Sử Nộp" icon="vaadin:records" themeNames="tertiary small"/>
+                </hbox>
+                <hbox spacing="xs" alignItems="CENTER">
+                    <button id="refreshBtn" text="Làm mới" icon="vaadin:refresh" themeNames="tertiary small"/>
+                </hbox>
+            </hbox>
+
+            <!-- Khung thống kê nhanh công nợ -->
+            <div id="kpiContainer" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Khung hướng dẫn thanh toán -->
+            <div id="guidanceBanner" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Vùng hiển thị DANH SÁCH KHOẢN PHẠT (Fines) -->
+            <vbox id="finesContainer" width="100%" spacing="true" padding="false" classNames="box-border">
+                <hbox width="100%" spacing="true" alignItems="CENTER" classNames="bg-base rounded-m border border-contrast-10 p-s mb-xs flex-wrap gap-xs box-border">
+                    <textField id="fineSearchField"
+                               placeholder="Tìm theo tên sách, mã vạch, lý do..."
+                               clearButtonVisible="true"
+                               width="100%"/>
+                    <comboBox id="fineStatusFilter"
+                              placeholder="Tất cả trạng thái"
+                              clearButtonVisible="true"
+                              width="16em"/>
+                    <button id="clearFineFilterBtn" text="Xóa lọc" icon="CLOSE"/>
+                    <span id="finesCountLabel" classNames="text-secondary text-s ms-auto whitespace-nowrap"/>
+                </hbox>
+                <div id="finesGridWrapper" width="100%" classNames="bg-base rounded-m border border-contrast-10 shadow-s overflow-x-auto box-border"/>
+                <div id="emptyFinesState" width="100%" visible="false" classNames="box-border"/>
+            </vbox>
+
+            <!-- Vùng hiển thị LỊCH SỬ BIÊN LAI (Payments) -->
+            <vbox id="paymentsContainer" width="100%" spacing="true" padding="false" visible="false" classNames="box-border">
+                <div id="paymentsGridWrapper" width="100%" classNames="bg-base rounded-m border border-contrast-10 shadow-s overflow-x-auto box-border"/>
+                <div id="emptyPaymentsState" width="100%" visible="false" classNames="box-border"/>
+            </vbox>
+
+        </vbox>
+    </layout>
+</view>

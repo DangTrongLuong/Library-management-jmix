@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://UserListView.title"
+      focusComponent="usersDataGrid">
+    <data>
+        <collection id="usersDc"
+                    class="com.company.librarymanagementsystem.entity.User">
+            <fetchPlan extends="_base">
+                <property name="role" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="usersDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from User e where lower(e.username) <> 'admin' and (e.role is null or upper(e.role.code) <> 'ADMIN') order by e.username]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%">
+            <button id="createButton" action="usersDataGrid.createAction" text="Thêm mới" icon="PLUS" themeNames="primary"/>
+            <button id="editButton" action="usersDataGrid.editAction" text="Chỉnh sửa" icon="PENCIL"/>
+            <button id="removeButton" text="Xóa" icon="TRASH" themeNames="error" enabled="false"/>
+            <button id="resetPasswordBtn" text="Đổi mật khẩu" icon="KEY" enabled="false"/>
+            <simplePagination id="pagination" dataLoader="usersDl" classNames="ms-auto"/>
+        </hbox>
+        <dataGrid id="usersDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  minHeight="20em"
+                  dataContainer="usersDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+            </actions>
+            <columns resizable="true">
+                <column property="username" header="Tên đăng nhập" autoWidth="true" flexGrow="1"/>
+                <column property="fullName" header="Họ và tên" autoWidth="true" flexGrow="1"/>
+                <column property="role" header="Vai trò" autoWidth="true" flexGrow="0"/>
+                <column property="email" header="Email" autoWidth="true" flexGrow="2"/>
+                <column property="phone" header="Số điện thoại" autoWidth="true" flexGrow="0"/>
+                <column property="status" header="Trạng thái" autoWidth="true" flexGrow="0"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction" text="Chọn"/>
+            <button id="discardButton" action="discardAction" text="Bỏ qua"/>
+        </hbox>
+    </layout>
+</view>

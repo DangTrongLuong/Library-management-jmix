@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Quyền hạn">
+    <data>
+        <instance id="permissionDc"
+                  class="com.company.librarymanagementsystem.entity.Permission">
+            <fetchPlan extends="_base"/>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="permissionDc">
+            <select id="moduleField"
+                    property="module"
+                    label="Phân hệ"
+                    required="true"
+                    requiredMessage="Vui lòng chọn phân hệ"/>
+            <comboBox id="nameField"
+                      property="name"
+                      label="Tên quyền"
+                      required="true"
+                      requiredMessage="Vui lòng chọn hoặc nhập tên quyền"
+                      allowCustomValue="true"/>
+            <textField id="codeField"
+                       property="code"
+                       label="Mã quyền"
+                       required="true"
+                       requiredMessage="Vui lòng chọn hoặc nhập mã quyền"/>
+            <textField id="descriptionField"
+                       property="description"
+                       label="Mô tả quyền"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

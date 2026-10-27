@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Danh sách Quyền hạn"
+      focusComponent="permissionsDataGrid">
+    <data>
+        <collection id="permissionsDc"
+                    class="com.company.librarymanagementsystem.entity.Permission">
+            <fetchPlan extends="_base"/>
+            <loader id="permissionsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Permission e order by e.module, e.code]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%">
+            <button id="createButton" action="permissionsDataGrid.createAction" text="Thêm mới" icon="PLUS" themeNames="primary"/>
+            <button id="editButton" action="permissionsDataGrid.editAction" text="Chỉnh sửa" icon="PENCIL"/>
+            <button id="removeButton" action="permissionsDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error"/>
+            <select id="moduleFilterSelect" width="18em" placeholder="Lọc theo phân hệ..."/>
+            <button id="importDefaultsButton" text="Nạp quyền mặc định" icon="DOWNLOAD" themeNames="secondary"/>
+            <simplePagination id="pagination" dataLoader="permissionsDl" classNames="ms-auto"/>
+        </hbox>
+        <dataGrid id="permissionsDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  minHeight="20em"
+                  dataContainer="permissionsDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+            </actions>
+            <columns resizable="true">
+                <column property="name" header="Tên quyền" autoWidth="true" flexGrow="1"/>
+                <column property="code" header="Mã quyền" autoWidth="true" flexGrow="0"/>
+                <column property="description" header="Mô tả quyền" autoWidth="true" flexGrow="2"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction" text="Chọn"/>
+            <button id="discardButton" action="discardAction" text="Bỏ qua"/>
+        </hbox>
+    </layout>
+</view>

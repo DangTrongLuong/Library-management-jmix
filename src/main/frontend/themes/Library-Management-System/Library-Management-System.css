@@ -1,0 +1,658 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ========================================================
+     1. TYPOGRAPHY & SIDEBAR TOKENS (GIỮ NGUYÊN THEO YÊU CẦU)
+     ======================================================== */
+  --lumo-font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --vaadin-app-layout-drawer-width: 18.5em;
+
+  /* ========================================================
+     2. DESIGN SYSTEM COLOR & SHADOW TOKENS
+     ======================================================== */
+  /* Primary Indigo-Blue */
+  --lumo-primary-color: #2563eb;
+  --lumo-primary-color-50pct: rgba(37, 99, 235, 0.5);
+  --lumo-primary-color-10pct: rgba(37, 99, 235, 0.1);
+  --lumo-primary-text-color: #1d4ed8;
+  --lumo-primary-contrast-color: #ffffff;
+
+  /* Success Emerald */
+  --lumo-success-color: #10b981;
+  --lumo-success-color-50pct: rgba(16, 185, 129, 0.5);
+  --lumo-success-color-10pct: rgba(16, 185, 129, 0.1);
+  --lumo-success-text-color: #047857;
+  --lumo-success-contrast-color: #ffffff;
+
+  /* Error Rose */
+  --lumo-error-color: #ef4444;
+  --lumo-error-color-50pct: rgba(239, 68, 68, 0.5);
+  --lumo-error-color-10pct: rgba(239, 68, 68, 0.1);
+  --lumo-error-text-color: #b91c1c;
+  --lumo-error-contrast-color: #ffffff;
+
+  /* Border Radii */
+  --lumo-border-radius-s: 6px;
+  --lumo-border-radius-m: 8px;
+  --lumo-border-radius-l: 12px;
+
+  /* Standard Component Sizing Token */
+  --lumo-size-m: 2.45rem;
+  --lumo-text-field-size: var(--lumo-size-m);
+  --lumo-button-size: var(--lumo-size-m);
+
+  /* Shadows */
+  --lumo-box-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --lumo-box-shadow-s: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --lumo-box-shadow-m: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --lumo-box-shadow-l: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+}
+
+/* ========================================================
+   GLOBAL MODERN SCROLLBAR
+   ======================================================== */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ========================================================
+   CHUẨN HÓA ĐỒNG TRỤC TUYỆT ĐỐI CHO TẤT CẢ CONTROLS (BẰNG ĐẦU 100%)
+   ======================================================== */
+/* 1. Mọi nút bấm và ô nhập liệu trong light DOM đều có chiều cao chuẩn 2.45rem và lề dọc = 0 */
+vaadin-button,
+vaadin-text-field:not([has-label]),
+vaadin-select:not([has-label]),
+vaadin-combo-box:not([has-label]),
+vaadin-date-picker:not([has-label]),
+vaadin-number-field:not([has-label]),
+vaadin-integer-field:not([has-label]),
+vaadin-select-text-field {
+  height: 2.45rem !important;
+  min-height: 2.45rem !important;
+  max-height: 2.45rem !important;
+  box-sizing: border-box !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  vertical-align: middle !important;
+}
+
+/* 2. Ép mọi thanh công cụ/panel tìm kiếm luôn căn giữa để các nút và ô nhập không bao giờ bị lệch đầu */
+.buttons-panel,
+#buttonsPanel,
+#toolbarPanel,
+#filterPanel,
+#searchPanel,
+vaadin-horizontal-layout[class*="buttons-panel"],
+vaadin-horizontal-layout[class*="filter-panel"],
+div[class*="flex"][class*="items-center"] {
+  align-items: center !important;
+}
+
+.buttons-panel > *,
+#buttonsPanel > *,
+#toolbarPanel > *,
+#filterPanel > *,
+#searchPanel > *,
+vaadin-horizontal-layout[class*="buttons-panel"] > *,
+vaadin-horizontal-layout[class*="filter-panel"] > *,
+div[class*="flex"][class*="items-center"] > * {
+  align-self: center !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 3. Căn đáy đồng trục tuyệt đối cho các layout có ô nhập liệu kèm nhãn (label) và nút bấm (alignItems=END) */
+vaadin-horizontal-layout[theme*="align-end"],
+vaadin-horizontal-layout[style*="align-items: flex-end"],
+vaadin-horizontal-layout[style*="align-items:flex-end"],
+vaadin-horizontal-layout.align-items-end,
+.align-items-end {
+  align-items: flex-end !important;
+}
+
+vaadin-horizontal-layout[theme*="align-end"] > *,
+vaadin-horizontal-layout[style*="align-items: flex-end"] > *,
+vaadin-horizontal-layout[style*="align-items:flex-end"] > *,
+vaadin-horizontal-layout.align-items-end > *,
+.align-items-end > * {
+  align-self: flex-end !important;
+  margin-bottom: 0 !important;
+}
+
+.buttons-panel vaadin-simple-pagination,
+#buttonsPanel vaadin-simple-pagination,
+#toolbarPanel vaadin-simple-pagination,
+.buttons-panel jmix-simple-pagination,
+#buttonsPanel jmix-simple-pagination,
+#toolbarPanel jmix-simple-pagination {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: center !important;
+  height: 2.45rem !important;
+  margin: 0 !important;
+}
+
+/* Khu vực nút chi tiết / modal actions */
+#detailActions,
+.detail-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 1.5rem !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid #e2e8f0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Nút bấm trong light DOM */
+vaadin-button {
+  font-family: var(--lumo-font-family, inherit) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+vaadin-button:hover:not([disabled]) {
+  transform: translateY(-1px);
+}
+
+vaadin-button:active:not([disabled]) {
+  transform: translateY(0);
+}
+
+/* ========================================================
+   UNIFORM DATA GRID TYPOGRAPHY & TABLE STYLING
+   ======================================================== */
+vaadin-grid {
+  font-size: var(--lumo-font-size-s, 0.875rem);
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden !important;
+}
+
+vaadin-grid vaadin-grid-cell-content {
+  font-size: var(--lumo-font-size-s, 0.875rem);
+}
+
+vaadin-grid::part(header-cell) {
+  font-size: var(--lumo-font-size-s, 0.8125rem) !important;
+  font-weight: 600 !important;
+  text-transform: none !important; /* Tránh viết hoa toàn bộ làm mở rộng text gây co cụm, rút gọn ... */
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  letter-spacing: normal !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+  padding: 8px 12px !important;
+}
+
+vaadin-grid::part(body-cell) {
+  padding: 10px 14px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #1e293b !important;
+}
+
+/* Giữ nguyên các phần tử badge/tag */
+vaadin-grid [theme~="badge"],
+.badge {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  padding: 3px 9px !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  line-height: 1.25 !important;
+}
+
+vaadin-grid .perm-code-badge {
+  font-size: 0.8125rem !important;
+}
+
+/* ========================================================
+   INPUT FIELDS GLOBAL BASELINE ALIGNMENT
+   ======================================================== */
+vaadin-text-field,
+vaadin-select,
+vaadin-combo-box,
+vaadin-date-picker,
+vaadin-integer-field,
+vaadin-number-field,
+vaadin-password-field {
+  box-sizing: border-box;
+}
+
+/* ========================================================
+   TOAST NOTIFICATION STYLING & POSITIONING
+   ======================================================== */
+vaadin-notification-container {
+  top: 28px !important;
+  padding-top: 12px !important;
+  right: 24px !important;
+  z-index: 10000 !important;
+}
+
+vaadin-notification-card {
+  margin-top: 24px !important;
+}
+
+/* Fallback & global rules for notification cards */
+vaadin-notification-card[theme~="success"] {
+  --lumo-body-text-color: #065f46;
+}
+
+vaadin-notification-card[theme~="error"] {
+  --lumo-body-text-color: #991b1b;
+}
+
+/* Layout bên trong Toast */
+.toast-layout {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+/* Icon Toast */
+.toast-icon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-icon-success {
+  color: #10b981 !important;
+}
+
+.toast-icon-error {
+  color: #ef4444 !important;
+}
+
+.toast-icon-warning {
+  color: #f59e0b !important;
+}
+
+.toast-icon-info {
+  color: #3b82f6 !important;
+}
+
+/* Chữ hiển thị thông điệp Toast */
+.toast-message {
+  font-family: var(--lumo-font-family, 'Plus Jakarta Sans', 'Inter', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: inherit;
+}
+
+/* ========================================================
+   PERMISSION CODE BADGES (MÀU THEO PHÂN HỆ)
+   ======================================================== */
+.perm-code-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  letter-spacing: 0.025em;
+  border-radius: 6px;
+  line-height: 1.25;
+  white-space: nowrap;
+  border-width: 1px;
+  border-style: solid;
+  transition: all 0.15s ease-in-out;
+  user-select: all;
+}
+
+.perm-code-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+}
+
+.perm-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* 1. Sách & Danh mục (BOOK): Indigo / Royal Blue */
+.perm-badge-book {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+.perm-badge-book .perm-badge-dot,
+.perm-dot-book {
+  background-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* 2. Độc giả & Thẻ (MEMBER): Emerald / Mint Green */
+.perm-badge-member {
+  background-color: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+.perm-badge-member .perm-badge-dot,
+.perm-dot-member {
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+/* 3. Mượn / Trả (LOAN): Amber / Warm Orange */
+.perm-badge-loan {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+.perm-badge-loan .perm-badge-dot,
+.perm-dot-loan {
+  background-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+/* 4. Tiền phạt (FINE): Rose / Coral Red */
+.perm-badge-fine {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+.perm-badge-fine .perm-badge-dot,
+.perm-dot-fine {
+  background-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* 5. Báo cáo & Thống kê (REPORT): Deep Violet / Purple */
+.perm-badge-report {
+  background-color: #faf5ff;
+  color: #7e22ce;
+  border-color: #e9d5ff;
+}
+.perm-badge-report .perm-badge-dot,
+.perm-dot-report {
+  background-color: #a855f7;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+}
+
+/* 6. Hệ thống & Phân quyền (SYSTEM): Modern Cyan / Teal */
+.perm-badge-system {
+  background-color: #f0fdfa;
+  color: #0f766e;
+  border-color: #99f6e4;
+}
+.perm-badge-system .perm-badge-dot,
+.perm-dot-system {
+  background-color: #14b8a6;
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+}
+
+/* 7. Fallback / Khác */
+.perm-badge-other {
+  background-color: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.perm-badge-other .perm-badge-dot,
+.perm-dot-other {
+  background-color: #64748b;
+  box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.2);
+}
+
+/* ========================================================
+   USER TABLE ROW ACTION BUTTONS (CHỈNH SỬA & XÓA)
+   ======================================================== */
+.user-action-btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.15s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.user-edit-btn {
+  color: #2563eb !important;
+}
+
+.user-edit-btn:hover {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+  transform: translateY(-1px) scale(1.08);
+}
+
+.user-delete-btn {
+  color: #ef4444 !important;
+}
+
+.user-delete-btn:hover {
+  background-color: #fef2f2 !important;
+  color: #b91c1c !important;
+  transform: translateY(-1px) scale(1.08);
+}
+
+/* ========================================================
+   KHUNG HIỂN THỊ CÁC QUYỀN HẠN ĐÃ CHỌN (CHIA 2 NỬA / 2 CỘT)
+   ======================================================== */
+.selected-perms-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+  min-height: 140px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 14px;
+  background-color: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+  .selected-perms-box {
+    grid-template-columns: 1fr;
+  }
+}
+
+.selected-perms-box:hover {
+  border-color: #94a3b8;
+}
+
+.perms-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.perm-chip {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 6px 8px 6px 12px !important;
+  border-radius: 8px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.15s ease-in-out !important;
+  line-height: 1.25 !important;
+  box-sizing: border-box !important;
+}
+
+.perm-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.perm-chip-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perm-chip-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perm-chip-remove-btn {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  padding: 0 !important;
+  margin-left: 8px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  opacity: 0.65;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease;
+}
+
+.perm-chip-remove-btn:hover {
+  opacity: 1;
+  color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  transform: scale(1.15);
+}
+
+/* 1. Sách & Danh mục (BOOK) */
+.perm-chip-book {
+  background-color: #eff6ff !important;
+  color: #1e40af !important;
+  border-color: #bfdbfe !important;
+}
+
+/* 2. Độc giả & Thẻ (MEMBER) */
+.perm-chip-member {
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  border-color: #bbf7d0 !important;
+}
+
+/* 3. Mượn / Trả (LOAN) */
+.perm-chip-loan {
+  background-color: #fff7ed !important;
+  color: #9a3412 !important;
+  border-color: #fed7aa !important;
+}
+
+/* 4. Tiền phạt (FINE) */
+.perm-chip-fine {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border-color: #fecaca !important;
+}
+
+/* 5. Báo cáo & Thống kê (REPORT) */
+.perm-chip-report {
+  background-color: #faf5ff !important;
+  color: #6b21a8 !important;
+  border-color: #e9d5ff !important;
+}
+
+/* 6. Hệ thống & Phân quyền (SYSTEM) */
+.perm-chip-system {
+  background-color: #f0fdfa !important;
+  color: #115e59 !important;
+  border-color: #99f6e4 !important;
+}
+
+.perm-chip-other {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* ========================================================
+   CENTER ALIGNMENT & LAYOUT UTILITIES
+   ======================================================== */
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  align-self: center !important;
+}
+
+.centered-page-container {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  align-self: center !important;
+}
+
+/* Căn giữa tuyệt đối cho nội dung và header các cột có text-align="center" trong Vaadin Grid */
+vaadin-grid-cell-content[text-align="center"] {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+vaadin-grid-cell-content[text-align="center"] > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========================================================
+   DASHBOARD VIEW LAYOUT CONSTRAINTS
+   ======================================================== */
+.dashboard-view-layout {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+.dashboard-view-layout * {
+  box-sizing: border-box;
+}

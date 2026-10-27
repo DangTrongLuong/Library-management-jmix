@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Đăng ký tài khoản Bạn đọc">
+    <layout classNames="jmix-login-main-layout">
+        <h1 text="Hệ thống quản lý thư viện"
+            classNames="login-page-title"/>
+        <div classNames="register-card-container">
+            <!-- Logo và tiêu đề Đăng ký tương tự màn hình Đăng nhập -->
+            <image resource="public/images/login-logo.png"
+                   classNames="register-logo"/>
+            <h2 text="Đăng ký"
+                classNames="auth-title"/>
+
+            <!-- Form layout 2 cột -->
+            <formLayout id="form" width="100%">
+                <responsiveSteps>
+                    <responsiveStep minWidth="0" columns="1"/>
+                    <responsiveStep minWidth="35em" columns="2"/>
+                </responsiveSteps>
+
+                <textField id="usernameField"
+                           label="Tên đăng nhập *"
+                           placeholder="vd: nguyenvana"
+                           clearButtonVisible="true"
+                           helperText="4-30 ký tự, chữ thường, số, dấu gạch dưới"/>
+                <textField id="fullNameField"
+                           label="Họ và tên *"
+                           placeholder="vd: Nguyễn Văn A"
+                           clearButtonVisible="true"/>
+
+                <textField id="emailField"
+                           label="Địa chỉ Email *"
+                           placeholder="vd: nguyenvana@gmail.com"
+                           clearButtonVisible="true"/>
+                <textField id="phoneField"
+                           label="Số điện thoại *"
+                           placeholder="vd: 0912345678"
+                           clearButtonVisible="true"/>
+
+                <passwordField id="passwordField"
+                               label="Mật khẩu *"
+                               placeholder="Tối thiểu 6 ký tự"/>
+                <passwordField id="confirmPasswordField"
+                               label="Xác nhận mật khẩu *"
+                               placeholder="Nhập lại mật khẩu"/>
+
+                <select id="memberTypeField"
+                        label="Đối tượng độc giả *"
+                        placeholder="Chọn loại đối tượng (Sinh viên, Giảng viên, Cán bộ...)"
+                        colspan="2"
+                        helperText="Quy định hạn mức số sách được mượn, thời hạn mượn và số ngày gia hạn"/>
+            </formLayout>
+
+            <!-- Khung thông báo lỗi / thành công động -->
+            <div id="messageBanner" width="100%" classNames="mt-s hidden"/>
+
+            <!-- Khung nút thao tác -->
+            <div classNames="flex flex-col gap-s mt-m" width="100%">
+                <button id="submitRegisterBtn"
+                        text="Đăng ký tài khoản"
+                        icon="CHECK_CIRCLE"
+                        themeNames="primary"
+                        classNames="w-full font-bold"/>
+
+                <div classNames="flex items-center justify-center gap-xs mt-xs text-s" width="100%">
+                    <span classNames="text-secondary" text="Đã có tài khoản thư viện?"/>
+                    <button id="loginLinkBtn"
+                            text="Đăng nhập ngay"
+                            themeNames="tertiary-inline"
+                            classNames="auth-link-btn"/>
+                </div>
+            </div>
+        </div>
+    </layout>
+</view>

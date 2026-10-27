@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Đầu sách">
+    <data>
+        <instance id="bookDc"
+                  class="com.company.librarymanagementsystem.entity.Book">
+            <fetchPlan extends="_base">
+                <property name="publisher" fetchPlan="_base"/>
+                <property name="authors" fetchPlan="_base"/>
+                <property name="categories" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+        <collection id="copiesDc" class="com.company.librarymanagementsystem.entity.BookCopy">
+            <fetchPlan extends="_base">
+                <property name="location" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="copiesDl">
+                <query><![CDATA[select c from BookCopy c where c.book = :container_bookDc and c.deletedAt is null order by c.id desc]]></query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <hbox width="100%" spacing="true" alignItems="START" classNames="gap-m">
+            <!-- Khung xem trước ảnh bìa sách -->
+            <vbox width="180px" minWidth="180px" alignItems="CENTER" padding="false" spacing="false" classNames="me-s">
+                <span text="Ảnh bìa sách" classNames="font-semibold text-secondary text-s mb-xs"/>
+                <image id="coverImagePreview"
+                       width="160px"
+                       height="225px"
+                       classNames="rounded shadow-s border"/>
+                <span id="coverStatusText" classNames="text-xs text-center mt-xs" width="100%"/>
+                <button id="fetchTikiBtn" text="Lấy ảnh từ Tiki" icon="SEARCH" themeNames="small tertiary" classNames="mt-xs"/>
+            </vbox>
+
+            <formLayout id="form" dataContainer="bookDc" width="100%">
+                <responsiveSteps>
+                    <responsiveStep minWidth="0" columns="1"/>
+                    <responsiveStep minWidth="45em" columns="2"/>
+                </responsiveSteps>
+
+                <textField id="titleField"
+                           property="title"
+                           label="Nhan đề cuốn sách"
+                           required="true"
+                           requiredMessage="Vui lòng nhập nhan đề cuốn sách"
+                           helperText="Nhập tên sách và chuyển ô để tự động tìm ảnh bìa trên Tiki"
+                           colspan="2"/>
+
+                <textField id="subtitleField"
+                           property="subtitle"
+                           label="Phụ đề sách"
+                           colspan="2"/>
+
+                <textField id="coverImageUrlField"
+                           property="coverImageUrl"
+                           label="URL ảnh bìa sách"
+                           helperText="Tự động điền từ Tiki hoặc dán link ảnh tùy chọn"
+                           clearButtonVisible="true"
+                           colspan="2"/>
+
+                <textField id="isbnField"
+                           property="isbn"
+                           required="true"
+                           requiredMessage="Vui lòng nhập mã ISBN"
+                           label="Mã chuẩn ISBN (10 hoặc 13 số)"/>
+
+                <textField id="ddcField"
+                           property="ddc"
+                           label="Mã phân loại DDC (Ví dụ: 005.1, 895.9223)"/>
+
+                <entityPicker id="publisherField"
+                              property="publisher"
+                              required="true"
+                              requiredMessage="Vui lòng chọn Nhà xuất bản"
+                              label="Nhà xuất bản"
+                              colspan="2">
+                    <actions>
+                        <action id="entityLookup" type="entity_lookup"/>
+                        <action id="entityClear" type="entity_clear"/>
+                    </actions>
+                </entityPicker>
+
+                <!-- Tác giả & Thể loại trên cùng 1 hàng với nút 3 chấm như Nhà xuất bản -->
+                <valuePicker id="authorsPicker"
+                             label="Tác giả"
+                             required="true"
+                             requiredMessage="Vui lòng chọn Tác giả"
+                             allowCustomValue="false">
+                    <actions>
+                        <action id="authorsLookupAction" icon="ELLIPSIS_DOTS_H"/>
+                        <action id="authorsClearAction" icon="CLOSE"/>
+                    </actions>
+                </valuePicker>
+
+                <valuePicker id="categoriesPicker"
+                             label="Thể loại"
+                             required="true"
+                             requiredMessage="Vui lòng chọn Thể loại"
+                             allowCustomValue="false">
+                    <actions>
+                        <action id="categoriesLookupAction" icon="ELLIPSIS_DOTS_H"/>
+                        <action id="categoriesClearAction" icon="CLOSE"/>
+                    </actions>
+                </valuePicker>
+
+                <textField id="publishYearField"
+                           property="publishYear"
+                           label="Năm xuất bản"/>
+
+                <textField id="editionField"
+                           property="edition"
+                           label="Lần xuất bản / Tái bản"/>
+
+                <textField id="pageCountField"
+                           property="pageCount"
+                           label="Số trang"/>
+
+                <textField id="priceField"
+                           property="price"
+                           label="Giá bìa (VNĐ)"/>
+
+                <select id="languageField"
+                        property="language"
+                        label="Ngôn ngữ"/>
+
+                <select id="statusField"
+                        property="status"
+                        label="Trạng thái lưu hành"/>
+
+                <checkbox id="isReferenceField"
+                          property="isReference"
+                          label="Sách tham khảo (chỉ đọc tại phòng đọc, không cho mượn về)"
+                          colspan="2"/>
+
+                <textArea id="descriptionField"
+                          property="description"
+                          label="Tóm tắt nội dung cuốn sách"
+                          height="8em"
+                          colspan="2"/>
+            </formLayout>
+        </hbox>
+
+        <details id="copiesDetails" summaryText="Danh sách bản sao &amp; Mã vạch sách" opened="true" width="100%" classNames="mt-m">
+            <vbox width="100%" spacing="true" padding="false">
+                <hbox spacing="true" alignItems="CENTER">
+                    <button id="addBulkCopiesBtn" text="Nhập bản sao hàng loạt" icon="PLUS_CIRCLE" themeNames="primary success"/>
+                    <button id="addSingleCopyBtn" text="Thêm cuốn đơn" icon="PLUS"/>
+                    <button id="printCopiesBtn" text="In mã vạch các bản sao" icon="BARCODE" themeNames="primary"/>
+                </hbox>
+                <dataGrid id="copiesDataGrid" dataContainer="copiesDc" width="100%" minHeight="14em">
+                    <columns resizable="true">
+                        <column property="barcode" header="Mã vạch (Barcode)" autoWidth="true"/>
+                        <column property="location" header="Vị trí kệ" autoWidth="true"/>
+                        <column property="status" header="Trạng thái" autoWidth="true"/>
+                        <column property="condition" header="Tình trạng" autoWidth="true"/>
+                        <column property="acquisitionPrice" header="Giá nhập" autoWidth="true"/>
+                        <column property="acquiredDate" header="Ngày nhập" autoWidth="true"/>
+                        <column property="note" header="Ghi chú" autoWidth="true"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+        </details>
+
+        <hbox id="detailActions" spacing="true" classNames="mt-m">
+            <button id="saveAndCloseButton" action="saveCloseAction" themeNames="primary" icon="CHECK"/>
+            <button id="closeButton" action="closeAction" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      focusComponent="login"
+      title="msg://LoginView.title">
+    <layout classNames="jmix-login-main-layout">
+        <h1 text="Hệ thống quản lý thư viện"
+            classNames="login-page-title"/>
+        <div classNames="login-card-container">
+            <image resource="public/images/login-logo.png"
+                   classNames="login-logo"/>
+            <loginForm id="login"
+                       classNames="custom-login-form"
+                       forgotPasswordButtonVisible="false">
+                <form title="msg://loginForm.headerTitle"
+                      username="msg://loginForm.username"
+                      password="msg://loginForm.password"
+                      rememberMe="msg://loginForm.rememberMe"
+                      submit="msg://loginForm.submit"
+                      forgotPassword="msg://loginForm.forgotPassword"/>
+                <errorMessage title="msg://loginForm.errorTitle"
+                              message="msg://loginForm.badCredentials"
+                              username="msg://loginForm.errorUsername"
+                              password="msg://loginForm.errorPassword"/>
+            </loginForm>
+            <div classNames="flex items-center justify-center gap-xs mt-s text-s" width="100%">
+                <span classNames="text-secondary" text="Chưa có tài khoản độc giả?"/>
+                <button id="registerBtn" text="Đăng ký ngay" themeNames="tertiary-inline" classNames="auth-link-btn"/>
+            </div>
+        </div>
+    </layout>
+</view>

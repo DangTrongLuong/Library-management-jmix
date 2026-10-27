@@ -1,0 +1,121 @@
+/* ========================================================
+   VAADIN COMBO BOX MODERN COMPONENT STYLING
+   ======================================================== */
+:host {
+  font-family: var(--lumo-font-family, inherit);
+  box-sizing: border-box;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+:host(:not([has-label])) {
+  height: 2.45rem !important;
+  min-height: 2.45rem !important;
+  max-height: 2.45rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  box-sizing: border-box !important;
+}
+
+:host(:not([has-label])) [part="input-field"] {
+  height: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+[part="label"] {
+  color: #334155 !important;
+  font-size: var(--lumo-font-size-s, 0.8125rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  margin-bottom: 0.35rem !important;
+  transition: color 0.15s ease-in-out !important;
+}
+
+:host([focused]:not([invalid])) [part="label"] {
+  color: #2563eb !important;
+}
+
+:host([invalid]) [part="label"] {
+  color: #ef4444 !important;
+}
+
+[part="input-field"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  height: 2.45rem !important;
+  min-height: 2.45rem !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04) !important;
+  box-sizing: border-box !important;
+  padding: 0 0.75rem !important;
+  transition: border-color 0.18s ease-in-out, box-shadow 0.18s ease-in-out !important;
+}
+
+:host(:hover:not([readonly]):not([disabled]):not([focused]):not([invalid])) [part="input-field"] {
+  border-color: #94a3b8 !important;
+}
+
+:host([focused]:not([invalid])) [part="input-field"] {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+:host([invalid]) [part="input-field"] {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+[part="value"] {
+  color: #0f172a !important;
+  font-size: var(--lumo-font-size-m, 0.875rem) !important;
+}
+
+[part="value"]::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+[part="toggle-button"] {
+  color: #64748b !important;
+  cursor: pointer !important;
+  transition: color 0.15s ease, transform 0.18s ease !important;
+}
+
+:host([opened]) [part="toggle-button"] {
+  color: #2563eb !important;
+  transform: rotate(180deg) !important;
+}
+
+[part="clear-button"] {
+  color: #94a3b8 !important;
+  cursor: pointer !important;
+  transition: color 0.15s ease, transform 0.15s ease !important;
+}
+
+[part="clear-button"]:hover {
+  color: #ef4444 !important;
+  transform: scale(1.15) !important;
+}
+
+/* Error Message */
+:host(:not([invalid])) [part="error-message"],
+:host(:not([has-error-message])) [part="error-message"],
+[part="error-message"]:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+:host([invalid]) [part="error-message"] {
+  display: block !important;
+  color: #ef4444 !important;
+  font-size: var(--lumo-font-size-xs, 0.75rem) !important;
+  font-weight: 500 !important;
+  margin-top: 0.25rem !important;
+}

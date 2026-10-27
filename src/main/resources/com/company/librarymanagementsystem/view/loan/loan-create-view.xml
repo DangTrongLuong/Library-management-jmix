@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Lập Phiếu Mượn Sách Tại Quầy">
+    <data>
+        <collection id="selectedCopiesDc"
+                    class="com.company.librarymanagementsystem.entity.BookCopy">
+            <fetchPlan extends="_base">
+                <property name="book" fetchPlan="_base">
+                    <property name="authors" fetchPlan="_base"/>
+                </property>
+                <property name="location" fetchPlan="_base"/>
+            </fetchPlan>
+        </collection>
+    </data>
+    <layout>
+        <vbox id="mainContainer" width="100%" maxWidth="85em" classNames="centered-page-container mx-auto" spacing="true" padding="true">
+            <!-- Header Title -->
+            <hbox width="100%" justifyContent="BETWEEN" alignItems="CENTER">
+                <vbox spacing="false" padding="false">
+                    <h2 text="Lập Phiếu Mượn Sách Tại Quầy"/>
+                    <span text="Quét thẻ độc giả, kiểm tra tư cách mượn và quét mã vạch các bản sao sách."
+                          classNames="text-secondary"/>
+                </vbox>
+                <button id="cancelTopBtn" text="Quay lại danh sách" icon="ARROW_LEFT"/>
+            </hbox>
+
+            <!-- Bước 1: Chọn Độc Giả & Kiểm Tra Tư Cách Mượn -->
+            <details id="memberSection" summaryText="1. Độc giả &amp; Tư cách mượn" opened="true" width="100%">
+                <vbox width="100%" spacing="true" padding="false">
+                    <vbox width="100%" spacing="false" padding="false">
+                        <hbox alignItems="BASELINE" spacing="xs" classNames="mb-xs">
+                            <span text="Chọn độc giả" classNames="text-secondary font-medium text-s"/>
+                            <span text="*" classNames="text-error font-bold text-s"/>
+                        </hbox>
+                        <hbox width="100%" alignItems="START" spacing="true">
+                            <comboBox id="memberComboBox"
+                                      placeholder="Tìm theo mã thẻ, họ tên, CCCD..."
+                                      width="32em"
+                                      required="true"/>
+                            <button id="recheckEligibilityBtn" text="Kiểm tra lại tư cách" icon="REFRESH"/>
+                        </hbox>
+                    </vbox>
+
+                    <!-- Banner trạng thái điều kiện mượn -->
+                    <div id="eligibilityCard" visible="false"/>
+                </vbox>
+            </details>
+
+            <!-- Bước 2: Quét & Thêm Sách Mượn -->
+            <details id="booksSection" summaryText="2. Chọn Bản sao sách mượn" opened="true" width="100%">
+                <vbox width="100%" spacing="true" padding="false">
+                    <vbox width="100%" spacing="false" padding="false">
+                        <span text="Mã vạch bản sao sách (Barcode)" classNames="text-secondary font-medium text-s mb-xs"/>
+                        <hbox width="100%" alignItems="START" spacing="true">
+                            <textField id="barcodeField"
+                                       placeholder="Quét mã vạch hoặc nhập mã rồi ấn Enter..."
+                                       width="25em"
+                                       clearButtonVisible="true"/>
+                            <button id="addBookBtn" text="Thêm sách" icon="PLUS" themeNames="primary"/>
+                        </hbox>
+                    </vbox>
+
+                    <!-- Bảng các cuốn sách trong phiếu mượn tạm thời -->
+                    <dataGrid id="selectedCopiesGrid"
+                              dataContainer="selectedCopiesDc"
+                              width="100%"
+                              minHeight="16em">
+                        <columns>
+                            <column property="barcode" header="Mã vạch" autoWidth="true"/>
+                            <column property="book.title" header="Tên đầu sách" autoWidth="true" flexGrow="2"/>
+                            <column key="author" header="Tác giả" autoWidth="true"/>
+                            <column property="location.name" header="Vị trí kệ" autoWidth="true"/>
+                            <column property="book.price" header="Giá bìa" autoWidth="true"/>
+                            <column key="dueDate" header="Hạn trả dự kiến" autoWidth="true" textAlign="CENTER"/>
+                            <column key="actions" header="Thao tác" autoWidth="true" textAlign="CENTER"/>
+                        </columns>
+                    </dataGrid>
+                </vbox>
+            </details>
+
+            <!-- Bước 3: Ghi chú & Hoàn tất -->
+            <details id="confirmSection" summaryText="3. Thông tin phiếu &amp; Xác nhận" opened="true" width="100%">
+                <vbox width="100%" spacing="true" padding="false">
+                    <textField id="noteField"
+                               label="Ghi chú phiếu mượn"
+                               placeholder="Nhập ghi chú thêm nếu cần..."
+                               width="100%"/>
+
+                    <hbox width="100%" justifyContent="END" spacing="true">
+                        <button id="cancelBtn" text="Hủy bỏ" icon="CLOSE"/>
+                        <button id="submitBtn" text="Xác nhận Lập phiếu mượn" icon="CHECK_CIRCLE"
+                                themeNames="primary success"/>
+                    </hbox>
+                </vbox>
+            </details>
+        </vbox>
+    </layout>
+</view>

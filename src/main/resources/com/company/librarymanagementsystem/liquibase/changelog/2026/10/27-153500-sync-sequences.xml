@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- Đồng bộ giá trị khởi tạo trong sys_sequence lớn hơn MAX(ID) của seed data để tránh trùng ID -->
+    <changeSet id="20261027-153500-sync-sequences" author="Library-Management-System">
+        <sql dbms="mysql">
+            INSERT INTO sys_sequence (NAME, INCREMENT, CURR_VALUE) VALUES
+            ('seq_id_Book', 100, 2000),
+            ('seq_id_Publisher', 100, 1000),
+            ('seq_id_Author', 100, 1000),
+            ('seq_id_Category', 100, 1000),
+            ('seq_id_Location', 100, 1000),
+            ('seq_id_BookCopy', 100, 2000),
+            ('seq_id_LibraryMember', 100, 3000),
+            ('seq_id_Loan', 100, 2000),
+            ('seq_id_LoanItem', 100, 2000),
+            ('seq_id_Fine', 100, 2000),
+            ('seq_id_Payment', 100, 2000),
+            ('seq_id_Reservation', 100, 1000),
+            ('seq_id_Renewal', 100, 1000),
+            ('seq_id_AuditLog', 100, 2000),
+            ('seq_id_MemberType', 100, 1000),
+            ('seq_id_Role', 100, 1000),
+            ('seq_id_Permission', 100, 1000)
+            ON DUPLICATE KEY UPDATE CURR_VALUE = GREATEST(CURR_VALUE, VALUES(CURR_VALUE));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

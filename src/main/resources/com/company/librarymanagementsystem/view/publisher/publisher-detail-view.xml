@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Nhà xuất bản">
+    <data>
+        <instance id="publisherDc"
+                  class="com.company.librarymanagementsystem.entity.Publisher">
+            <fetchPlan extends="_base"/>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="publisherDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+
+            <textField id="nameField"
+                       property="name"
+                       label="Tên nhà xuất bản"
+                       required="true"
+                       requiredMessage="Vui lòng nhập tên nhà xuất bản"
+                       colspan="2"/>
+
+            <textField id="addressField"
+                       property="address"
+                       label="Địa chỉ trụ sở"
+                       colspan="2"/>
+
+            <textField id="phoneField"
+                       property="phone"
+                       label="Số điện thoại liên hệ"/>
+
+            <textField id="emailField"
+                       property="email"
+                       label="Email liên hệ"/>
+
+            <textField id="websiteField"
+                       property="website"
+                       label="Website (URL)"
+                       colspan="2"/>
+        </formLayout>
+
+        <hbox id="detailActions" spacing="true" classNames="mt-m">
+            <button id="saveAndCloseButton" action="saveCloseAction" themeNames="primary" icon="CHECK"/>
+            <button id="closeButton" action="closeAction" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

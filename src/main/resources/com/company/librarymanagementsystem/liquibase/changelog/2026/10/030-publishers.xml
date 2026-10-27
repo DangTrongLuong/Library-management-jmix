@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- ChangeSet 1: Create PUBLISHERS table with audit fields -->
+    <changeSet id="20261021-01-create-publishers" author="Library-Management-System">
+        <createTable tableName="PUBLISHERS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(150)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UC_PUBLISHERS_NAME"/>
+            </column>
+            <column name="ADDRESS" type="VARCHAR(255)"/>
+            <column name="PHONE" type="VARCHAR(50)"/>
+            <column name="EMAIL" type="VARCHAR(150)"/>
+            <column name="WEBSITE" type="VARCHAR(255)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="IDX_PUBLISHERS_ON_NAME" tableName="PUBLISHERS" unique="true">
+            <column name="NAME"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 2: Seed Publishers (including all 14 publishers from Books catalog) -->
+    <changeSet id="20261021-02-seed-publishers" author="Library-Management-System">
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="1"/>
+            <column name="NAME" value="NXB Kim Đồng"/>
+            <column name="ADDRESS" value="55 Quang Trung, Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3943 4730"/>
+            <column name="EMAIL" value="cskh_online@nxbkimdong.com.vn"/>
+            <column name="WEBSITE" value="nxbkimdong.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="2"/>
+            <column name="NAME" value="NXB Trẻ"/>
+            <column name="ADDRESS" value="161B Lý Chính Thắng, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh"/>
+            <column name="PHONE" value="028 3931 6289"/>
+            <column name="EMAIL" value="hopthu@nxbtre.com.vn"/>
+            <column name="WEBSITE" value="nxbtre.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="3"/>
+            <column name="NAME" value="NXB Văn Học"/>
+            <column name="ADDRESS" value="18 Nguyễn Trường Tộ, Ba Đình, Hà Nội"/>
+            <column name="PHONE" value="024 3716 1518"/>
+            <column name="EMAIL" value="nxbvanhoc@gmail.com"/>
+            <column name="WEBSITE" value="nxbvanhoc.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="4"/>
+            <column name="NAME" value="NXB Bách khoa Hà Nội"/>
+            <column name="ADDRESS" value="Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3868 4569"/>
+            <column name="EMAIL" value="nxb@hust.edu.vn"/>
+            <column name="WEBSITE" value="nxb.hust.edu.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="5"/>
+            <column name="NAME" value="NXB Giáo Dục"/>
+            <column name="ADDRESS" value="81 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3822 0801"/>
+            <column name="EMAIL" value="nxbgdvn@nxbgd.vn"/>
+            <column name="WEBSITE" value="nxbgd.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="6"/>
+            <column name="NAME" value="NXB Lao Động"/>
+            <column name="ADDRESS" value="175 Giảng Võ, Đống Đa, Hà Nội"/>
+            <column name="PHONE" value="024 3851 5380"/>
+            <column name="EMAIL" value="nxblaodong@gmail.com"/>
+            <column name="WEBSITE" value="nxblaodong.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="7"/>
+            <column name="NAME" value="NXB Hội Nhà Văn"/>
+            <column name="ADDRESS" value="65 Nguyễn Du, Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3822 2135"/>
+            <column name="EMAIL" value="nxbhoinhavan@gmail.com"/>
+            <column name="WEBSITE" value="nxbhoinhavan.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="8"/>
+            <column name="NAME" value="NXB Thế Giới"/>
+            <column name="ADDRESS" value="46 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3825 3841"/>
+            <column name="EMAIL" value="thegioi@hn.vnn.vn"/>
+            <column name="WEBSITE" value="thegioipublishers.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="9"/>
+            <column name="NAME" value="NXB Tri Thức"/>
+            <column name="ADDRESS" value="53 Nguyễn Du, Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3944 7239"/>
+            <column name="EMAIL" value="phathanh@nxbtrithuc.com.vn"/>
+            <column name="WEBSITE" value="nxbtrithuc.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="10"/>
+            <column name="NAME" value="NXB Khoa Học Xã Hội"/>
+            <column name="ADDRESS" value="26 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3936 0773"/>
+            <column name="EMAIL" value="nxbkhxh@gmail.com"/>
+            <column name="WEBSITE" value="nxbkhxh.vass.gov.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="11"/>
+            <column name="NAME" value="NXB Hà Nội"/>
+            <column name="ADDRESS" value="Số 4 Tống Duy Tân, Hàng Bông, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3825 2916"/>
+            <column name="EMAIL" value="nxbhanoi@gmail.com"/>
+            <column name="WEBSITE" value="nxbhanoi.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="12"/>
+            <column name="NAME" value="NXB Tổng hợp TP.HCM"/>
+            <column name="ADDRESS" value="62 Nguyễn Thị Minh Khai, Đa Kao, Quận 1, TP.HCM"/>
+            <column name="PHONE" value="028 3822 5340"/>
+            <column name="EMAIL" value="tonghop@nxbhcm.com.vn"/>
+            <column name="WEBSITE" value="nxbhcm.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="13"/>
+            <column name="NAME" value="NXB Mỹ Thuật"/>
+            <column name="ADDRESS" value="44B Hàm Long, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3943 5899"/>
+            <column name="EMAIL" value="nxbmythuat@gmail.com"/>
+            <column name="WEBSITE" value="nxbmythuat.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="14"/>
+            <column name="NAME" value="NXB Âm Nhạc"/>
+            <column name="ADDRESS" value="61 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3822 1788"/>
+            <column name="EMAIL" value="nxbamnhac@gmail.com"/>
+            <column name="WEBSITE" value="dihavina.com"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="15"/>
+            <column name="NAME" value="Chính trị Quốc gia Sự thật"/>
+            <column name="ADDRESS" value="6/86 Duy Tân, Cầu Giấy, Hà Nội"/>
+            <column name="PHONE" value="024 3942 2008"/>
+            <column name="EMAIL" value="nxbctqg@nxbctqg.vn"/>
+            <column name="WEBSITE" value="nxbctqg.org.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="16"/>
+            <column name="NAME" value="Công Thương"/>
+            <column name="ADDRESS" value="Tầng 4, Tòa nhà Bộ Công Thương, số 655 Phạm Văn Đồng, quận Bắc Từ Liêm, Hà Nội"/>
+            <column name="PHONE" value="024 3726 4381"/>
+            <column name="EMAIL" value="nxbcongthuong@moit.gov.vn"/>
+            <column name="WEBSITE" value="nxbcongthuong.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="17"/>
+            <column name="NAME" value="Công an nhân dân"/>
+            <column name="ADDRESS" value="92 Nguyễn Du, quận Hai Bà Trưng, TP. Hà Nội"/>
+            <column name="PHONE" value="024 3942 1657"/>
+            <column name="EMAIL" value="nxbcand@gmail.com"/>
+            <column name="WEBSITE" value="nxbcand.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="18"/>
+            <column name="NAME" value="Dân trí"/>
+            <column name="ADDRESS" value="Số 9, ngõ 26, phố Hoàng Cầu, quận Đống Đa, thành phố Hà Nội"/>
+            <column name="PHONE" value="024 3512 3712"/>
+            <column name="EMAIL" value="nxbdantri@gmail.com"/>
+            <column name="WEBSITE" value="nxbdantri.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="19"/>
+            <column name="NAME" value="Đại học Quốc gia Hà Nội"/>
+            <column name="ADDRESS" value="16 Hàng Chuối, quận Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3971 4896"/>
+            <column name="EMAIL" value="nxb@vnu.edu.vn"/>
+            <column name="WEBSITE" value="press.vnu.edu.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="20"/>
+            <column name="NAME" value="Đại học Quốc gia TP.HCM"/>
+            <column name="ADDRESS" value="Khu phố 6, phường Linh Trung, thành phố Thủ Đức, Thành phố Hồ Chí Minh"/>
+            <column name="PHONE" value="028 6681 7088"/>
+            <column name="EMAIL" value="vnupress@vnuhcm.edu.vn"/>
+            <column name="WEBSITE" value="vnupress.edu.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="21"/>
+            <column name="NAME" value="Đại học Sư phạm"/>
+            <column name="ADDRESS" value="128 Xuân Thủy, quận Cầu Giấy, Hà Nội"/>
+            <column name="PHONE" value="024 3754 7735"/>
+            <column name="EMAIL" value="sachsp@hnue.edu.vn"/>
+            <column name="WEBSITE" value="nxbdhsp.edu.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="22"/>
+            <column name="NAME" value="Giao thông Vận tải"/>
+            <column name="ADDRESS" value="80B Trần Hưng Đạo, quận Hoàn Kiếm, TP. Hà Nội"/>
+            <column name="PHONE" value="024 3942 3449"/>
+            <column name="EMAIL" value="nxbgtvt@fpt.vn"/>
+            <column name="WEBSITE" value="nxbgtvt.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="23"/>
+            <column name="NAME" value="Hàng hải"/>
+            <column name="ADDRESS" value="484 Lạch Tray, Đổng Quốc Bình, Lê Chân, Hải Phòng"/>
+            <column name="PHONE" value="0225 3729 655"/>
+            <column name="EMAIL" value="nxbhh@vimaru.edu.vn"/>
+            <column name="WEBSITE" value="vimaru.edu.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="24"/>
+            <column name="NAME" value="Khoa học và Kỹ thuật"/>
+            <column name="ADDRESS" value="70 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3942 3171"/>
+            <column name="EMAIL" value="nxbkhkt@hn.vnn.vn"/>
+            <column name="WEBSITE" value="nxbkhkt.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="25"/>
+            <column name="NAME" value="Nông nghiệp"/>
+            <column name="ADDRESS" value="183 Hoàng Văn Thái, quận Thanh Xuân, Hà Nội"/>
+            <column name="PHONE" value="024 3852 3887"/>
+            <column name="EMAIL" value="nxbnn@hn.vnn.vn"/>
+            <column name="WEBSITE" value="nxbnn.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="26"/>
+            <column name="NAME" value="Phụ nữ Việt Nam"/>
+            <column name="ADDRESS" value="39 Hàng Chuối, quận Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3971 7980"/>
+            <column name="EMAIL" value="nxbphunu@fpt.vn"/>
+            <column name="WEBSITE" value="nxbphunu.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="27"/>
+            <column name="NAME" value="Quân đội nhân dân"/>
+            <column name="ADDRESS" value="Số 7 Phan Đình Phùng, phường Quán Thánh, Ba Đình, Hà Nội"/>
+            <column name="PHONE" value="024 3747 4330"/>
+            <column name="EMAIL" value="nxbqdnd@gmail.com"/>
+            <column name="WEBSITE" value="nxbqdnd.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="28"/>
+            <column name="NAME" value="Tài chính"/>
+            <column name="ADDRESS" value="Số 7 Phan Huy Chú, Phan Chu Trinh, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3826 2767"/>
+            <column name="EMAIL" value="nxbtc@mof.gov.vn"/>
+            <column name="WEBSITE" value="nxbtc.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="29"/>
+            <column name="NAME" value="Thanh niên"/>
+            <column name="ADDRESS" value="64 Bà Triệu, quận Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 3943 4044"/>
+            <column name="EMAIL" value="nxbthanhnien@gmail.com"/>
+            <column name="WEBSITE" value="nxbthanhnien.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="30"/>
+            <column name="NAME" value="Thông tin và Truyền thông"/>
+            <column name="ADDRESS" value="Tầng 6, tòa nhà Cục Tần số, 115 Trần Duy Hưng, Cầu Giấy, Hà Nội"/>
+            <column name="PHONE" value="024 3577 2143"/>
+            <column name="EMAIL" value="nxb.tttt@mic.gov.vn"/>
+            <column name="WEBSITE" value="nxbthongtinvatruyenthong.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="31"/>
+            <column name="NAME" value="Tư pháp"/>
+            <column name="ADDRESS" value="Số 35 Trần Quốc Toản, Hàng Bài, Hoàn Kiếm, Hà Nội"/>
+            <column name="PHONE" value="024 6263 2060"/>
+            <column name="EMAIL" value="nxbtuphap@moj.gov.vn"/>
+            <column name="WEBSITE" value="nxbtuphap.moj.gov.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="32"/>
+            <column name="NAME" value="Xây dựng"/>
+            <column name="ADDRESS" value="37 Hoa Lư, quận Hai Bà Trưng, Hà Nội"/>
+            <column name="PHONE" value="024 3976 0270"/>
+            <column name="EMAIL" value="nxbxaydung@hn.vnn.vn"/>
+            <column name="WEBSITE" value="nxbxaydung.com.vn"/>
+        </insert>
+        <insert tableName="PUBLISHERS">
+            <column name="ID" valueNumeric="33"/>
+            <column name="NAME" value="Y học"/>
+            <column name="ADDRESS" value="352 Đội Cấn, quận Ba Đình, Hà Nội"/>
+            <column name="PHONE" value="024 3762 5934"/>
+            <column name="EMAIL" value="xuatbanyhoc@fpt.vn"/>
+            <column name="WEBSITE" value="nxbyhoc.com.vn"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

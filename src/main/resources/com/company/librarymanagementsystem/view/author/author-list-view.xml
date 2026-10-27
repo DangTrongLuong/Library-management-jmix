@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Tác giả"
+      focusComponent="authorsDataGrid">
+    <data>
+        <collection id="authorsDc"
+                    class="com.company.librarymanagementsystem.entity.Author">
+            <fetchPlan extends="_base"/>
+            <loader id="authorsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Author e order by e.fullName]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+            <button id="createButton" action="authorsDataGrid.createAction" text="Thêm mới" icon="PLUS" themeNames="primary"/>
+            <button id="editButton" action="authorsDataGrid.editAction" text="Chỉnh sửa" icon="PENCIL"/>
+            <button id="removeButton" action="authorsDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error"/>
+            <button id="refreshButton" action="authorsDataGrid.refreshAction" text="Làm mới" icon="REFRESH"/>
+            
+            <textField id="searchField"
+                       placeholder="Tìm kiếm tác giả theo tên, quốc tịch..."
+                       clearButtonVisible="true"
+                       prefixComponent="vaadin-icon:search"
+                       width="24em"
+                       classNames="ms-m"/>
+
+            <simplePagination id="pagination" dataLoader="authorsDl" classNames="ms-auto"/>
+        </hbox>
+
+        <dataGrid id="authorsDataGrid"
+                  width="100%"
+                  selectionMode="MULTI"
+                  columnReorderingAllowed="true"
+                  minHeight="24em"
+                  dataContainer="authorsDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+                <action id="refreshAction" type="list_refresh" text="Làm mới"/>
+            </actions>
+            <columns resizable="true">
+                <column property="fullName" header="Họ và tên tác giả" autoWidth="true" flexGrow="1"/>
+                <column property="birthYear" header="Năm sinh / Thời kỳ" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+                <column property="nationality" header="Quốc tịch" autoWidth="true" flexGrow="0"/>
+                <column property="biography" header="Tiểu sử" autoWidth="true" flexGrow="2"/>
+            </columns>
+        </dataGrid>
+
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction" text="Chọn" themeNames="primary" icon="CHECK"/>
+            <button id="discardButton" action="discardAction" text="Bỏ qua" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

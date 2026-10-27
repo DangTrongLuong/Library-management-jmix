@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Mượn - Trả sách"
+      focusComponent="searchField">
+    <data>
+        <collection id="loanItemsDc"
+                    class="com.company.librarymanagementsystem.entity.LoanItem">
+            <fetchPlan extends="_base">
+                <property name="loan" fetchPlan="_base">
+                    <property name="member" fetchPlan="_base">
+                        <property name="memberType" fetchPlan="_base"/>
+                        <property name="user" fetchPlan="_base"/>
+                    </property>
+                    <property name="issuedBy" fetchPlan="_base"/>
+                </property>
+                <property name="bookCopy" fetchPlan="_base">
+                    <property name="book" fetchPlan="_base">
+                        <property name="authors" fetchPlan="_base"/>
+                    </property>
+                    <property name="location" fetchPlan="_base"/>
+                </property>
+                <property name="receivedBy" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="loanItemsDl" readOnly="true">
+                <query>
+                    <![CDATA[select li from LoanItem li
+                    left join li.loan l
+                    left join l.member m
+                    left join li.bookCopy bc
+                    left join bc.book b
+                    where (:statusFilter is null or li.status = :statusFilter)
+                    and (:overdueOnly is null or (li.status = 'BORROWED' and li.dueDate < :currentDate))
+                    and (:searchText is null or :searchText = ''
+                         or lower(l.loanCode) like lower(concat('%', :searchText, '%'))
+                         or lower(m.memberCode) like lower(concat('%', :searchText, '%'))
+                         or lower(m.fullName) like lower(concat('%', :searchText, '%'))
+                         or lower(bc.barcode) like lower(concat('%', :searchText, '%'))
+                         or lower(b.title) like lower(concat('%', :searchText, '%')))
+                    order by li.id desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="false"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <vbox width="100%" spacing="true" padding="false">
+            <!-- Modern KPI Ribbon -->
+            <div id="kpiContainer" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Action Toolbar & Search Filters -->
+            <hbox id="toolbarPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+                <textField id="searchField"
+                           placeholder="Mã phiếu, mã thẻ, tên độc giả, mã vạch, tên sách..."
+                           width="30em"
+                           clearButtonVisible="true"/>
+                <select id="statusFilterSelect"
+                        placeholder="Lọc theo trạng thái..."
+                        width="13em"/>
+                <button id="searchBtn" text="Lọc" icon="SEARCH" themeNames="primary"/>
+                <button id="clearFilterBtn" text="Xóa lọc" icon="CLOSE"/>
+
+                <hbox width="100%" justifyContent="END" spacing="true">
+                    <button id="createLoanBtn" text="Lập phiếu mượn" icon="PLUS_CIRCLE" themeNames="primary success"/>
+                    <button id="viewDetailBtn" text="Xem chi tiết phiếu" icon="FILE_TEXT"/>
+                    <button id="returnBookBtn" text="Nhận trả sách" icon="CHECK_CIRCLE" themeNames="primary"/>
+                    <button id="renewBtn" text="Gia hạn" icon="CALENDAR_CLOCK" themeNames="secondary"/>
+                    <button id="refreshBtn" text="Làm mới" icon="REFRESH"/>
+                </hbox>
+            </hbox>
+
+            <!-- Main DataGrid: Danh sách cuốn sách mượn trả -->
+            <dataGrid id="loanItemsDataGrid"
+                      width="100%"
+                      columnReorderingAllowed="true"
+                      minHeight="28em"
+                      dataContainer="loanItemsDc">
+                <columns>
+                    <column property="loan.loanCode" header="Mã phiếu" autoWidth="true"/>
+                    <column property="loan.member.memberCode" header="Mã độc giả" autoWidth="true"/>
+                    <column property="loan.member.fullName" header="Họ và tên" autoWidth="true"/>
+                    <column property="bookCopy.barcode" header="Mã vạch" autoWidth="true" textAlign="CENTER"/>
+                    <column property="bookCopy.book.title" header="Tên sách" autoWidth="true" flexGrow="2"/>
+                    <column property="loan.loanDate" header="Ngày mượn" autoWidth="true" textAlign="CENTER"/>
+                    <column property="dueDate" header="Hạn trả" autoWidth="true" textAlign="CENTER"/>
+                    <column key="overdueStatus" header="Tình trạng hạn" autoWidth="true" textAlign="CENTER"/>
+                    <column property="renewCount" header="Lần gia hạn" autoWidth="true" textAlign="CENTER"/>
+                    <column key="itemStatus" header="Trạng thái" autoWidth="true" textAlign="CENTER"/>
+                    <column property="returnCondition" header="Tình trạng trả" autoWidth="true" textAlign="CENTER"/>
+                    <column property="returnedAt" header="Ngày trả" autoWidth="true" textAlign="CENTER"/>
+                    <column property="receivedBy.username" header="Thủ thư nhận trả" autoWidth="true" textAlign="CENTER"/>
+                </columns>
+            </dataGrid>
+
+            <simplePagination id="pagination"
+                              dataLoader="loanItemsDl"
+                              itemsPerPageVisible="true"
+                              itemsPerPageDefaultValue="20"
+                              itemsPerPageOptions="10, 20, 50, 100"/>
+        </vbox>
+    </layout>
+</view>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/flowui/menu">
+
+    <item id="ManagerDashboardView" view="ManagerDashboardView" title="Dashboard Quản trị"/>
+    <item id="LibrarianShiftDashboardView" view="LibrarianShiftDashboardView" title="Dashboard Ca Trực Thủ Thư"/>
+    <item id="OpacCatalogView" view="OpacCatalogView" title="Tra cứu Sách trực tuyến"/>
+
+    <menu id="managerOperations" title="Quản Trị &amp; Điều Hành" opened="true">
+        <item id="managerLibrarySettings" view="LibrarySettingView" title="Cấu hình tham số thư viện"/>
+        <item id="managerFineWaives" view="FineWaiveApprovalView" title="Duyệt miễn / giảm phạt"/>
+        <item id="managerExceptions" view="ExceptionHandlingView" title="Trung tâm xử lý ngoại lệ"/>
+        <item id="managerAuditLogs" view="AuditLogListView" title="Nhật ký kiểm toán nghiệp vụ"/>
+        <item view="MemberType.list" title="Chính sách Loại độc giả"/>
+    </menu>
+
+    <menu id="readerServices" title="Dịch vụ Bạn đọc &amp; Độc giả" opened="true">
+        <item view="ReaderProfileView" title="Hồ sơ &amp; Thẻ thư viện"/>
+        <item view="ReaderCurrentLoansView" title="Sách đang mượn &amp; Gia hạn"/>
+        <item view="ReaderLoanHistoryView" title="Lịch sử mượn trả"/>
+        <item view="ReaderReservationsView" title="Sách đang đặt trước"/>
+        <item view="ReaderFinesView" title="Tiền phạt &amp; Phí dịch vụ"/>
+    </menu>
+
+    <menu id="catalogManagement" title="Quản lý Danh Mục &amp; Kho Sách" opened="true">
+        <item view="Book.list" title="Quản lý đầu sách"/>
+        <item view="BookCopy.list" title="Bản sao &amp; Mã vạch sách"/>
+        <item view="Location.list" title="Vị trí kệ sách"/>
+        <item view="Author.list" title="Quản lý tác giả"/>
+        <item view="Category.list" title="Quản lý thể loại"/>
+        <item view="Publisher.list" title="Quản lý nhà xuất bản"/>
+    </menu>
+
+    <menu id="librarianManagement" title="Quản lý Thư viện" opened="true">
+        <item view="Loan.list" title="Quản lý Mượn - Trả sách"/>
+        <item view="Reservation.list" title="Quản lý Đặt trước sách"/>
+        <item view="Fine.list" title="Quản lý Tiền phạt &amp; Bồi thường"/>
+        <item view="Member.list" title="Quản lý Độc giả &amp; Thẻ TV"/>
+    </menu>
+
+    <menu id="administration" title="Tài Khoản và Phân Quyền" opened="true">
+        <item view="User.list" title="Người dùng"/>
+        <item view="Role.list" title="Vai trò"/>
+        <item view="Permission.list" title="Quyền hạn"/>
+    </menu>
+
+</menu-config>

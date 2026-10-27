@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Vị trí kệ sách"
+      focusComponent="locationsDataGrid">
+    <data>
+        <collection id="locationsDc"
+                    class="com.company.librarymanagementsystem.entity.Location">
+            <fetchPlan extends="_base"/>
+            <loader id="locationsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Location e where e.deletedAt is null order by e.floor, e.code]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+            <button id="createButton" action="locationsDataGrid.createAction" text="Thêm vị trí kệ" icon="PLUS" themeNames="primary"/>
+            <button id="editButton" action="locationsDataGrid.editAction" text="Chỉnh sửa" icon="PENCIL"/>
+            <button id="removeButton" action="locationsDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error"/>
+            <button id="refreshButton" action="locationsDataGrid.refreshAction" text="Làm mới" icon="REFRESH"/>
+
+            <textField id="searchField"
+                       placeholder="Tìm kiếm vị trí theo mã kệ, tên vị trí, tầng..."
+                       clearButtonVisible="true"
+                       prefixComponent="vaadin-icon:search"
+                       width="24em"
+                       classNames="ms-m"/>
+
+            <simplePagination id="pagination" dataLoader="locationsDl" classNames="ms-auto"/>
+        </hbox>
+
+        <dataGrid id="locationsDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  minHeight="24em"
+                  dataContainer="locationsDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+                <action id="refreshAction" type="list_refresh" text="Làm mới"/>
+            </actions>
+            <columns resizable="true">
+                <column property="code" header="Mã vị trí kệ" autoWidth="true" flexGrow="0"/>
+                <column property="name" header="Tên vị trí kệ" autoWidth="true" flexGrow="1"/>
+                <column property="floor" header="Tầng" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+                <column property="roomOrZone" header="Khu vực" autoWidth="true" flexGrow="1"/>
+                <column property="aisle" header="Dãy kệ" autoWidth="true" flexGrow="0"/>
+                <column property="shelfLevel" header="Ngăn kệ" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+                <column property="maxCapacity" header="Sức chứa" autoWidth="true" flexGrow="0" textAlign="END"/>
+                <column property="status" header="Trạng thái" autoWidth="true" flexGrow="0" textAlign="CENTER"/>
+                <column property="description" header="Mô tả chi tiết" autoWidth="true" flexGrow="2"/>
+            </columns>
+        </dataGrid>
+
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction" text="Chọn"/>
+            <button id="discardButton" action="discardAction" text="Bỏ qua"/>
+        </hbox>
+    </layout>
+</view>

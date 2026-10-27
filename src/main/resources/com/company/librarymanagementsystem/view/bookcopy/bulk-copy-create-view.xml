@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Nhập bản sao hàng loạt">
+    <data>
+        <collection id="booksDc" class="com.company.librarymanagementsystem.entity.Book">
+            <fetchPlan extends="_base"/>
+            <loader id="booksDl">
+                <query><![CDATA[select b from Book b order by b.title]]></query>
+            </loader>
+        </collection>
+        <collection id="locationsDc" class="com.company.librarymanagementsystem.entity.Location">
+            <fetchPlan extends="_base"/>
+            <loader id="locationsDl">
+                <query><![CDATA[select l from Location l where l.deletedAt is null order by l.code]]></query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <vbox width="100%" spacing="true">
+            <span classNames="text-secondary">
+                Nhập số lượng bản sao cần tạo. Hệ thống sẽ tự động sinh mã vạch chuẩn BK{id}-{seq} duy nhất cho từng cuốn.
+            </span>
+
+            <formLayout id="form">
+                <responsiveSteps>
+                    <responsiveStep minWidth="0" columns="1"/>
+                    <responsiveStep minWidth="40em" columns="2"/>
+                </responsiveSteps>
+
+                <entityComboBox id="bookField"
+                                metaClass="Book"
+                                itemsContainer="booksDc"
+                                label="Chọn Đầu Sách"
+                                required="true"
+                                requiredMessage="Vui lòng chọn đầu sách cần nhập bản sao"
+                                colspan="2"/>
+
+                <integerField id="quantityField"
+                              label="Số lượng bản sao nhập về"
+                              value="5"
+                              min="1"
+                              max="100"
+                              stepButtonsVisible="true"
+                              required="true"/>
+
+                <entityComboBox id="locationField"
+                                metaClass="Location"
+                                itemsContainer="locationsDc"
+                                label="Vị trí xếp kệ ban đầu"
+                                clearButtonVisible="true"/>
+
+                <select id="conditionField"
+                        label="Tình trạng vật lý ban đầu"
+                        required="true"/>
+
+                <datePicker id="acquiredDateField"
+                            label="Ngày nhập kho"/>
+
+                <bigDecimalField id="acquisitionPriceField"
+                                 label="Đơn giá nhập mỗi cuốn (VNĐ)"/>
+
+                <textField id="acquisitionSourceField"
+                           label="Nguồn nhập (Mua mới, tặng, tài trợ...)"
+                           value="Mua mới từ NXB"/>
+
+                <textField id="noteField"
+                           label="Ghi chú đợt nhập"
+                           colspan="2"/>
+            </formLayout>
+
+            <hbox id="dialogActions" spacing="true" classNames="mt-m ms-auto">
+                <button id="submitButton" text="Tiến hành sinh mã &amp; Nhập kho" themeNames="primary success" icon="CHECK"/>
+                <button id="cancelButton" text="Hủy bỏ" icon="BAN"/>
+            </hbox>
+        </vbox>
+    </layout>
+</view>

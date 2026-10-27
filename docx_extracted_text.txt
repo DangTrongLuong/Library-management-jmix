@@ -1,0 +1,1972 @@
+
+PHÂN TÍCH & THIẾT KẾ HỆ THỐNG
+QUẢN LÝ THƯ VIỆN NÂNG CAO
+
+Quản lý toàn bộ vòng đời mượn – trả: sách, bản sao, độc giả, gia hạn, đặt trước, tiền phạt và báo cáo
+
+Nội dung tài liệu
+0. Tổng quan & phân tích yêu cầu
+1. Thiết kế cơ sở dữ liệu (bảng, thuộc tính, ràng buộc, validate, quan hệ)
+2. Các Role và nhiệm vụ
+3. Chức năng theo từng Role và bảng dữ liệu liên quan
+4. Yêu cầu bổ sung (luồng nghiệp vụ, tính phạt, job, báo cáo, phi chức năng, mở rộng)
+
+Phiên bản 1.0 – Ngày 20/10/2026
+0. TỔNG QUAN & PHÂN TÍCH YÊU CẦU
+0.1. Mục tiêu hệ thống
+Số hóa toàn bộ nghiệp vụ thư viện: từ biên mục sách, quản lý từng bản sao vật lý, đến mượn – trả – gia hạn – đặt trước – thu phạt.
+Tự động hóa các việc lặp lại: tính phạt quá hạn, nhắc hạn, hết hạn giữ chỗ, khóa thẻ hết hạn.
+Bảo đảm tính nhất quán: một bản sao chỉ nằm trong một phiếu mượn đang hoạt động; độc giả còn nợ phạt thì không mượn thêm được.
+Cung cấp số liệu cho quản lý: sách phổ biến, sách quá hạn, doanh thu phạt, tồn kho, độc giả hoạt động.
+0.2. Phạm vi
+Trong phạm vi (In scope)
+Ngoài phạm vi (giai đoạn sau)
+Quản lý danh mục: sách (đầu sách), tác giả, thể loại, nhà xuất bản, bản sao, vị trí kệ
+Quản lý độc giả, loại độc giả, thẻ thư viện
+Mượn / trả / gia hạn / đặt trước
+Tính phạt, thu phạt, miễn giảm
+Thông báo (in-app, email)
+Dashboard và báo cáo
+Phân quyền theo role, audit log, cấu hình chính sách
+Sách điện tử (eBook) và đọc trực tuyến
+Nhiều chi nhánh / liên thư viện
+Tích hợp cổng thanh toán thật (chỉ thiết kế chỗ gắn)
+Gợi ý sách bằng AI / recommendation
+Ứng dụng mobile native
+Mượn liên thư viện (inter-library loan)
+0.3. Phân tích yêu cầu gốc và phần còn thiếu
+Bảng dưới đây đối chiếu từng ý trong yêu cầu ban đầu với những điểm cần làm rõ hoặc bổ sung để hệ thống chạy được trong thực tế.
+Yêu cầu gốc
+Phân tích
+Cần bổ sung
+Quản lý sách, tác giả, thể loại, bản sao sách
+Phải tách “đầu sách” (thông tin thư mục: tên, ISBN, tác giả) khỏi “bản sao” (cuốn vật lý có mã vạch, tình trạng, vị trí). Mượn/trả luôn thao tác trên bản sao; tìm kiếm và đặt trước thao tác trên đầu sách.
+Sách – tác giả và sách – thể loại là quan hệ nhiều-nhiều.
+Nhà xuất bản, vị trí kệ, thể loại dạng cây, vai trò tác giả (tác giả/dịch giả), sách tham khảo chỉ đọc tại chỗ, trạng thái bản sao (mất, hỏng, bảo trì, thanh lý), giá bìa để tính đền bù, import hàng loạt, sinh mã vạch.
+Mượn / trả
+Một lần mượn có thể gồm nhiều cuốn, mỗi cuốn có hạn trả và trạng thái trả riêng, nên cần phiếu mượn (loans) và chi tiết phiếu (loan_items).
+Cần xác định ai được mượn, mượn tối đa bao nhiêu, bao nhiêu ngày.
+Thẻ thư viện và hạn thẻ, loại độc giả (sinh viên, giảng viên…) với hạn mức riêng, lịch nghỉ lễ, ghi nhận tình trạng khi trả, xử lý sách mất/hỏng, mã phiếu và biên lai in được.
+Gia hạn
+Gia hạn là một sự kiện có lịch sử, không chỉ sửa ngày hạn. Phải giới hạn số lần và không được gia hạn nếu có người đang chờ.
+Bảng renewals để lưu vết, luật: không gia hạn khi quá hạn / còn nợ phạt / có người đặt trước / vượt số lần cho phép.
+Đặt trước sách
+Đặt trước theo đầu sách. Khi có bản sao trả về, hệ thống giữ bản sao đó cho người đứng đầu hàng đợi trong N ngày.
+Hàng đợi theo thời gian, trạng thái (PENDING, READY, FULFILLED, CANCELLED, EXPIRED), tự hết hạn giữ chỗ, thông báo cho người đặt, giới hạn số lượt đặt, không đặt trùng.
+Tính tiền phạt tự động khi quá hạn
+Phạt phải do job chạy hằng ngày và/hoặc tính tại thời điểm trả sách. Công thức phải cấu hình được.
+Mức phạt theo loại độc giả, số ngày ân hạn, trần phạt (không vượt giá bìa), phạt mất/hỏng, thanh toán từng phần, miễn/giảm có phê duyệt, biên lai.
+Ngăn mượn khi còn khoản phạt chưa xử lý
+Cần một điểm kiểm tra điều kiện mượn duy nhất (eligibility check) dùng chung cho mượn, gia hạn, đặt trước để tránh sót luật.
+Ngưỡng nợ cho phép (mặc định 0), chặn khi còn sách quá hạn, chặn khi thẻ hết hạn hoặc bị khóa, thông báo lý do chặn rõ ràng cho thủ thư.
+Dashboard sách phổ biến, sách quá hạn
+Đây là báo cáo đọc dữ liệu, nên dùng view/truy vấn tổng hợp, có lọc theo thời gian.
+Doanh thu phạt, tỷ lệ trả trễ, tồn kho theo thể loại, độc giả hoạt động, hàng đợi đặt trước dài, xuất Excel/PDF.
+(Chưa đề cập) Xác thực, phân quyền, thông báo, audit, cấu hình
+Hệ thống nhiều vai trò cần phân quyền rõ; thao tác tiền bạc phải có dấu vết.
+Bảng users/roles/permissions, notifications, audit_logs, library_settings, library_holidays; chính sách mật khẩu, khóa tài khoản khi đăng nhập sai nhiều lần.
+1. THIẾT KẾ CƠ SỞ DỮ LIỆU
+1.1. Quy ước chung
+Khóa chính: cột id kiểu BIGINT tự tăng (hoặc UUID nếu cần phân tán); bảng liên kết dùng khóa chính kép.
+Cột chuẩn: created_at, updated_at (DATETIME, lưu UTC, hiển thị theo múi giờ Asia/Ho_Chi_Minh).
+Xóa mềm: bảng có lịch sử dùng deleted_at, không xóa cứng dữ liệu đã phát sinh giao dịch; khóa ngoại mặc định ON DELETE RESTRICT.
+Tiền tệ và kiểu liệt kê: tiền dùng DECIMAL(12,2), đơn vị VND, không dùng FLOAT; trạng thái dùng ENUM hoặc VARCHAR + CHECK. Đặt tên snake_case, tên bảng số nhiều.
+Unique có điều kiện (partial index): dùng PostgreSQL; với MySQL thay bằng generated column hoặc kiểm tra trong transaction.
+1.2. Danh sách bảng
+STT
+Bảng
+Nhóm
+Mục đích
+1
+roles
+Tài khoản
+Danh sách vai trò
+2
+permissions
+Tài khoản
+Danh sách quyền (LOAN_CREATE, FINE_WAIVE…)
+3
+role_permissions
+Tài khoản
+Gán quyền cho vai trò (N-N)
+4
+users
+Tài khoản
+Tài khoản đăng nhập (nhân viên và độc giả)
+5
+member_types
+Độc giả
+Loại độc giả và chính sách mượn tương ứng
+6
+members
+Độc giả
+Hồ sơ thẻ thư viện của độc giả
+7
+authors
+Danh mục
+Tác giả / dịch giả
+8
+categories
+Danh mục
+Thể loại (dạng cây)
+9
+publishers
+Danh mục
+Nhà xuất bản
+10
+locations
+Danh mục
+Vị trí kệ trong thư viện
+11
+books
+Danh mục
+Đầu sách (thông tin thư mục)
+12
+book_authors
+Danh mục
+Sách – tác giả (N-N)
+13
+book_categories
+Danh mục
+Sách – thể loại (N-N)
+14
+book_copies
+Danh mục
+Bản sao vật lý, có mã vạch
+15
+loans
+Mượn/trả
+Phiếu mượn (đầu phiếu)
+16
+loan_items
+Mượn/trả
+Từng cuốn trong phiếu mượn, hạn trả, ngày trả
+17
+renewals
+Mượn/trả
+Lịch sử gia hạn
+18
+reservations
+Mượn/trả
+Đặt trước và hàng đợi
+19
+fines
+Mượn/trả
+Khoản phạt
+20
+payments
+Mượn/trả
+Giao dịch thu tiền phạt
+21
+notifications
+Hệ thống
+Thông báo gửi cho người dùng
+22
+library_settings
+Hệ thống
+Cấu hình chính sách dạng key – value
+23
+library_holidays
+Hệ thống
+Ngày nghỉ / đóng cửa
+24
+audit_logs
+Hệ thống
+Nhật ký thao tác (chỉ ghi thêm, không sửa)
+
+1.3. Sơ đồ quan hệ thực thể (ERD)
+
+Hình 1. ERD rút gọn (chỉ thể hiện bảng và quan hệ; thuộc tính xem ở mục 1.4). Màu theo nhóm: xanh dương – tài khoản; xanh lá – độc giả; vàng – danh mục sách; cam – nghiệp vụ mượn/trả; xám – hệ thống.
+
+1.4. Chi tiết từng bảng
+1.4.1. Nhóm tài khoản & phân quyền
+Bảng roles
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+SMALLINT
+PK, AUTO_INCREMENT
+
+code
+VARCHAR(30)
+UNIQUE, NOT NULL
+Viết hoa, không dấu: ADMIN, MANAGER, LIBRARIAN, CATALOGER, READER
+name
+VARCHAR(100)
+NOT NULL
+Tên hiển thị
+description
+VARCHAR(255)
+NULL
+Mô tả phạm vi vai trò
+
+Bảng permissions
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+INT
+PK, AUTO_INCREMENT
+
+code
+VARCHAR(60)
+UNIQUE, NOT NULL
+Dạng MODULE_ACTION: BOOK_CREATE, LOAN_CREATE, FINE_WAIVE, REPORT_VIEW…
+module
+VARCHAR(30)
+NOT NULL
+Nhóm chức năng: BOOK, MEMBER, LOAN, FINE, REPORT, SYSTEM
+description
+VARCHAR(255)
+NULL
+
+
+Bảng role_permissions
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+role_id
+SMALLINT
+FK → roles.id, NOT NULL
+ON DELETE CASCADE
+permission_id
+INT
+FK → permissions.id, NOT NULL
+ON DELETE CASCADE
+(khóa chính)
+
+PK (role_id, permission_id)
+Không cho trùng một quyền trong cùng vai trò
+
+Bảng users
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+username
+VARCHAR(50)
+UNIQUE, NOT NULL
+4–50 ký tự, chỉ gồm a–z, 0–9, dấu chấm, gạch dưới; lưu chữ thường
+email
+VARCHAR(150)
+UNIQUE, NOT NULL
+Đúng định dạng email, lưu chữ thường, dùng để gửi thông báo và đặt lại mật khẩu
+password_hash
+VARCHAR(255)
+NOT NULL
+Băm bằng bcrypt/argon2; mật khẩu gốc tối thiểu 8 ký tự, có chữ và số; không bao giờ trả về qua API
+full_name
+VARCHAR(150)
+NOT NULL
+Không rỗng sau khi trim; tối đa 150 ký tự
+phone
+VARCHAR(20)
+NULL, UNIQUE (nếu có)
+Số điện thoại Việt Nam: ^(0|\+84)[0-9]{9}$
+role_id
+SMALLINT
+FK → roles.id, NOT NULL
+Mỗi tài khoản một vai trò chính (nếu cần nhiều vai trò, thêm bảng user_roles)
+status
+ENUM
+NOT NULL, DEFAULT 'ACTIVE'
+ACTIVE, LOCKED, INACTIVE
+failed_login_count
+SMALLINT
+NOT NULL, DEFAULT 0, CHECK ≥ 0
+Đăng nhập sai liên tiếp; ≥ 5 thì khóa tạm
+locked_until
+DATETIME
+NULL
+Thời điểm hết khóa tạm
+must_change_password
+BOOLEAN
+NOT NULL, DEFAULT FALSE
+TRUE khi tài khoản mới tạo bằng mật khẩu tạm
+last_login_at
+DATETIME
+NULL
+
+created_at, updated_at, deleted_at
+DATETIME
+
+Theo quy ước chung
+1.4.2. Nhóm độc giả
+Bảng member_types (chính sách theo loại độc giả)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+SMALLINT
+PK, AUTO_INCREMENT
+
+code
+VARCHAR(30)
+UNIQUE, NOT NULL
+STUDENT, TEACHER, STAFF, PUBLIC…
+name
+VARCHAR(100)
+NOT NULL
+
+max_loan_books
+SMALLINT
+NOT NULL, CHECK 1–50
+Số cuốn tối đa được mượn cùng lúc
+loan_days
+SMALLINT
+NOT NULL, CHECK 1–365
+Số ngày mượn mặc định
+max_renewals
+SMALLINT
+NOT NULL, DEFAULT 1, CHECK ≥ 0
+Số lần gia hạn tối đa cho mỗi cuốn
+renew_days
+SMALLINT
+NOT NULL, CHECK ≥ 1
+Số ngày cộng thêm mỗi lần gia hạn
+max_reservations
+SMALLINT
+NOT NULL, DEFAULT 3, CHECK ≥ 0
+Số lượt đặt trước đang hiệu lực tối đa
+fine_per_day
+DECIMAL(12,2)
+NOT NULL, CHECK ≥ 0
+Mức phạt mỗi ngày trễ cho mỗi cuốn
+card_valid_months
+SMALLINT
+NOT NULL, CHECK 1–120
+Thời hạn thẻ khi cấp/gia hạn
+
+Bảng members (hồ sơ thẻ thư viện)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+user_id
+BIGINT
+FK → users.id, UNIQUE, NOT NULL
+Quan hệ 1-1; mỗi độc giả có đúng một tài khoản (thủ thư tạo hộ nếu độc giả đến quầy)
+member_code
+VARCHAR(20)
+UNIQUE, NOT NULL
+Mã thẻ in mã vạch, ví dụ LIB2026-000123; sinh tự động
+member_type_id
+SMALLINT
+FK → member_types.id, NOT NULL
+
+date_of_birth
+DATE
+NULL, CHECK ≤ hôm nay
+Nếu có, tuổi tối thiểu theo quy định thư viện (ví dụ ≥ 6)
+gender
+ENUM
+NULL
+MALE, FEMALE, OTHER
+id_number
+VARCHAR(20)
+UNIQUE (nếu có)
+CCCD hoặc mã sinh viên/nhân viên; 9–12 ký tự số/chữ
+address
+VARCHAR(255)
+NULL
+
+card_issued_date
+DATE
+NOT NULL
+Không lớn hơn hôm nay
+card_expiry_date
+DATE
+NOT NULL, CHECK > card_issued_date
+Quá hạn thẻ thì chuyển EXPIRED, không được mượn
+status
+ENUM
+NOT NULL, DEFAULT 'PENDING'
+PENDING (chờ duyệt), ACTIVE, SUSPENDED (tạm khóa), EXPIRED, BLOCKED (cấm)
+status_reason
+VARCHAR(255)
+NULL; bắt buộc khi SUSPENDED/BLOCKED
+Lý do khóa
+created_at, updated_at, deleted_at
+DATETIME
+
+
+1.4.3. Nhóm danh mục sách
+Bảng authors
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+full_name
+VARCHAR(150)
+NOT NULL
+Trim; không rỗng; cảnh báo nếu trùng tên + năm sinh
+birth_year
+SMALLINT
+NULL, CHECK 1–năm hiện tại
+
+nationality
+VARCHAR(60)
+NULL
+
+biography
+TEXT
+NULL
+
+created_at, updated_at, deleted_at
+DATETIME
+
+Không xóa tác giả đang gắn với sách
+
+Bảng categories (thể loại dạng cây)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+INT
+PK, AUTO_INCREMENT
+
+name
+VARCHAR(100)
+NOT NULL, UNIQUE (parent_id, name)
+Không trùng tên trong cùng cha
+slug
+VARCHAR(120)
+UNIQUE, NOT NULL
+Sinh từ name, không dấu, dùng cho URL
+parent_id
+INT
+FK → categories.id, NULL
+Tự tham chiếu; không được bằng id; cấm vòng lặp; giới hạn độ sâu ≤ 3
+ddc_code
+VARCHAR(10)
+NULL
+Mã phân loại Dewey (nếu thư viện dùng)
+description
+VARCHAR(255)
+NULL
+
+
+Bảng publishers
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+INT
+PK, AUTO_INCREMENT
+
+name
+VARCHAR(150)
+UNIQUE, NOT NULL
+
+address
+VARCHAR(255)
+NULL
+
+phone / email / website
+VARCHAR
+NULL
+Đúng định dạng nếu có nhập
+
+Bảng locations (vị trí kệ)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+INT
+PK, AUTO_INCREMENT
+
+code
+VARCHAR(30)
+UNIQUE, NOT NULL
+Ví dụ T2-A-03 (tầng 2, dãy A, kệ 03)
+name
+VARCHAR(100)
+NOT NULL
+
+floor
+SMALLINT
+NULL
+
+description
+VARCHAR(255)
+NULL
+
+
+Bảng books (đầu sách)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+isbn
+VARCHAR(17)
+UNIQUE (nếu có), NULL
+ISBN-10 hoặc ISBN-13 hợp lệ (kiểm tra số kiểm tra); chuẩn hóa bỏ dấu gạch; sách cũ có thể không có ISBN
+title
+VARCHAR(255)
+NOT NULL
+Trim, không rỗng; đánh chỉ mục tìm kiếm toàn văn
+subtitle
+VARCHAR(255)
+NULL
+
+publisher_id
+INT
+FK → publishers.id, NULL
+
+publish_year
+SMALLINT
+NULL, CHECK 1400 ≤ x ≤ năm hiện tại
+
+edition
+VARCHAR(50)
+NULL
+Lần tái bản
+language
+VARCHAR(10)
+NOT NULL, DEFAULT 'vi'
+Mã ngôn ngữ ISO 639-1
+page_count
+INT
+NULL, CHECK > 0
+
+price
+DECIMAL(12,2)
+NOT NULL, CHECK ≥ 0
+Giá bìa, dùng tính tiền đền khi mất và trần phạt quá hạn
+description
+TEXT
+NULL
+
+cover_image_url
+VARCHAR(500)
+NULL
+Chỉ cho phép http/https hoặc đường dẫn nội bộ
+is_reference
+BOOLEAN
+NOT NULL, DEFAULT FALSE
+TRUE = sách tham khảo, chỉ đọc tại chỗ, không cho mượn về
+status
+ENUM
+NOT NULL, DEFAULT 'ACTIVE'
+ACTIVE, HIDDEN (ẩn khỏi catalog công khai)
+created_by
+BIGINT
+FK → users.id, NOT NULL
+Người biên mục
+created_at, updated_at, deleted_at
+DATETIME
+
+Không xóa đầu sách còn bản sao
+
+Bảng book_authors (N-N)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+book_id
+BIGINT
+FK → books.id, NOT NULL
+ON DELETE CASCADE
+author_id
+BIGINT
+FK → authors.id, NOT NULL
+ON DELETE RESTRICT
+author_role
+ENUM
+NOT NULL, DEFAULT 'AUTHOR'
+AUTHOR, TRANSLATOR, EDITOR, ILLUSTRATOR
+display_order
+SMALLINT
+NOT NULL, DEFAULT 1, CHECK ≥ 1
+Thứ tự hiển thị tác giả
+(khóa chính)
+
+PK (book_id, author_id, author_role)
+Mỗi sách phải có ít nhất 1 tác giả (kiểm tra ở service)
+
+Bảng book_categories (N-N)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+book_id
+BIGINT
+FK → books.id, NOT NULL
+ON DELETE CASCADE
+category_id
+INT
+FK → categories.id, NOT NULL
+ON DELETE RESTRICT
+(khóa chính)
+
+PK (book_id, category_id)
+Mỗi sách có ít nhất 1 thể loại (kiểm tra ở service)
+
+Bảng book_copies (bản sao vật lý)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+book_id
+BIGINT
+FK → books.id, NOT NULL
+
+barcode
+VARCHAR(30)
+UNIQUE, NOT NULL
+Mã vạch dán trên sách, ví dụ BK000123-01; sinh tự động; không đổi sau khi in
+location_id
+INT
+FK → locations.id, NULL
+Vị trí hiện tại trên kệ
+status
+ENUM
+NOT NULL, DEFAULT 'AVAILABLE'
+AVAILABLE, BORROWED, RESERVED, LOST, DAMAGED, MAINTENANCE, WITHDRAWN (thanh lý)
+condition
+ENUM
+NOT NULL, DEFAULT 'GOOD'
+NEW, GOOD, FAIR, POOR
+acquired_date
+DATE
+NULL, CHECK ≤ hôm nay
+Ngày nhập kho
+acquisition_price
+DECIMAL(12,2)
+NULL, CHECK ≥ 0
+Giá nhập thực tế
+acquisition_source
+VARCHAR(100)
+NULL
+Mua / tặng / trao đổi
+note
+VARCHAR(255)
+NULL
+
+created_at, updated_at, deleted_at
+DATETIME
+
+Không được đặt AVAILABLE nếu còn loan_item BORROWED; không xóa nếu có lịch sử mượn
+1.4.4. Nhóm nghiệp vụ mượn – trả
+Bảng loans (phiếu mượn)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+loan_code
+VARCHAR(20)
+UNIQUE, NOT NULL
+Số phiếu in được, ví dụ PM20261020-0001
+member_id
+BIGINT
+FK → members.id, NOT NULL
+Phải ACTIVE, thẻ còn hạn, đủ điều kiện mượn tại thời điểm lập phiếu
+issued_by
+BIGINT
+FK → users.id, NOT NULL
+Thủ thư lập phiếu
+loan_date
+DATETIME
+NOT NULL, DEFAULT now
+Không sửa sau khi tạo
+note
+VARCHAR(255)
+NULL
+
+created_at, updated_at
+DATETIME
+
+Phiếu không xóa; sai sót xử lý bằng thao tác hủy có audit
+
+Bảng loan_items (từng cuốn trong phiếu)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+loan_id
+BIGINT
+FK → loans.id, NOT NULL
+ON DELETE RESTRICT
+copy_id
+BIGINT
+FK → book_copies.id, NOT NULL
+Bản sao phải AVAILABLE, hoặc RESERVED cho đúng người đặt; đầu sách không phải sách tham khảo
+due_date
+DATE
+NOT NULL, CHECK ≥ ngày loan_date
+Hạn trả = ngày mượn + loan_days; dời sang ngày mở cửa kế tiếp nếu trúng ngày nghỉ
+returned_at
+DATETIME
+NULL, CHECK ≥ loan_date
+NULL nghĩa là chưa trả
+received_by
+BIGINT
+FK → users.id, NULL
+Thủ thư nhận trả; bắt buộc khi returned_at khác NULL
+renew_count
+SMALLINT
+NOT NULL, DEFAULT 0, CHECK ≥ 0
+≤ member_types.max_renewals
+status
+ENUM
+NOT NULL, DEFAULT 'BORROWED'
+BORROWED, RETURNED, LOST. “Quá hạn” là trạng thái tính toán: status = BORROWED và due_date < hôm nay
+return_condition
+ENUM
+NULL
+GOOD, DAMAGED, LOST; bắt buộc khi trả
+(ràng buộc)
+
+UNIQUE (loan_id, copy_id); UNIQUE partial (copy_id) WHERE status = 'BORROWED'
+Một bản sao chỉ nằm trong một phiếu mượn đang hoạt động
+
+Bảng renewals (lịch sử gia hạn)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+loan_item_id
+BIGINT
+FK → loan_items.id, NOT NULL
+Cuốn đang BORROWED
+old_due_date
+DATE
+NOT NULL
+
+new_due_date
+DATE
+NOT NULL, CHECK > old_due_date
+= old_due_date + renew_days
+renewed_by
+BIGINT
+FK → users.id, NOT NULL
+Độc giả (online) hoặc thủ thư (quầy)
+channel
+ENUM
+NOT NULL
+ONLINE, COUNTER
+renewed_at
+DATETIME
+NOT NULL, DEFAULT now
+
+
+Bảng reservations (đặt trước)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+member_id
+BIGINT
+FK → members.id, NOT NULL
+Phải đủ điều kiện (ACTIVE, không nợ phạt quá ngưỡng)
+book_id
+BIGINT
+FK → books.id, NOT NULL
+Đặt theo đầu sách; chỉ đặt khi không còn bản sao AVAILABLE
+copy_id
+BIGINT
+FK → book_copies.id, NULL
+Bản sao đang được giữ; bắt buộc khi status = READY
+status
+ENUM
+NOT NULL, DEFAULT 'PENDING'
+PENDING, READY, FULFILLED, CANCELLED, EXPIRED
+reserved_at
+DATETIME
+NOT NULL, DEFAULT now
+Dùng xếp thứ tự hàng đợi (FIFO)
+notified_at
+DATETIME
+NULL
+Thời điểm báo sách đã sẵn sàng
+hold_expires_at
+DATETIME
+NULL; bắt buộc khi READY
+= thời điểm báo + RESERVATION_HOLD_DAYS
+fulfilled_loan_item_id
+BIGINT
+FK → loan_items.id, NULL
+Gắn với lượt mượn thực tế khi FULFILLED
+cancel_reason
+VARCHAR(255)
+NULL
+
+(ràng buộc)
+
+UNIQUE partial (member_id, book_id) WHERE status IN ('PENDING','READY')
+Không đặt trùng cùng một đầu sách; không đặt khi chính mình đang mượn đầu sách đó
+
+Bảng fines (khoản phạt)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+member_id
+BIGINT
+FK → members.id, NOT NULL
+Lưu trực tiếp để truy vấn nhanh tổng nợ
+loan_item_id
+BIGINT
+FK → loan_items.id, NULL
+NULL với phạt không gắn lượt mượn (phí cấp lại thẻ…)
+fine_type
+ENUM
+NOT NULL
+OVERDUE, LOST, DAMAGED, CARD_FEE, OTHER
+days_overdue
+INT
+NULL, CHECK ≥ 0
+Chỉ dùng cho OVERDUE
+amount
+DECIMAL(12,2)
+NOT NULL, CHECK > 0
+Tổng tiền phạt
+paid_amount
+DECIMAL(12,2)
+NOT NULL, DEFAULT 0, CHECK 0 ≤ paid_amount ≤ amount
+Tổng đã thu = tổng payments
+status
+ENUM
+NOT NULL, DEFAULT 'UNPAID'
+UNPAID, PARTIAL, PAID, WAIVED
+description
+VARCHAR(255)
+NULL
+
+waived_by / waived_at / waived_reason
+BIGINT / DATETIME / VARCHAR
+NULL; cả ba bắt buộc khi status = WAIVED
+Chỉ Manager (hoặc thủ thư trong hạn mức) được miễn giảm; có lý do
+created_by
+BIGINT
+FK → users.id, NULL
+NULL nếu do job tự động tạo
+(ràng buộc)
+
+UNIQUE (loan_item_id, fine_type) cho OVERDUE
+Mỗi lượt mượn chỉ một dòng phạt quá hạn, job cập nhật số ngày/tiền thay vì tạo dòng mới
+
+Bảng payments (thu tiền phạt)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+receipt_no
+VARCHAR(20)
+UNIQUE, NOT NULL
+Số biên lai
+fine_id
+BIGINT
+FK → fines.id, NOT NULL
+
+amount
+DECIMAL(12,2)
+NOT NULL, CHECK > 0
+≤ số tiền còn nợ của khoản phạt tại thời điểm thu
+method
+ENUM
+NOT NULL
+CASH, BANK_TRANSFER, CARD, E_WALLET
+transaction_ref
+VARCHAR(100)
+NULL
+Mã giao dịch ngân hàng/ví; bắt buộc nếu không phải CASH
+received_by
+BIGINT
+FK → users.id, NULL
+NULL nếu độc giả tự thanh toán online
+paid_at
+DATETIME
+NOT NULL, DEFAULT now
+
+note
+VARCHAR(255)
+NULL
+Không sửa/xóa; hoàn tiền tạo dòng riêng (ví dụ amount âm trong bảng refund mở rộng)
+1.4.5. Nhóm hệ thống
+Bảng notifications
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+user_id
+BIGINT
+FK → users.id, NOT NULL
+Người nhận
+type
+ENUM
+NOT NULL
+DUE_SOON, OVERDUE, RESERVATION_READY, RESERVATION_EXPIRED, FINE_CREATED, CARD_EXPIRING, SYSTEM
+title
+VARCHAR(150)
+NOT NULL
+
+content
+TEXT
+NOT NULL
+
+channel
+ENUM
+NOT NULL
+IN_APP, EMAIL, SMS
+ref_type / ref_id
+VARCHAR(30) / BIGINT
+NULL
+Đối tượng liên quan (loan_item, reservation, fine) để bấm vào xem
+is_read
+BOOLEAN
+NOT NULL, DEFAULT FALSE
+
+sent_at / read_at
+DATETIME
+NULL
+Chống gửi trùng: UNIQUE (user_id, type, ref_type, ref_id, ngày gửi)
+
+Bảng library_settings
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+setting_key
+VARCHAR(100)
+PK
+Ví dụ BLOCK_LOAN_FINE_THRESHOLD, FINE_GRACE_DAYS, FINE_CAP_RATIO, LOST_FEE_MULTIPLIER, LOST_PROCESSING_FEE, RESERVATION_HOLD_DAYS, DUE_SOON_REMINDER_DAYS, AUTO_BLOCK_OVERDUE_DAYS, EXCLUDE_HOLIDAYS_FROM_FINE
+setting_value
+VARCHAR(500)
+NOT NULL
+Validate theo data_type
+data_type
+ENUM
+NOT NULL
+INT, DECIMAL, BOOLEAN, STRING
+description
+VARCHAR(255)
+NULL
+
+updated_by / updated_at
+BIGINT / DATETIME
+FK → users.id
+Mọi thay đổi ghi audit_logs
+
+Bảng library_holidays
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+INT
+PK, AUTO_INCREMENT
+
+holiday_date
+DATE
+UNIQUE, NOT NULL
+Ngày thư viện đóng cửa
+name
+VARCHAR(100)
+NOT NULL
+Tết, Quốc khánh, nghỉ hè…
+
+Bảng audit_logs (chỉ ghi thêm)
+Thuộc tính
+Kiểu dữ liệu
+Ràng buộc
+Validate / Mô tả
+id
+BIGINT
+PK, AUTO_INCREMENT
+
+user_id
+BIGINT
+FK → users.id, NULL
+NULL nếu do hệ thống/job thực hiện
+action
+VARCHAR(50)
+NOT NULL
+LOGIN, LOAN_CREATE, LOAN_RETURN, FINE_WAIVE, SETTING_UPDATE, MEMBER_BLOCK…
+entity_type / entity_id
+VARCHAR(40) / BIGINT
+NOT NULL
+Đối tượng bị tác động
+old_value / new_value
+JSON
+NULL
+Giá trị trước và sau (loại bỏ dữ liệu nhạy cảm như mật khẩu)
+ip_address
+VARCHAR(45)
+NULL
+Hỗ trợ IPv6
+created_at
+DATETIME
+NOT NULL, DEFAULT now
+Cấp quyền DB chỉ INSERT/SELECT, không UPDATE/DELETE
+1.5. Quan hệ giữa các bảng
+Bảng cha
+Quan hệ
+Bảng con
+Khóa ngoại / ghi chú
+roles
+1 – N
+users
+users.role_id; RESTRICT
+roles ↔ permissions
+N – N
+role_permissions
+Bảng liên kết; CASCADE
+users
+1 – 1
+members
+members.user_id (UNIQUE)
+member_types
+1 – N
+members
+members.member_type_id
+members
+1 – N
+loans
+loans.member_id
+users (thủ thư)
+1 – N
+loans
+loans.issued_by
+loans
+1 – N
+loan_items
+loan_items.loan_id; một phiếu có ít nhất 1 cuốn
+book_copies
+1 – N
+loan_items
+Lịch sử mượn của từng bản sao; tại một thời điểm chỉ 1 dòng BORROWED
+loan_items
+1 – N
+renewals
+renewals.loan_item_id
+books
+1 – N
+book_copies
+book_copies.book_id
+books ↔ authors
+N – N
+book_authors
+Kèm vai trò và thứ tự
+books ↔ categories
+N – N
+book_categories
+Bảng liên kết
+categories
+1 – N (tự tham chiếu)
+categories
+parent_id; thể loại cha – con
+publishers
+1 – N
+books
+books.publisher_id
+locations
+1 – N
+book_copies
+book_copies.location_id
+members
+1 – N
+reservations
+reservations.member_id
+books
+1 – N
+reservations
+Đặt theo đầu sách; hàng đợi sắp theo reserved_at
+book_copies
+1 – 0..1
+reservations
+reservations.copy_id: bản sao đang giữ cho người đặt
+loan_items
+1 – 0..1
+reservations
+reservations.fulfilled_loan_item_id
+members
+1 – N
+fines
+fines.member_id
+loan_items
+1 – 0..N
+fines
+fines.loan_item_id (quá hạn, mất, hỏng)
+fines
+1 – N
+payments
+Thanh toán từng phần được
+users
+1 – N
+notifications, audit_logs, payments (received_by)
+Người nhận / người thực hiện
+1.6. Ràng buộc nghiệp vụ (Business Rules)
+Cột “Thực thi” cho biết nên đặt ở đâu: DB (CHECK, UNIQUE, FK), Service (kiểm tra trong transaction) hoặc Job (chạy định kỳ).
+Mã
+Quy tắc
+Thực thi
+BR01
+Chỉ mượn khi members.status = ACTIVE và card_expiry_date ≥ hôm nay; tài khoản users.status = ACTIVE.
+Service
+BR02
+Chặn mượn mới khi tổng nợ phạt (UNPAID + PARTIAL, trừ WAIVED) > ngưỡng BLOCK_LOAN_FINE_THRESHOLD (mặc định 0).
+Service
+BR03
+Chặn mượn mới khi độc giả còn cuốn quá hạn chưa trả (có thể bật/tắt bằng cấu hình).
+Service
+BR04
+Số cuốn đang mượn + số cuốn mượn thêm ≤ member_types.max_loan_books.
+Service
+BR05
+Chỉ cho mượn bản sao AVAILABLE; bản sao RESERVED chỉ cho đúng người được giữ chỗ; sách is_reference = TRUE không cho mượn về.
+Service
+BR06
+Một bản sao chỉ có tối đa một loan_item BORROWED tại một thời điểm.
+DB (partial unique) + khóa dòng khi mượn
+BR07
+Gia hạn khi: status = BORROWED, chưa quá hạn, renew_count < max_renewals, không còn nợ phạt vượt ngưỡng, không có reservation PENDING của người khác trên cùng đầu sách.
+Service
+BR08
+Tiền phạt quá hạn = max(0, số ngày trễ − ngày ân hạn) × fine_per_day, không vượt giá bìa × FINE_CAP_RATIO (xem mục 4.2).
+Service + Job
+BR09
+Mất sách: tiền phạt = giá bìa × LOST_FEE_MULTIPLIER + LOST_PROCESSING_FEE; bản sao chuyển LOST; loan_item chuyển LOST.
+Service
+BR10
+Chỉ cho đặt trước khi đầu sách không còn bản sao AVAILABLE; không đặt trùng; không vượt max_reservations; không đặt sách mình đang mượn.
+Service + DB (partial unique)
+BR11
+Khi bản sao được trả, nếu có reservation PENDING thì gán cho người đầu hàng đợi: reservation → READY, bản sao → RESERVED, đặt hold_expires_at.
+Service (trong transaction trả sách)
+BR12
+Hết hold_expires_at mà chưa nhận: reservation → EXPIRED, bản sao trả về AVAILABLE hoặc chuyển cho người kế tiếp.
+Job
+BR13
+paid_amount ≤ amount; fines.status tự cập nhật: 0 < paid < amount là PARTIAL, paid = amount là PAID.
+DB (CHECK) + Service
+BR14
+Miễn/giảm phạt bắt buộc có người duyệt, lý do và ghi audit; thủ thư chỉ miễn trong hạn mức được cấu hình.
+Service
+BR15
+returned_at ≥ loan_date; due_date ≥ ngày loan_date; new_due_date > old_due_date.
+DB (CHECK)
+BR16
+ISBN hợp lệ và duy nhất; barcode bản sao duy nhất; member_code duy nhất.
+DB (UNIQUE) + Service
+BR17
+Không xóa cứng sách, bản sao, độc giả, phiếu mượn, phạt đã phát sinh giao dịch; dùng xóa mềm hoặc đổi trạng thái.
+DB (RESTRICT) + Service
+BR18
+Khóa tài khoản tạm 15 phút sau 5 lần đăng nhập sai liên tiếp.
+Service
+BR19
+Tự chuyển thẻ sang EXPIRED khi quá card_expiry_date; có thể tự đặt SUSPENDED khi quá hạn > AUTO_BLOCK_OVERDUE_DAYS.
+Job
+BR20
+Mọi thao tác tiền (tạo/sửa/miễn phạt, thu tiền) và thay đổi cấu hình, phân quyền đều ghi audit_logs.
+Service
+1.7. Trạng thái và chuyển trạng thái
+Đối tượng
+Các trạng thái
+Chuyển trạng thái hợp lệ
+book_copies.status
+AVAILABLE, BORROWED, RESERVED, LOST, DAMAGED, MAINTENANCE, WITHDRAWN
+AVAILABLE → BORROWED (mượn)
+BORROWED → AVAILABLE (trả tốt) / RESERVED (trả và có người chờ) / DAMAGED / LOST
+RESERVED → BORROWED (người đặt đến nhận) / AVAILABLE (hết hạn giữ, không ai chờ)
+DAMAGED → MAINTENANCE → AVAILABLE hoặc WITHDRAWN
+LOST → AVAILABLE (tìm lại, có audit) hoặc WITHDRAWN
+loan_items.status
+BORROWED, RETURNED, LOST
+BORROWED → RETURNED (trả)
+BORROWED → LOST (báo mất)
+LOST → RETURNED (tìm lại được, hoàn phạt theo chính sách)
+reservations.status
+PENDING, READY, FULFILLED, CANCELLED, EXPIRED
+PENDING → READY (có bản sao)
+READY → FULFILLED (nhận sách) / EXPIRED (quá hạn giữ)
+PENDING/READY → CANCELLED (độc giả hoặc thủ thư hủy)
+fines.status
+UNPAID, PARTIAL, PAID, WAIVED
+UNPAID → PARTIAL → PAID (thu tiền)
+UNPAID/PARTIAL → WAIVED (miễn, có duyệt)
+PAID và WAIVED là trạng thái cuối
+members.status
+PENDING, ACTIVE, SUSPENDED, EXPIRED, BLOCKED
+PENDING → ACTIVE (duyệt)
+ACTIVE → SUSPENDED / BLOCKED / EXPIRED
+SUSPENDED → ACTIVE (hết lý do)
+EXPIRED → ACTIVE (gia hạn thẻ)
+BLOCKED → ACTIVE (chỉ Manager)
+1.8. View và chỉ mục đề xuất
+View hỗ trợ truy vấn và dashboard
+v_member_outstanding_fines: tổng nợ phạt (amount − paid_amount, trừ WAIVED) theo từng độc giả; dùng cho eligibility check.
+v_overdue_items: loan_items có status = BORROWED và due_date < hôm nay, kèm số ngày trễ, tên sách, độc giả, liên hệ.
+v_book_availability: số bản sao theo đầu sách và theo trạng thái; số bản sao AVAILABLE; số người đang chờ.
+v_popular_books: số lượt mượn theo đầu sách trong khoảng thời gian (loan_items → book_copies → books).
+v_member_current_loans: số cuốn đang mượn của từng độc giả, dùng kiểm tra BR04.
+Chỉ mục (index)
+Bảng
+Chỉ mục
+Mục đích
+books
+FULLTEXT / GIN (title, subtitle); INDEX (publisher_id); INDEX (publish_year)
+Tìm kiếm catalog
+book_copies
+INDEX (book_id, status); UNIQUE (barcode)
+Đếm bản sao khả dụng, quét mã vạch
+loan_items
+INDEX (status, due_date); INDEX (copy_id, status); INDEX (loan_id)
+Danh sách quá hạn, kiểm tra bản sao đang mượn
+loans
+INDEX (member_id, loan_date DESC)
+Lịch sử mượn của độc giả
+reservations
+INDEX (book_id, status, reserved_at); INDEX (member_id, status)
+Hàng đợi theo đầu sách
+fines
+INDEX (member_id, status); INDEX (loan_item_id)
+Tính tổng nợ, kiểm tra chặn mượn
+notifications
+INDEX (user_id, is_read, created_at DESC)
+Hộp thư thông báo
+audit_logs
+INDEX (entity_type, entity_id); INDEX (user_id, created_at)
+Tra cứu lịch sử thao tác
+2. CÁC ROLE CỦA DỰ ÁN VÀ NHIỆM VỤ
+2.1. Tổng quan các role
+Role
+Mã
+Mô tả ngắn
+Đối tượng thực tế
+Khách
+GUEST
+Chưa đăng nhập, chỉ tra cứu công khai
+Bất kỳ ai truy cập website
+Độc giả
+READER
+Người có thẻ thư viện, tự phục vụ trên hệ thống
+Sinh viên, giảng viên, nhân viên, bạn đọc ngoài
+Thủ thư
+LIBRARIAN
+Xử lý nghiệp vụ hằng ngày tại quầy: mượn, trả, đặt trước, thu phạt, cấp thẻ
+Nhân viên quầy
+Nhân viên biên mục
+CATALOGER
+Quản lý dữ liệu sách, bản sao, vị trí, kiểm kê (có thể gộp vào Thủ thư ở thư viện nhỏ)
+Nhân viên kho / biên mục
+Quản lý thư viện
+MANAGER
+Đặt chính sách, duyệt ngoại lệ, xem báo cáo
+Trưởng thư viện
+Quản trị hệ thống
+ADMIN
+Quản trị kỹ thuật, tài khoản, phân quyền, tích hợp
+Cán bộ CNTT
+Hệ thống (tác nhân tự động)
+SYSTEM
+Các job và trigger chạy nền, không có người thao tác
+Scheduler / worker
+2.2. Nhiệm vụ chi tiết của từng role
+2.2.1. Khách (GUEST)
+Tra cứu catalog: tìm theo tên sách, tác giả, ISBN, thể loại, nhà xuất bản, năm.
+Xem chi tiết sách: mô tả, số bản sao còn rảnh, vị trí kệ.
+Xem sách mới nhập và sách được mượn nhiều.
+Xem nội quy, giờ mở cửa, chính sách mượn và phạt.
+Đăng ký tài khoản độc giả (chờ thủ thư duyệt) hoặc đăng nhập.
+Không được: đặt trước, gia hạn, xem thông tin cá nhân.
+2.2.2. Độc giả (READER)
+Quản lý hồ sơ cá nhân và mật khẩu của chính mình.
+Theo dõi sách đang mượn, hạn trả, sách quá hạn.
+Tự gia hạn sách khi đủ điều kiện; tuân thủ hạn trả.
+Đặt trước sách đã hết bản sao; đến nhận sách trong thời hạn giữ chỗ; hủy đặt trước khi không cần.
+Xem và thanh toán tiền phạt của mình; nhận thông báo nhắc hạn.
+Yêu cầu gia hạn hoặc cấp lại thẻ.
+Không được: xem dữ liệu độc giả khác, sửa thông tin sách, sửa phạt.
+2.2.3. Thủ thư (LIBRARIAN)
+Quản lý độc giả: tiếp nhận đăng ký, kiểm tra giấy tờ, duyệt và cấp thẻ, gia hạn thẻ, khóa/mở khóa tạm thời (BLOCKED chỉ Manager mở).
+Mượn sách: quét thẻ và mã vạch, kiểm tra điều kiện mượn, lập phiếu mượn, in phiếu.
+Trả sách: quét mã vạch, kiểm tra tình trạng, cập nhật bản sao, tính phạt quá hạn, chuyển sách cho người đang đặt trước.
+Gia hạn tại quầy cho độc giả không dùng online.
+Xử lý đặt trước: theo dõi sách READY, gọi/nhắn độc giả, giao sách, hủy lượt đã hết hạn.
+Xử lý sách mất/hỏng: ghi nhận, lập khoản phạt, cập nhật trạng thái bản sao.
+Thu tiền phạt: ghi nhận thanh toán đầy đủ hoặc từng phần, in biên lai.
+Đề xuất miễn giảm phạt lên Manager (hoặc tự miễn trong hạn mức được cấp).
+Theo dõi danh sách quá hạn, gửi nhắc thủ công.
+Không được: sửa chính sách, xóa khoản phạt, xem cấu hình hệ thống, xóa đầu sách.
+2.2.4. Nhân viên biên mục (CATALOGER)
+Nhập và chỉnh sửa đầu sách, tác giả, thể loại, nhà xuất bản; kiểm tra trùng ISBN.
+Thêm bản sao, sinh và in mã vạch, gán vị trí kệ.
+Cập nhật tình trạng bản sao, đưa vào bảo trì, đề xuất thanh lý.
+Import sách hàng loạt từ Excel/CSV.
+Kiểm kê định kỳ, đối chiếu sách thực tế với hệ thống, ghi nhận sách thất lạc.
+Không được: lập phiếu mượn/trả, thu phạt, quản lý độc giả.
+2.2.5. Quản lý thư viện (MANAGER)
+Xây dựng và cập nhật chính sách: loại độc giả, hạn mức mượn, số ngày mượn, mức phạt, thời gian giữ chỗ, ngưỡng chặn mượn.
+Duyệt miễn/giảm phạt và các ngoại lệ (mở khóa độc giả BLOCKED, hủy phiếu nhập sai).
+Theo dõi dashboard và báo cáo, ra quyết định mua thêm sách, điều chỉnh chính sách.
+Quản lý lịch nghỉ, giờ mở cửa.
+Quản lý nhân viên thư viện: tạo và khóa tài khoản Thủ thư, Nhân viên biên mục.
+Xem audit log nghiệp vụ để kiểm soát gian lận, sai sót.
+Duyệt thanh lý sách, duyệt đề xuất mua sách.
+2.2.6. Quản trị hệ thống (ADMIN)
+Tạo, khóa, reset mật khẩu mọi tài khoản (bao gồm Manager và Admin khác).
+Quản lý vai trò và quyền (roles, permissions, role_permissions).
+Cấu hình kỹ thuật: email SMTP, SMS, múi giờ, lưu trữ ảnh, giới hạn tải, bảo mật.
+Giám sát job chạy nền, log hệ thống, hiệu năng; sao lưu và phục hồi dữ liệu.
+Quản lý tích hợp ngoài: SSO/LDAP, cổng thanh toán, dịch vụ gửi tin.
+Xem audit log toàn hệ thống và nhật ký đăng nhập.
+Không nên: trực tiếp thao tác nghiệp vụ mượn/trả hay tiền phạt (tách biệt nhiệm vụ).
+2.2.7. Hệ thống (SYSTEM)
+Chạy hằng đêm: tính và cập nhật tiền phạt quá hạn.
+Gửi nhắc sắp đến hạn và nhắc quá hạn.
+Hết hạn giữ chỗ, chuyển cho người kế tiếp trong hàng đợi.
+Chuyển thẻ hết hạn sang EXPIRED; tự khóa độc giả quá hạn quá lâu (nếu bật cấu hình).
+Ghi audit log tự động cho mọi thao tác quan trọng.
+3. CHỨC NĂNG THEO TỪNG ROLE
+Mỗi chức năng có mã để tham chiếu khi viết user story, phân công và kiểm thử. Cột “Bảng liên quan” liệt kê các bảng dữ liệu được đọc (R) hoặc ghi (W) khi thực hiện chức năng. Mã BRxx tham chiếu mục 1.6.
+3.1. Khách (GUEST)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+G01
+Tìm kiếm sách
+Tìm theo tên, tác giả, ISBN, thể loại, NXB, năm; lọc “còn bản sao”; sắp xếp theo độ phù hợp, mới nhất, phổ biến.
+books, authors, categories, publishers, book_authors, book_categories (R)
+G02
+Xem chi tiết sách
+Hiển thị thông tin thư mục, số bản sao rảnh/đang mượn, vị trí kệ, số người đang chờ.
+books, book_copies, locations, reservations (R)
+G03
+Sách mới và sách phổ biến
+Danh sách sách mới nhập và top sách mượn nhiều trong 30/90 ngày.
+books, loan_items, book_copies (R)
+G04
+Xem nội quy và giờ mở cửa
+Hiển thị chính sách, mức phạt, lịch nghỉ.
+library_settings, library_holidays, member_types (R)
+G05
+Đăng ký tài khoản
+Tạo users (role READER) và members trạng thái PENDING, chờ thủ thư duyệt. Validate email, điện thoại, mật khẩu.
+users, members (W)
+G06
+Đăng nhập / quên mật khẩu
+Đăng nhập, đặt lại mật khẩu qua email; khóa tạm sau 5 lần sai (BR18).
+users, audit_logs (R/W)
+3.2. Độc giả (READER)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+R01
+Quản lý hồ sơ
+Xem/sửa họ tên, điện thoại, địa chỉ; đổi mật khẩu. Không tự sửa loại độc giả, mã thẻ, trạng thái.
+users, members (R/W)
+R02
+Xem thẻ thư viện
+Mã thẻ (kèm mã vạch/QR), hạn thẻ, loại độc giả, hạn mức mượn còn lại.
+members, member_types, loan_items (R)
+R03
+Sách đang mượn
+Danh sách cuốn đang mượn, hạn trả, cảnh báo sắp/đã quá hạn, số lần gia hạn còn lại.
+loans, loan_items, book_copies, books (R)
+R04
+Lịch sử mượn trả
+Xem toàn bộ lịch sử có lọc theo thời gian, trạng thái.
+loans, loan_items, books (R)
+R05
+Gia hạn online
+Chọn cuốn và gia hạn; hệ thống chạy BR07, hiển thị hạn mới hoặc lý do bị từ chối.
+loan_items, renewals, reservations, fines, member_types (R/W)
+R06
+Đặt trước sách
+Đặt khi hết bản sao rảnh; kiểm tra BR10; hiển thị vị trí trong hàng đợi.
+reservations, books, book_copies, members, fines (R/W)
+R07
+Quản lý đặt trước
+Xem trạng thái (PENDING/READY), hạn giữ chỗ; hủy lượt đặt.
+reservations (R/W)
+R08
+Xem tiền phạt
+Danh sách khoản phạt, số còn nợ, lịch sử thanh toán, biên lai.
+fines, payments (R)
+R09
+Thanh toán phạt online
+Thanh toán đầy đủ hoặc từng phần qua cổng tích hợp (giai đoạn sau); chỉ ghi nhận khi cổng xác nhận thành công.
+fines, payments (R/W)
+R10
+Thông báo
+Nhận thông báo nhắc hạn, sách đặt trước sẵn sàng, phạt mới; đánh dấu đã đọc.
+notifications (R/W)
+R11
+Yêu cầu gia hạn / cấp lại thẻ
+Gửi yêu cầu, thủ thư xử lý tại quầy; có thể phát sinh phí CARD_FEE.
+members, fines (R/W)
+3.3. Thủ thư (LIBRARIAN)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+L01
+Đăng ký và duyệt độc giả
+Tạo hồ sơ tại quầy hoặc duyệt đăng ký online; chọn loại độc giả; sinh member_code; đặt hạn thẻ; in thẻ.
+users, members, member_types (R/W)
+L02
+Gia hạn thẻ, khóa/mở khóa
+Gia hạn card_expiry_date; chuyển SUSPENDED kèm lý do; mở lại ACTIVE (BLOCKED do Manager).
+members, audit_logs (R/W)
+L03
+Tra cứu độc giả và kiểm tra điều kiện mượn
+Quét thẻ, xem trạng thái, tổng nợ phạt, số cuốn đang mượn, cuốn quá hạn, kết quả BR01–BR04 kèm lý do chặn.
+members, v_member_outstanding_fines, v_member_current_loans, loan_items (R)
+L04
+Lập phiếu mượn
+Quét thẻ rồi quét từng mã vạch; kiểm tra BR01–BR06; tính due_date (bỏ qua ngày nghỉ); chuyển bản sao sang BORROWED; nếu cuốn đang RESERVED cho chính người đó thì hoàn tất reservation (FULFILLED).
+loans, loan_items, book_copies, reservations, library_holidays (R/W)
+L05
+Nhận trả sách
+Quét mã vạch; ghi tình trạng (GOOD/DAMAGED/LOST); đặt returned_at; tính phạt quá hạn; nếu có người chờ thì gán bản sao cho reservation đầu hàng (BR11), nếu không thì AVAILABLE.
+loan_items, book_copies, fines, reservations, notifications (R/W)
+L06
+Gia hạn tại quầy
+Như R05 nhưng thủ thư thao tác; ghi channel = COUNTER.
+loan_items, renewals (R/W)
+L07
+Xử lý đặt trước
+Xem hàng đợi theo sách; danh sách READY chờ nhận; hủy lượt hết hạn; tạo đặt trước hộ độc giả.
+reservations, book_copies, notifications (R/W)
+L08
+Xử lý sách mất / hỏng
+Đánh dấu loan_item LOST hoặc trả với tình trạng DAMAGED; tạo fines (BR09); cập nhật trạng thái bản sao.
+loan_items, book_copies, fines (R/W)
+L09
+Thu tiền phạt
+Chọn khoản phạt, nhập số tiền và phương thức; cập nhật paid_amount và status; in biên lai.
+fines, payments (R/W)
+L10
+Đề xuất / thực hiện miễn giảm phạt
+Gửi đề xuất kèm lý do cho Manager; hoặc miễn trực tiếp trong hạn mức (BR14).
+fines, audit_logs (R/W)
+L11
+Danh sách quá hạn và nhắc nợ
+Xem v_overdue_items, lọc theo số ngày trễ; gửi nhắc email/SMS thủ công.
+v_overdue_items, notifications (R/W)
+L12
+In ấn
+In thẻ thư viện, phiếu mượn, biên lai, nhãn mã vạch.
+members, loans, payments, book_copies (R)
+L13
+Dashboard vận hành
+Số lượt mượn/trả hôm nay, số sách quá hạn, đặt trước chờ nhận, tiền phạt thu trong ngày.
+views tổng hợp (R)
+3.4. Nhân viên biên mục (CATALOGER)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+C01
+Quản lý đầu sách
+Thêm/sửa/ẩn sách; kiểm tra ISBN và trùng; gán tác giả và thể loại; tải ảnh bìa; chỉ xóa mềm khi không còn bản sao.
+books, book_authors, book_categories (R/W)
+C02
+Quản lý tác giả
+Thêm/sửa/gộp tác giả trùng; chặn xóa tác giả đang gắn sách.
+authors, book_authors (R/W)
+C03
+Quản lý thể loại
+Quản lý cây thể loại; chặn vòng lặp (BR trong 1.4.3); chuyển sách khi gộp thể loại.
+categories, book_categories (R/W)
+C04
+Quản lý nhà xuất bản
+Thêm/sửa NXB; chặn xóa khi còn sách.
+publishers, books (R/W)
+C05
+Thêm bản sao và sinh mã vạch
+Nhập số lượng bản sao, hệ thống sinh barcode duy nhất, gán vị trí, ngày nhập, giá nhập; in nhãn.
+book_copies, locations (R/W)
+C06
+Quản lý vị trí kệ
+Thêm vị trí; chuyển hàng loạt bản sao sang vị trí mới.
+locations, book_copies (R/W)
+C07
+Cập nhật tình trạng và thanh lý
+Đổi condition, đưa vào MAINTENANCE, đề xuất WITHDRAWN (Manager duyệt); không đổi khi đang BORROWED.
+book_copies, audit_logs (R/W)
+C08
+Import / Export
+Nhập sách và bản sao từ Excel/CSV có báo cáo dòng lỗi; xuất danh mục.
+books, book_copies, authors, categories (R/W)
+C09
+Kiểm kê (mở rộng)
+Tạo đợt kiểm kê theo kệ, quét mã vạch, đối chiếu thiếu/thừa, cập nhật trạng thái LOST/AVAILABLE.
+inventory_checks, book_copies (R/W)
+3.5. Quản lý thư viện (MANAGER)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+M01
+Dashboard và báo cáo
+Sách phổ biến, sách quá hạn, doanh thu phạt, tỷ lệ trả trễ, tồn kho, độc giả hoạt động (xem mục 4.3); xuất Excel/PDF.
+views, loan_items, fines, payments, book_copies (R)
+M02
+Quản lý loại độc giả và chính sách
+Sửa hạn mức, số ngày mượn, số lần gia hạn, mức phạt theo loại; thay đổi có hiệu lực cho lượt mượn mới.
+member_types (R/W), audit_logs (W)
+M03
+Cấu hình quy tắc phạt và chặn mượn
+Ngưỡng nợ, ngày ân hạn, trần phạt, hệ số đền sách mất, thời gian giữ chỗ, ngày nhắc hạn.
+library_settings (R/W), audit_logs (W)
+M04
+Quản lý lịch nghỉ
+Thêm/sửa/xóa ngày đóng cửa; ảnh hưởng tính hạn trả và phạt.
+library_holidays (R/W)
+M05
+Duyệt miễn/giảm phạt
+Xem đề xuất của thủ thư, duyệt hoặc từ chối kèm lý do.
+fines, audit_logs (R/W)
+M06
+Xử lý ngoại lệ
+Mở khóa độc giả BLOCKED, hủy phiếu mượn sai, phục hồi cuốn LOST tìm lại.
+members, loans, loan_items, book_copies (R/W)
+M07
+Quản lý nhân viên thư viện
+Tạo/khóa tài khoản Thủ thư và Nhân viên biên mục; không tạo Admin/Manager.
+users, roles (R/W)
+M08
+Duyệt thanh lý và đề xuất mua
+Duyệt chuyển bản sao sang WITHDRAWN; duyệt yêu cầu mua sách (mở rộng).
+book_copies, purchase_requests (R/W)
+M09
+Xem audit log nghiệp vụ
+Lọc theo người, hành động, đối tượng, khoảng thời gian.
+audit_logs (R)
+3.6. Quản trị hệ thống (ADMIN)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+A01
+Quản lý tài khoản
+Tạo/khóa/mở khóa/reset mật khẩu mọi tài khoản; buộc đổi mật khẩu lần đầu.
+users (R/W), audit_logs (W)
+A02
+Quản lý vai trò và quyền
+Tạo vai trò, gán/thu hồi quyền; không cho xóa vai trò đang có người dùng.
+roles, permissions, role_permissions (R/W)
+A03
+Cấu hình kỹ thuật
+SMTP, SMS gateway, múi giờ, kích thước tải lên, chính sách mật khẩu, thời gian phiên.
+library_settings (R/W)
+A04
+Giám sát và nhật ký
+Xem audit log toàn hệ thống, log đăng nhập, trạng thái job nền, lỗi hệ thống.
+audit_logs (R)
+A05
+Sao lưu và phục hồi
+Lập lịch sao lưu CSDL và tệp; kiểm tra phục hồi định kỳ.
+toàn bộ CSDL
+A06
+Quản lý tích hợp
+SSO/LDAP, cổng thanh toán, dịch vụ email/SMS; khóa API.
+library_settings (R/W)
+A07
+Quản trị dữ liệu
+Khôi phục bản ghi xóa mềm, ẩn danh hóa dữ liệu độc giả theo yêu cầu pháp lý.
+bảng có deleted_at (R/W)
+3.7. Hệ thống tự động (SYSTEM)
+Mã
+Chức năng
+Mô tả và luật liên quan
+Bảng liên quan
+S01
+Job tính phạt quá hạn
+Hằng đêm: với mỗi loan_item quá hạn, tạo hoặc cập nhật dòng fines OVERDUE theo BR08.
+loan_items, fines, library_settings, library_holidays, member_types (R/W)
+S02
+Job nhắc hạn
+Gửi thông báo trước hạn N ngày và khi đã quá hạn; không gửi trùng trong ngày.
+loan_items, notifications (R/W)
+S03
+Job hết hạn giữ chỗ
+reservation READY quá hold_expires_at chuyển EXPIRED; bản sao chuyển cho người kế tiếp hoặc AVAILABLE (BR12).
+reservations, book_copies, notifications (R/W)
+S04
+Job hết hạn thẻ
+Thẻ quá card_expiry_date chuyển EXPIRED; nhắc trước khi hết hạn; tự SUSPENDED nếu quá hạn lâu (BR19).
+members, notifications (R/W)
+S05
+Tự gán sách cho hàng đợi
+Chạy trong transaction trả sách (BR11).
+reservations, book_copies (R/W)
+S06
+Cập nhật trạng thái phạt
+Sau mỗi payment, cập nhật paid_amount và status của fines (BR13).
+fines, payments (R/W)
+S07
+Ghi audit log
+Tự động ghi mọi thao tác quan trọng (BR20).
+audit_logs (W)
+3.8. Ma trận phân quyền tóm tắt
+● toàn quyền thao tác trong module; ◐ giới hạn (chỉ xem, chỉ dữ liệu của chính mình, hoặc có điều kiện); – không có quyền.
+Module
+Khách
+Độc giả
+Thủ thư
+Biên mục
+Quản lý
+Admin
+Tra cứu catalog
+●
+●
+●
+●
+●
+●
+Đầu sách, tác giả, thể loại, NXB
+–
+–
+◐ xem
+●
+◐ xem
+◐ xem
+Bản sao, vị trí kệ
+–
+–
+◐ đổi trạng thái mất/hỏng
+●
+◐ duyệt thanh lý
+◐ xem
+Độc giả và thẻ
+–
+◐ hồ sơ mình
+●
+–
+◐ mở khóa, xem
+◐ tài khoản
+Mượn / trả
+–
+◐ xem của mình
+●
+–
+◐ xem, hủy ngoại lệ
+–
+Gia hạn
+–
+◐ của mình
+●
+–
+◐ xem
+–
+Đặt trước
+–
+◐ của mình
+●
+–
+◐ xem
+–
+Tiền phạt: xem, tạo, thu
+–
+◐ xem, trả của mình
+●
+–
+◐ xem
+–
+Miễn/giảm phạt
+–
+–
+◐ trong hạn mức
+–
+●
+–
+Dashboard và báo cáo
+–
+–
+◐ vận hành ngày
+–
+●
+◐ kỹ thuật
+Chính sách và cấu hình nghiệp vụ
+–
+–
+–
+–
+●
+◐ xem
+Tài khoản nhân viên
+–
+–
+–
+–
+◐ thủ thư, biên mục
+●
+Vai trò và phân quyền
+–
+–
+–
+–
+–
+●
+Thông báo
+–
+◐ nhận
+◐ gửi nhắc
+–
+◐ xem
+◐ cấu hình kênh
+Audit log
+–
+–
+–
+–
+◐ nghiệp vụ
+●
+4. YÊU CẦU BỔ SUNG
+Phần này bổ sung những nội dung yêu cầu gốc chưa nêu nhưng cần có để hệ thống hoàn chỉnh và triển khai được.
+4.1. Các luồng nghiệp vụ chính
+a) Kiểm tra điều kiện mượn (dùng chung cho mượn, gia hạn, đặt trước)
+Tài khoản và thẻ: users.status = ACTIVE, members.status = ACTIVE, thẻ còn hạn (BR01).
+Nợ phạt: tổng nợ ≤ ngưỡng cấu hình (BR02). Nếu vượt: từ chối, hiển thị số tiền cần thanh toán.
+Quá hạn: không còn cuốn quá hạn chưa trả (BR03, nếu bật).
+Hạn mức: số cuốn đang mượn + cuốn mới ≤ max_loan_books (BR04).
+Mỗi lần từ chối trả về mã lỗi và lý do cụ thể để thủ thư giải thích với độc giả.
+b) Mượn sách
+Thủ thư quét thẻ, hệ thống chạy kiểm tra điều kiện (mục a).
+Quét từng mã vạch; kiểm tra bản sao AVAILABLE (hoặc RESERVED cho đúng người), không phải sách tham khảo.
+Trong một transaction: khóa dòng bản sao (SELECT … FOR UPDATE), tạo loans và loan_items, tính due_date, đặt bản sao BORROWED, nếu có reservation tương ứng thì chuyển FULFILLED.
+Ghi audit log, in phiếu mượn.
+c) Trả sách
+Quét mã vạch, hệ thống tìm loan_item BORROWED của bản sao đó.
+Thủ thư chọn tình trạng khi trả: GOOD, DAMAGED hoặc LOST.
+Trong một transaction: đặt returned_at, status RETURNED; nếu trễ thì tạo/chốt fines OVERDUE; nếu DAMAGED tạo phạt hỏng.
+Nếu có reservation PENDING cho đầu sách: gán bản sao (BR11), gửi thông báo; ngược lại bản sao về AVAILABLE (hoặc DAMAGED/MAINTENANCE).
+Thông báo cho độc giả nếu phát sinh phạt, nhắc thanh toán.
+d) Gia hạn
+Kiểm tra BR07 (trạng thái, quá hạn, số lần, nợ phạt, hàng đợi).
+Tính new_due_date = due_date hiện tại + renew_days, dời sang ngày mở cửa nếu trùng ngày nghỉ.
+Tạo renewals, cập nhật due_date và renew_count trong một transaction.
+e) Đặt trước
+Độc giả chọn đầu sách hết bản sao rảnh; hệ thống kiểm tra BR10 và điều kiện mượn.
+Tạo reservation PENDING, trả về vị trí trong hàng đợi.
+Khi có bản sao trả về: reservation đầu hàng READY, bản sao RESERVED, đặt hold_expires_at, gửi thông báo.
+Độc giả đến nhận trong hạn: thủ thư lập phiếu mượn, reservation FULFILLED. Quá hạn giữ chỗ: job chuyển EXPIRED và chuyển cho người kế tiếp.
+f) Phạt và thanh toán
+Khoản phạt sinh từ job đêm, khi trả sách, hoặc khi báo mất/hỏng.
+Độc giả hoặc thủ thư thu tiền: tạo payments, cập nhật paid_amount và status (UNPAID, PARTIAL, PAID).
+Miễn/giảm: thủ thư đề xuất, Manager duyệt, status WAIVED, ghi lý do và audit.
+Khi tổng nợ về dưới ngưỡng, độc giả tự động được mượn lại.
+4.2. Quy tắc tính phạt chi tiết
+Số ngày trễ = ngày trả (hoặc hôm nay nếu chưa trả) − due_date. Nếu EXCLUDE_HOLIDAYS_FROM_FINE bật thì không đếm ngày đóng cửa.
+Phạt quá hạn = min( max(0, ngày trễ − FINE_GRACE_DAYS) × fine_per_day , giá bìa × FINE_CAP_RATIO ).
+Phạt mất sách = giá bìa × LOST_FEE_MULTIPLIER + LOST_PROCESSING_FEE. Nếu đã có phạt quá hạn trên cuốn đó thì giữ nguyên dòng OVERDUE và cộng thêm dòng LOST.
+Phạt hỏng sách: thủ thư nhập số tiền theo mức độ hỏng (có hướng dẫn tỷ lệ), tối đa bằng giá bìa.
+Chốt phạt: khi sách được trả, dòng OVERDUE được chốt số ngày và số tiền cuối cùng; sau đó job không cập nhật nữa.
+Ví dụ (giá trị mặc định minh họa, cấu hình được): fine_per_day = 2.000đ, ân hạn 0 ngày, FINE_CAP_RATIO = 1, LOST_FEE_MULTIPLIER = 1,5, LOST_PROCESSING_FEE = 20.000đ.
+Tình huống
+Giá bìa
+Tính
+Tiền phạt
+Trễ 10 ngày
+90.000đ
+10 × 2.000
+20.000đ
+Trễ 60 ngày (chạm trần)
+90.000đ
+min(60 × 2.000 = 120.000 ; 90.000)
+90.000đ
+Mất sách
+90.000đ
+90.000 × 1,5 + 20.000
+155.000đ
+4.3. Dashboard và báo cáo
+Chỉ số / báo cáo
+Cách tính / nguồn dữ liệu
+Dành cho
+Sách phổ biến (top N)
+Đếm loan_items theo books (qua book_copies) trong khoảng thời gian, lọc theo thể loại
+Manager, Thủ thư
+Sách đang quá hạn
+v_overdue_items: danh sách, số ngày trễ, tổng số, phân nhóm 1–7, 8–30, >30 ngày
+Manager, Thủ thư
+Doanh thu phạt
+SUM(payments.amount) theo ngày/tháng; tổng nợ còn lại; tổng đã miễn
+Manager
+Tỷ lệ trả trễ
+Số loan_items trả sau due_date / tổng số đã trả
+Manager
+Tồn kho và tình trạng bản sao
+Đếm book_copies theo status, theo thể loại, theo vị trí
+Manager, Biên mục
+Sách có hàng đợi dài
+Số reservation PENDING theo đầu sách so với số bản sao; gợi ý mua thêm
+Manager
+Độc giả hoạt động / không hoạt động
+Số độc giả có mượn trong 90 ngày; thẻ sắp hết hạn
+Manager
+Độc giả nợ phạt lâu
+v_member_outstanding_fines lọc theo tuổi nợ
+Manager, Thủ thư
+Vận hành trong ngày
+Lượt mượn, trả, gia hạn, đặt trước chờ nhận, tiền thu hôm nay
+Thủ thư
+Xuất báo cáo
+Xuất Excel và PDF cho mọi báo cáo trên; lọc theo khoảng ngày
+Manager
+4.4. Công việc chạy nền (Background jobs)
+Job
+Lịch chạy
+Việc làm
+Bảng chính
+calc_overdue_fines
+Hằng ngày 00:30
+Tạo/cập nhật phạt OVERDUE cho cuốn còn quá hạn
+loan_items, fines
+send_due_reminders
+Hằng ngày 08:00
+Nhắc sắp đến hạn (N ngày) và quá hạn
+loan_items, notifications
+expire_reservations
+Mỗi giờ
+Hết hạn giữ chỗ, chuyển cho người kế tiếp
+reservations, book_copies
+expire_member_cards
+Hằng ngày 01:00
+Cập nhật thẻ hết hạn; nhắc thẻ sắp hết hạn
+members, notifications
+auto_block_overdue
+Hằng ngày 01:30
+Tạm khóa độc giả quá hạn quá N ngày (nếu bật)
+members, loan_items
+cleanup
+Hằng tuần
+Xóa thông báo cũ đã đọc, lưu trữ audit log cũ
+notifications, audit_logs
+Mọi job phải idempotent (chạy lại không tạo dữ liệu trùng), ghi log kết quả và có cơ chế cảnh báo khi thất bại.
+4.5. Yêu cầu phi chức năng
+Bảo mật: mật khẩu băm bcrypt/argon2; xác thực JWT hoặc session có hạn; phân quyền theo RBAC kiểm tra ở backend cho từng API; chống SQL injection (truy vấn tham số hóa), XSS, CSRF; giới hạn tốc độ (rate limit) cho đăng nhập và đặt lại mật khẩu; HTTPS bắt buộc.
+Riêng tư dữ liệu: độc giả chỉ xem dữ liệu của chính mình; che bớt thông tin nhạy cảm (CCCD, điện thoại) với vai trò không cần; log không chứa mật khẩu/token.
+Toàn vẹn dữ liệu và đồng thời: thao tác mượn, trả, đặt trước, thu tiền chạy trong transaction; khóa dòng bản sao để hai thủ thư không cho mượn cùng một cuốn; dùng khóa lạc quan (cột version) cho cập nhật dễ xung đột.
+Hiệu năng: tìm kiếm catalog < 1 giây với ≥ 100.000 đầu sách; danh sách phân trang phía server; chỉ mục theo mục 1.8; dashboard dùng view hoặc bảng tổng hợp cache.
+Độ tin cậy: sao lưu CSDL hằng ngày, giữ tối thiểu 30 ngày; thử phục hồi định kỳ; job nền có retry và cảnh báo.
+Khả năng kiểm toán: audit_logs bất biến; có thể truy ngược ai sửa gì, lúc nào, giá trị trước/sau.
+Khả dụng: giao diện responsive (máy tính quầy, tablet, điện thoại); hỗ trợ máy quét mã vạch như bàn phím; tiếng Việt có dấu (UTF-8), múi giờ Asia/Ho_Chi_Minh; sẵn sàng đa ngôn ngữ.
+Bảo trì: API có tài liệu OpenAPI; migration CSDL có phiên bản; seed dữ liệu mẫu (vai trò, quyền, loại độc giả, cấu hình mặc định).
+Kiểm thử: unit test cho các quy tắc BR01–BR20, đặc biệt tính phạt, gia hạn, hàng đợi đặt trước; kiểm thử đồng thời cho mượn cùng một bản sao.
+4.6. Chức năng và bảng mở rộng đề xuất
+Chức năng mở rộng
+Mô tả
+Bảng thêm (gợi ý)
+Đề xuất mua sách
+Độc giả gửi yêu cầu, Manager duyệt, Biên mục nhập kho
+purchase_requests
+Nhập sách / đơn mua
+Quản lý nhà cung cấp, đơn nhập, hóa đơn
+suppliers, acquisitions
+Kiểm kê
+Đợt kiểm kê và kết quả đối chiếu
+inventory_checks, inventory_check_items
+Đánh giá, bình luận, yêu thích
+Độc giả đánh giá sách và lưu danh sách yêu thích
+book_reviews, favorites
+Hoàn tiền / điều chỉnh phạt
+Hoàn tiền khi tìm lại sách đã báo mất
+refunds
+Mượn tại chỗ (đọc tại thư viện)
+Ghi nhận sách đọc tại chỗ, thống kê lượt đọc
+in_house_uses
+Đa chi nhánh
+Nhiều cơ sở, chuyển sách giữa cơ sở
+branches, copy_transfers
+Sách điện tử
+Tài liệu số, giới hạn thời gian truy cập
+ebooks, ebook_access
+Nhắc qua SMS / Zalo / push
+Thêm kênh thông báo
+mở rộng notifications.channel
+Tự mượn tại kiosk
+Độc giả tự quét thẻ và sách, thủ thư kiểm soát bằng cổng từ
+mở rộng loans.channel
+Refresh token và đặt lại mật khẩu
+Quản lý phiên đăng nhập an toàn
+refresh_tokens, password_reset_tokens
+4.7. Giả định và câu hỏi cần làm rõ với khách hàng
+Mức phạt mỗi ngày là cố định hay khác nhau theo loại sách và loại độc giả? Có trần phạt không?
+Có tính ngày nghỉ, ngày lễ vào số ngày trễ không? Có ngày ân hạn không?
+Độc giả còn phạt thì bị chặn mượn, nhưng có bị chặn gia hạn và đặt trước không?
+Độc giả còn sách quá hạn có được mượn thêm không?
+Thời gian giữ sách cho người đặt trước là bao nhiêu ngày? Có cho đặt trước sách đang còn bản sao rảnh không?
+Thẻ thư viện có phí, có thời hạn không? Độc giả đăng ký online có cần xác minh giấy tờ không?
+Sách mất: đền bằng tiền, bằng sách cùng loại, hay cả hai? Hệ số đền là bao nhiêu?
+Có cần thanh toán online ngay từ đầu hay chỉ thu tiền mặt tại quầy?
+Có sách tham khảo chỉ đọc tại chỗ không? Có tài liệu điện tử không?
+Quy mô: số đầu sách, số bản sao, số độc giả, số quầy mượn trả, một hay nhiều chi nhánh?
+Thư viện đã có dữ liệu cũ cần di chuyển (migration) từ Excel hoặc phần mềm khác không?
+4.8. Đề xuất lộ trình triển khai
+Giai đoạn
+Phạm vi
+Kết quả
+Giai đoạn 1 – MVP
+Tài khoản và phân quyền; danh mục sách, tác giả, thể loại, NXB, bản sao; độc giả và thẻ; mượn, trả; tra cứu catalog
+Thư viện vận hành được quầy mượn trả cơ bản
+Giai đoạn 2 – Lõi nghiệp vụ
+Gia hạn; đặt trước và hàng đợi; tính phạt tự động; chặn mượn khi còn nợ; thu phạt; thông báo; job nền
+Đủ các yêu cầu gốc
+Giai đoạn 3 – Quản trị và báo cáo
+Dashboard, báo cáo, xuất file; miễn/giảm phạt có duyệt; audit log; cấu hình chính sách; lịch nghỉ
+Quản lý theo dõi và điều chỉnh được vận hành
+Giai đoạn 4 – Mở rộng
+Kiểm kê, đề xuất mua sách, thanh toán online, đánh giá sách, kênh thông báo thêm, đa chi nhánh/eBook nếu cần
+Nâng cao trải nghiệm và quy mô

@@ -1,0 +1,220 @@
+.jmix-login-main-layout {
+  position: relative;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 16px 24px;
+  background-image: url('../images/bg-library.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+  --lumo-font-family: 'Poppins', sans-serif;
+}
+
+.login-page-title {
+  position: absolute;
+  top: 36px;
+  left: 56px;
+  z-index: 1;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.25;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.login-card-container {
+  box-sizing: border-box;
+  height: 100%;
+  width: 520px;
+  max-width: 100%;
+  margin: 0;
+  padding: 48px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(248, 245, 237, 0.68);
+  border: 1px solid rgba(173, 137, 82, 0.8);
+  border-radius: 24px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  color: #243447;
+  --lumo-font-family: 'Poppins', sans-serif;
+  --lumo-body-text-color: #243447;
+  --lumo-secondary-text-color: #46566a;
+  --lumo-header-text-color: #111827;
+  --lumo-space-s: 0.7rem;
+  --lumo-space-m: 0.75rem;
+  --lumo-space-l: 1rem;
+  --vaadin-input-field-height: 2.5rem;
+  --vaadin-input-field-value-color: #1f2937;
+  --vaadin-input-field-label-color: #46566a;
+  --vaadin-input-field-background: rgba(255, 255, 255, 0.96);
+  --vaadin-checkbox-label-color: #243447;
+  --vaadin-button-height: 2.5rem;
+}
+
+.login-logo {
+  display: block;
+  flex: 0 0 auto;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 0.25rem;
+  align-self: center;
+  object-fit: contain;
+}
+
+.login-card-container jmix-login-form,
+.login-card-container .custom-login-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card-container .custom-login-form {
+  --lumo-base-color: transparent;
+  --lumo-tint-5pct: transparent;
+  --jmix-login-form-locales-select-width: 10em;
+}
+
+@media (max-width: 600px) {
+  .jmix-login-main-layout {
+    padding: 12px;
+  }
+
+  .login-page-title {
+    top: 24px;
+    left: 28px;
+    right: 28px;
+    font-size: clamp(1.35rem, 5vw, 1.75rem);
+  }
+
+  .login-card-container {
+    width: 100%;
+    padding: 28px 20px;
+    border-radius: 18px;
+  }
+
+  .register-card-container {
+    width: 100%;
+    padding: 24px 16px;
+    border-radius: 18px;
+    max-height: 96vh;
+  }
+}
+
+.register-card-container {
+  box-sizing: border-box;
+  width: 560px;
+  max-width: 100%;
+  margin: 0;
+  padding: 32px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: rgba(248, 245, 237, 0.68);
+  border: 1px solid rgba(173, 137, 82, 0.8);
+  border-radius: 24px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  color: #243447;
+  max-height: 94vh;
+  overflow-y: auto;
+  --lumo-font-family: 'Poppins', sans-serif;
+  --lumo-body-text-color: #243447;
+  --lumo-secondary-text-color: #46566a;
+  --lumo-header-text-color: #111827;
+  --vaadin-input-field-height: 2.5rem;
+  --vaadin-input-field-value-color: #1f2937;
+  --vaadin-input-field-label-color: #46566a;
+  --vaadin-input-field-background: rgba(255, 255, 255, 0.96);
+  --vaadin-button-height: 2.5rem;
+}
+
+.register-card-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.register-card-container::-webkit-scrollbar-thumb {
+  background: rgba(173, 137, 82, 0.5);
+  border-radius: 4px;
+}
+
+.register-logo {
+  display: block;
+  flex: 0 0 auto;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 0.25rem;
+  align-self: center;
+  object-fit: contain;
+}
+
+.auth-title {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.25;
+}
+
+/* Nút liên kết dạng text link màu xanh không có nền nút */
+.auth-link-btn,
+vaadin-button.auth-link-btn {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #0284c7 !important;
+  font-weight: 600 !important;
+  font-size: 0.925rem !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: auto !important;
+  min-height: auto !important;
+  min-width: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  text-decoration: none !important;
+  line-height: inherit !important;
+}
+
+.auth-link-btn:hover,
+vaadin-button.auth-link-btn:hover {
+  color: #0369a1 !important;
+  text-decoration: underline !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.auth-link-btn::part(label) {
+  padding: 0 !important;
+  color: #0284c7 !important;
+  font-weight: 600 !important;
+  font-size: 0.925rem !important;
+  cursor: pointer !important;
+}
+
+.auth-link-btn:hover::part(label) {
+  color: #0369a1 !important;
+  text-decoration: underline !important;
+}
+
+

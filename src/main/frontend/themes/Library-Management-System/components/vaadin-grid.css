@@ -1,0 +1,79 @@
+/* ========================================================
+   VAADIN GRID MODERN COMPONENT STYLING
+   ======================================================== */
+:host {
+  font-family: var(--lumo-font-family, inherit);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Header Cells (Tiêu đề bảng) */
+[part~="header-cell"] {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  font-size: var(--lumo-font-size-s, 0.8125rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+  padding: 8px 12px !important;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+[part~="header-cell"] ::slotted(vaadin-grid-cell-content) {
+  display: flex;
+  align-items: center;
+}
+
+/* Body Cells (Dữ liệu hàng) */
+[part~="body-cell"] {
+  background-color: #ffffff;
+  color: #1e293b;
+  font-size: var(--lumo-font-size-s, 0.875rem);
+  padding: 10px 14px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  line-height: 1.45;
+  transition: background-color 0.15s ease-in-out;
+}
+
+/* Row Hover State (Rê chuột qua hàng) */
+[part~="row"]:hover [part~="body-cell"] {
+  background-color: #f8fafc !important;
+}
+
+/* Selected Row State (Hàng đang được chọn) */
+[part~="row"][selected] [part~="body-cell"] {
+  background-color: #eff6ff !important;
+  color: #1e3a8a !important;
+}
+
+[part~="row"][selected] [part~="body-cell"]:first-child {
+  box-shadow: inset 3.5px 0 0 #2563eb !important;
+}
+
+/* Sọc hàng nhẹ (Zebra Striping) */
+:host([theme~="row-stripes"]) [part~="row"]:nth-child(even) [part~="body-cell"] {
+  background-color: #fafbfc;
+}
+
+:host([theme~="row-stripes"]) [part~="row"]:nth-child(even):hover [part~="body-cell"] {
+  background-color: #f1f5f9 !important;
+}
+
+/* Compact theme */
+:host([theme~="compact"]) [part~="header-cell"],
+:host([theme~="compact"]) [part~="body-cell"] {
+  padding: 6px 10px !important;
+}
+
+/* Reorder Ghost */
+[part~="reorder-ghost"] {
+  opacity: 0.85;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}

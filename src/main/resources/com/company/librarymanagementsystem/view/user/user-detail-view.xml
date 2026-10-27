@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://UserDetailView.title">
+    <data>
+        <instance id="userDc"
+                  class="com.company.librarymanagementsystem.entity.User">
+            <fetchPlan extends="_base">
+                <property name="role" fetchPlan="_base"/>
+                <property name="permissions" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+        <collection id="permissionsDc"
+                    class="com.company.librarymanagementsystem.entity.Permission">
+            <fetchPlan extends="_base"/>
+            <loader id="permissionsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Permission e order by e.module, e.code]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <formLayout id="form" dataContainer="userDc">
+            <div id="defaultPasswordNote" colspan="2" classNames="p-s text-secondary text-s rounded-m"
+                 css="background-color: var(--lumo-primary-color-10pct); border-left: 4px solid var(--lumo-primary-color); margin-bottom: 8px;">
+                <span text="Mật khẩu mặc định khi tạo mới: 123456a@ (Người dùng sẽ được yêu cầu đổi mật khẩu ở lần đăng nhập đầu tiên)"/>
+            </div>
+            <textField id="usernameField"
+                       property="username"
+                       label="Tên đăng nhập"
+                       requiredMessage="Vui lòng nhập tên đăng nhập"/>
+            <textField id="lastNameField" property="lastName" label="Họ và tên đệm"/>
+            <textField id="firstNameField" property="firstName" label="Tên"/>
+            <textField id="emailField" property="email" label="Email"/>
+            <textField id="phoneField" property="phone" label="Số điện thoại"/>
+            <entityComboBox id="roleField" property="role" label="Vai trò chính" clearButtonVisible="true"/>
+            <select id="statusField" property="status" label="Trạng thái tài khoản"/>
+            <comboBox id="timeZoneField" property="timeZoneId" label="Múi giờ" clearButtonVisible="true"/>
+            <vbox id="permissionsSection" colspan="2" padding="false" spacing="true" width="100%">
+                <hbox width="100%" alignItems="CENTER" justifyContent="BETWEEN">
+                    <hbox alignItems="CENTER" spacing="true">
+                        <span text="Danh sách quyền hạn được cấp" classNames="font-semibold text-m"/>
+                        <span id="selectedPermCountBadge" text="0 quyền" classNames="badge primary small"/>
+                    </hbox>
+                    <hbox spacing="true">
+                        <button id="applyRolePermissionsBtn" text="Lấy theo vai trò" icon="REFRESH" themeNames="small tertiary"/>
+                        <button id="selectAllPermissionsBtn" text="Chọn tất cả" icon="CHECK_SQUARE_O" themeNames="small tertiary"/>
+                        <button id="clearAllPermissionsBtn" text="Bỏ chọn tất cả" icon="CLOSE_SMALL" themeNames="small tertiary error"/>
+                    </hbox>
+                </hbox>
+
+                <comboBox id="permissionSearchBox"
+                          placeholder="Nhập tìm kiếm theo tên, mã hoặc phân hệ để thêm quyền..."
+                          clearButtonVisible="true"
+                          width="100%"/>
+
+                <div id="selectedPermissionsContainer" classNames="selected-perms-box" width="100%"/>
+            </vbox>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction" text="Lưu và Đóng"/>
+            <button id="closeButton" action="closeAction" text="Đóng"/>
+        </hbox>
+    </layout>
+</view>

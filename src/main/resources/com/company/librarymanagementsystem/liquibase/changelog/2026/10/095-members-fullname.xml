@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="20261022-04-add-member-fullname-make-user-optional" author="Library-Management-System">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="MEMBERS" columnName="FULL_NAME"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="MEMBERS">
+            <column name="FULL_NAME" type="VARCHAR(150)"/>
+        </addColumn>
+        <sql>
+            UPDATE MEMBERS m LEFT JOIN USER_ u ON m.USER_ID = u.ID
+            SET m.FULL_NAME = COALESCE(u.FULL_NAME, u.USERNAME, 'Độc giả')
+            WHERE m.FULL_NAME IS NULL OR m.FULL_NAME = '';
+        </sql>
+        <addNotNullConstraint tableName="MEMBERS" columnName="FULL_NAME" columnDataType="VARCHAR(150)"/>
+        <dropNotNullConstraint tableName="MEMBERS" columnName="USER_ID" columnDataType="${uuid.type}"/>
+    </changeSet>
+
+</databaseChangeLog>

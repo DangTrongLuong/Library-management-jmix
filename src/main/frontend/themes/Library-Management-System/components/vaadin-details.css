@@ -1,0 +1,104 @@
+/* ========================================================
+   VAADIN DETAILS MODERN COMPONENT STYLING
+   ======================================================== */
+:host {
+  font-family: var(--lumo-font-family, inherit);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  box-sizing: border-box;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.18s ease-in-out, box-shadow 0.18s ease-in-out;
+}
+
+:host(:hover) {
+  border-color: #cbd5e1;
+}
+
+[part="summary"] {
+  background-color: #f8fafc;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: var(--lumo-font-size-m, 0.95rem);
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 0.15s ease;
+}
+
+[part="summary"]:hover {
+  background-color: #f1f5f9;
+}
+
+:host([opened]) [part="summary"] {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[part="content"] {
+  padding: 1rem 1.25rem;
+  background-color: #ffffff;
+}
+
+[part="toggle"] {
+  color: #2563eb;
+  margin-inline-end: 0.5rem;
+}
+
+/* ========================================================
+   RESET CHO VAADIN-DETAILS TRONG SIDEBAR LIST-MENU
+   (Đảm bảo các menu trong sidebar thanh thoát, cách đều nhau nhẹ nhàng)
+   ======================================================== */
+:host-context(.jmix-list-menu),
+:host-context(.jmix-main-view-navigation),
+:host-context(nav) {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+:host-context(.jmix-list-menu) [part="summary"],
+:host-context(.jmix-main-view-navigation) [part="summary"],
+:host-context(nav) [part="summary"] {
+  background-color: transparent !important;
+  padding: 6px 10px !important;
+  border: none !important;
+  border-bottom: none !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+:host-context(.jmix-list-menu) [part="summary"]:hover,
+:host-context(.jmix-main-view-navigation) [part="summary"]:hover,
+:host-context(nav) [part="summary"]:hover {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+  color: #1d4ed8 !important;
+  transform: translateX(2px) !important;
+}
+
+:host-context(.jmix-list-menu) [part="content"],
+:host-context(.jmix-main-view-navigation) [part="content"],
+:host-context(nav) [part="content"] {
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+:host-context(.jmix-list-menu) [part="toggle"],
+:host-context(.jmix-main-view-navigation) [part="toggle"],
+:host-context(nav) [part="toggle"] {
+  color: #64748b !important;
+  font-size: 0.75rem !important;
+  margin-inline-end: 0.35rem !important;
+  transition: transform 0.18s ease !important;
+}

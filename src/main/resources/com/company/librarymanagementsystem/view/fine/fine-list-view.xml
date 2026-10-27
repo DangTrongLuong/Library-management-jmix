@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Tiền phạt &amp; Bồi thường"
+      focusComponent="searchField">
+
+    <data>
+        <collection id="finesDc"
+                    class="com.company.librarymanagementsystem.entity.Fine">
+            <fetchPlan extends="_base">
+                <property name="member" fetchPlan="_base"/>
+                <property name="loanItem" fetchPlan="_base">
+                    <property name="bookCopy" fetchPlan="_base">
+                        <property name="book" fetchPlan="_base"/>
+                    </property>
+                    <property name="loan" fetchPlan="_base"/>
+                </property>
+                <property name="createdBy" fetchPlan="_base"/>
+                <property name="waivedBy" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="finesDl" readOnly="true">
+                <query>
+                    <![CDATA[select f from Fine f
+                             where (:statusFilter is null or f.status = :statusFilter)
+                               and (:fineTypeFilter is null or f.fineType = :fineTypeFilter)
+                               and (:searchText is null or (
+                                      lower(f.member.memberCode) like lower(concat('%', :searchText, '%'))
+                                   or lower(f.member.fullName) like lower(concat('%', :searchText, '%'))
+                                   or lower(f.description) like lower(concat('%', :searchText, '%'))
+                                   or lower(f.loanItem.bookCopy.barcode) like lower(concat('%', :searchText, '%'))
+                                   or lower(f.loanItem.bookCopy.book.title) like lower(concat('%', :searchText, '%'))
+                               ))
+                             order by f.createdAt desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+
+    <layout padding="false" spacing="false" width="100%">
+        <vbox width="100%" spacing="true" padding="true">
+
+            <!-- Modern KPI Ribbon -->
+            <div id="kpiContainer" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Hàng 1: Bộ lọc & Tìm kiếm -->
+            <hbox width="100%" alignItems="CENTER" spacing="true">
+                <textField id="searchField"
+                           placeholder="Mã thẻ, tên độc giả, mã vạch, tên sách..."
+                           clearButtonVisible="true"
+                           width="24em"/>
+                <select id="statusFilterSelect"
+                        placeholder="Lọc theo trạng thái..."
+                        width="14em"/>
+                <select id="typeFilterSelect"
+                        placeholder="Lọc theo loại phạt..."
+                        width="15em"/>
+                <button id="searchBtn" text="Lọc" icon="SEARCH" themeNames="primary"/>
+                <button id="clearFilterBtn" text="Xóa lọc" icon="CLOSE"/>
+            </hbox>
+
+            <!-- Hàng 2: Các nút thao tác tại quầy -->
+            <hbox width="100%" alignItems="CENTER" spacing="true">
+                <button id="payFineBtn" text="Thu tiền phạt" icon="vaadin:money-deposit" themeNames="primary success"/>
+                <button id="payAllBtn" text="Thu toàn bộ nợ" icon="vaadin:wallet" themeNames="primary"/>
+                <button id="waiveFineBtn" text="Miễn / Giảm phạt" icon="vaadin:gift" themeNames="contrast"/>
+                <button id="reportLostOrDamagedBtn" text="Báo mất / hỏng sách" icon="vaadin:warning" themeNames="error"/>
+                <button id="receiptHistoryBtn" text="Lịch sử biên lai" icon="vaadin:records"/>
+                <button id="refreshBtn" text="Làm mới" icon="REFRESH"/>
+            </hbox>
+
+            <!-- Bảng danh sách tiền phạt -->
+            <dataGrid id="finesDataGrid"
+                      width="100%"
+                      columnReorderingAllowed="true"
+                      minHeight="25em"
+                      dataContainer="finesDc">
+                <columns resizable="true">
+                    <column property="member.memberCode" header="Mã thẻ" autoWidth="true"/>
+                    <column property="member.fullName" header="Họ và tên độc giả" autoWidth="true" flexGrow="1"/>
+                    <column key="fineTypeCol" header="Loại phạt" autoWidth="true" textAlign="CENTER"/>
+                    <column key="bookInfoCol" header="Sách liên quan" autoWidth="true" flexGrow="2"/>
+                    <column key="amountCol" header="Số tiền phạt" autoWidth="true" textAlign="END"/>
+                    <column key="paidAmountCol" header="Đã thu" autoWidth="true" textAlign="END"/>
+                    <column key="remainingCol" header="Còn nợ" autoWidth="true" textAlign="END"/>
+                    <column key="statusCol" header="Trạng thái" autoWidth="true" textAlign="CENTER"/>
+                    <column key="createdAtCol" header="Ngày ghi nhận" autoWidth="true" textAlign="CENTER"/>
+                    <column property="description" header="Ghi chú / Chi tiết" autoWidth="true" flexGrow="1"/>
+                </columns>
+            </dataGrid>
+
+            <!-- Phân trang -->
+            <hbox width="100%" alignItems="CENTER" justifyContent="END">
+                <simplePagination id="pagination"
+                                  dataLoader="finesDl"
+                                  classNames="ms-auto"
+                                  itemsPerPageVisible="true"
+                                  itemsPerPageDefaultValue="20"
+                                  itemsPerPageOptions="10, 20, 50, 100"/>
+            </hbox>
+
+        </vbox>
+    </layout>
+</view>

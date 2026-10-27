@@ -1,0 +1,45 @@
+# Jmix
+.jmix/
+
+# Gradle
+.gradle/
+build/
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+# Environment variables & secrets
+.env
+.env.*
+.env.properties
+!.env.example
+
+# Jmix bundles (if applicable)
+src/main/bundles/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+/target/
+
+### VS Code ###
+.vscode/
+
+### Vaadin & Frontend ###
+node_modules/
+src/main/frontend/generated/
+pnpmfile.js
+vite.generated.ts
+webpack.generated.js
+package-lock.json
+pnpm-lock.yaml
+
+### OS & Temporary files ###
+.DS_Store
+Thumbs.db
+*.log
+*.tmp

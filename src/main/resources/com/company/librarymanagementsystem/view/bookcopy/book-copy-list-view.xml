@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Bản sao &amp; Mã vạch sách"
+      focusComponent="bookCopiesDataGrid">
+    <data>
+        <collection id="bookCopiesDc"
+                    class="com.company.librarymanagementsystem.entity.BookCopy">
+            <fetchPlan extends="_base">
+                <property name="book" fetchPlan="_base"/>
+                <property name="location" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="bookCopiesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from BookCopy e where e.deletedAt is null order by e.id desc]]>
+                </query>
+            </loader>
+        </collection>
+
+        <collection id="locationsDc"
+                    class="com.company.librarymanagementsystem.entity.Location">
+            <fetchPlan extends="_base"/>
+            <loader id="locationsDl">
+                <query>
+                    <![CDATA[select l from Location l where l.deletedAt is null order by l.code]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <vbox width="100%" spacing="true" padding="false">
+            <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+                <button id="bulkCreateButton" text="Nhập bản sao hàng loạt" icon="PLUS_CIRCLE" themeNames="primary success"/>
+                <button id="createButton" action="bookCopiesDataGrid.createAction" text="Thêm cuốn đơn" icon="PLUS"/>
+                <button id="printBarcodeButton" text="In mã vạch" icon="BARCODE" themeNames="primary"/>
+                <button id="editButton" action="bookCopiesDataGrid.editAction" text="Sửa" icon="PENCIL"/>
+                <button id="removeButton" action="bookCopiesDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error"/>
+                <button id="refreshButton" action="bookCopiesDataGrid.refreshAction" text="Làm mới" icon="REFRESH"/>
+
+                <simplePagination id="pagination" dataLoader="bookCopiesDl" classNames="ms-auto"/>
+            </hbox>
+
+            <hbox id="searchPanel" alignItems="CENTER" width="100%" spacing="true">
+                <textField id="searchField"
+                           placeholder="Tra cứu theo mã vạch, tên sách, ISBN..."
+                           clearButtonVisible="true"
+                           prefixComponent="vaadin-icon:search"
+                           width="35em"/>
+            </hbox>
+
+            <hbox id="filterPanel" alignItems="CENTER" width="100%" spacing="true">
+                <entityComboBox id="locationFilter"
+                                metaClass="Location"
+                                itemsContainer="locationsDc"
+                                placeholder="Lọc theo vị trí kệ"
+                                clearButtonVisible="true"
+                                width="35em"/>
+
+                <select id="statusFilter"
+                        placeholder="Lọc theo trạng thái"
+                        emptySelectionAllowed="true"
+                        emptySelectionCaption="-- Tất cả trạng thái --"
+                        width="15em"/>
+
+                <button id="clearFilterBtn" text="Xóa bộ lọc" icon="CLOSE_SMALL" themeNames="tertiary"/>
+            </hbox>
+        </vbox>
+
+        <dataGrid id="bookCopiesDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  selectionMode="MULTI"
+                  minHeight="26em"
+                  dataContainer="bookCopiesDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+                <action id="refreshAction" type="list_refresh" text="Làm mới"/>
+            </actions>
+            <columns resizable="true">
+                <column property="barcode" header="Mã vạch (Barcode)" autoWidth="true" flexGrow="0"/>
+                <column property="book" header="Đầu sách" autoWidth="true" flexGrow="2"/>
+                <column property="location" header="Vị trí kệ" autoWidth="true" flexGrow="1"/>
+                <column property="status" header="Trạng thái mượn" autoWidth="true" flexGrow="0"/>
+                <column property="condition" header="Tình trạng sách" autoWidth="true" flexGrow="0"/>
+                <column property="acquisitionPrice" header="Giá nhập" autoWidth="true" flexGrow="0"/>
+                <column property="acquiredDate" header="Ngày nhập" autoWidth="true" flexGrow="0"/>
+                <column property="note" header="Ghi chú" autoWidth="true" flexGrow="1"/>
+            </columns>
+        </dataGrid>
+
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction" text="Chọn"/>
+            <button id="discardButton" action="discardAction" text="Bỏ qua"/>
+        </hbox>
+    </layout>
+</view>

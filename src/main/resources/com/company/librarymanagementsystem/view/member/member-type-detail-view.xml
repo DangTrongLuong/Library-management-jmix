@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Loại độc giả">
+    <data>
+        <instance id="memberTypeDc"
+                  class="com.company.librarymanagementsystem.entity.MemberType">
+            <fetchPlan extends="_base"/>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="memberTypeDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+
+            <textField id="codeField" property="code" label="Mã loại độc giả" required="true" requiredMessage="Vui lòng nhập mã loại độc giả (VD: STUDENT)"/>
+            <textField id="nameField" property="name" label="Tên loại độc giả" required="true" requiredMessage="Vui lòng nhập tên loại độc giả (VD: Sinh viên)"/>
+
+            <textField id="maxLoanBooksField" property="maxLoanBooks" label="Số sách mượn tối đa cùng lúc" required="true"/>
+            <textField id="loanDaysField" property="loanDays" label="Số ngày mượn mặc định" required="true"/>
+
+            <textField id="maxRenewalsField" property="maxRenewals" label="Số lần gia hạn tối đa" required="true"/>
+            <textField id="renewDaysField" property="renewDays" label="Số ngày thêm mỗi lần gia hạn" required="true"/>
+
+            <textField id="maxReservationsField" property="maxReservations" label="Số lượt đặt trước tối đa" required="true"/>
+            <bigDecimalField id="finePerDayField" property="finePerDay" label="Mức phạt quá hạn (VNĐ/ngày)" required="true"/>
+
+            <textField id="cardValidMonthsField" property="cardValidMonths" label="Thời hạn thẻ khi cấp (tháng)" required="true"/>
+            <textField id="descriptionField" property="description" label="Mô tả chính sách"/>
+        </formLayout>
+
+        <hbox id="detailActions" spacing="true" classNames="mt-m">
+            <button id="saveAndCloseButton" action="saveCloseAction" themeNames="primary" icon="CHECK"/>
+            <button id="closeButton" action="closeAction" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

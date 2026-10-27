@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Bản sao sách">
+    <data>
+        <instance id="bookCopyDc"
+                  class="com.company.librarymanagementsystem.entity.BookCopy">
+            <fetchPlan extends="_base">
+                <property name="book" fetchPlan="_base"/>
+                <property name="location" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="bookCopyDl"/>
+        </instance>
+        <collection id="booksDc" class="com.company.librarymanagementsystem.entity.Book">
+            <fetchPlan extends="_base"/>
+            <loader id="booksDl">
+                <query><![CDATA[select b from Book b order by b.title]]></query>
+            </loader>
+        </collection>
+        <collection id="locationsDc" class="com.company.librarymanagementsystem.entity.Location">
+            <fetchPlan extends="_base"/>
+            <loader id="locationsDl">
+                <query><![CDATA[select l from Location l where l.deletedAt is null order by l.code]]></query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="bookCopyDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+
+            <entityComboBox id="bookField"
+                            property="book"
+                            itemsContainer="booksDc"
+                            label="Đầu sách"
+                            required="true"
+                            requiredMessage="Vui lòng chọn đầu sách"
+                            colspan="2"/>
+
+            <hbox alignItems="END" spacing="true" colspan="2" width="100%" classNames="align-items-end">
+                <textField id="barcodeField"
+                           property="barcode"
+                           label="Mã vạch (Barcode)"
+                           required="true"
+                           requiredMessage="Vui lòng nhập hoặc sinh mã vạch"
+                           width="70%"/>
+                <button id="generateBarcodeBtn"
+                        text="Tự sinh mã vạch"
+                        icon="MAGIC"
+                        themeNames="secondary"
+                        width="30%"/>
+            </hbox>
+
+            <entityComboBox id="locationField"
+                            property="location"
+                            itemsContainer="locationsDc"
+                            label="Vị trí kệ sách"
+                            clearButtonVisible="true"/>
+
+            <select id="statusField"
+                    property="status"
+                    label="Trạng thái mượn"
+                    required="true"/>
+
+            <select id="conditionField"
+                    property="condition"
+                    label="Tình trạng vật lý"
+                    required="true"/>
+
+            <datePicker id="acquiredDateField"
+                        property="acquiredDate"
+                        label="Ngày nhập kho"/>
+
+            <bigDecimalField id="acquisitionPriceField"
+                             property="acquisitionPrice"
+                             label="Giá nhập thực tế (VNĐ)"/>
+
+            <textField id="acquisitionSourceField"
+                       property="acquisitionSource"
+                       label="Nguồn nhập (Mua mới, tặng...)"/>
+
+            <textField id="noteField"
+                       property="note"
+                       label="Ghi chú thêm"
+                       colspan="2"/>
+        </formLayout>
+
+        <hbox id="detailActions" spacing="true" classNames="mt-m">
+            <button id="saveAndCloseButton" action="saveCloseAction" themeNames="primary" icon="CHECK"/>
+            <button id="closeButton" action="closeAction" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

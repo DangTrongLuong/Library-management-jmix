@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chính sách Loại độc giả"
+      focusComponent="memberTypesDataGrid">
+    <data>
+        <collection id="memberTypesDc"
+                    class="com.company.librarymanagementsystem.entity.MemberType">
+            <fetchPlan extends="_base"/>
+            <loader id="memberTypesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from MemberType e where e.deletedAt is null order by e.id]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <hbox id="buttonsPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+            <button id="createButton" action="memberTypesDataGrid.createAction" text="Thêm loại độc giả" icon="PLUS" themeNames="primary"/>
+            <button id="editButton" action="memberTypesDataGrid.editAction" text="Chỉnh sửa chính sách" icon="PENCIL"/>
+            <button id="removeButton" action="memberTypesDataGrid.removeAction" text="Xóa" icon="TRASH" themeNames="error"/>
+            <button id="refreshButton" action="memberTypesDataGrid.refreshAction" text="Làm mới" icon="REFRESH"/>
+        </hbox>
+
+        <dataGrid id="memberTypesDataGrid"
+                  width="100%"
+                  columnReorderingAllowed="true"
+                  minHeight="20em"
+                  dataContainer="memberTypesDc">
+            <actions>
+                <action id="createAction" type="list_create" text="Thêm mới"/>
+                <action id="editAction" type="list_edit" text="Chỉnh sửa"/>
+                <action id="removeAction" type="list_remove" text="Xóa"/>
+                <action id="refreshAction" type="list_refresh" text="Làm mới"/>
+            </actions>
+            <columns resizable="true">
+                <column property="code" header="Mã loại" autoWidth="true"/>
+                <column property="name" header="Tên loại độc giả" autoWidth="true" flexGrow="1"/>
+                <column property="maxLoanBooks" header="Số sách mượn tối đa" autoWidth="true" textAlign="CENTER"/>
+                <column property="loanDays" header="Hạn mượn (ngày)" autoWidth="true" textAlign="CENTER"/>
+                <column property="maxRenewals" header="Số lần gia hạn" autoWidth="true" textAlign="CENTER"/>
+                <column property="renewDays" header="Ngày/gia hạn" autoWidth="true" textAlign="CENTER"/>
+                <column property="finePerDay" header="Mức phạt (VNĐ/ngày)" autoWidth="true" textAlign="END"/>
+                <column property="cardValidMonths" header="Thời hạn thẻ (tháng)" autoWidth="true" textAlign="CENTER"/>
+                <column property="description" header="Mô tả chính sách" autoWidth="true" flexGrow="2"/>
+            </columns>
+        </dataGrid>
+    </layout>
+</view>

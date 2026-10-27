@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chuyển vị trí kệ sách hàng loạt">
+    <data>
+        <collection id="locationsDc" class="com.company.librarymanagementsystem.entity.Location">
+            <fetchPlan extends="_base"/>
+            <loader id="locationsDl">
+                <query><![CDATA[select l from Location l where l.deletedAt is null order by l.code]]></query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <vbox width="100%" spacing="true">
+            <span id="selectedCountSpan" classNames="text-secondary font-semibold"/>
+
+            <entityComboBox id="targetLocationField"
+                            metaClass="Location"
+                            itemsContainer="locationsDc"
+                            label="Chọn vị trí kệ đích chuyển đến"
+                            required="true"
+                            requiredMessage="Vui lòng chọn vị trí kệ đích"
+                            width="100%"/>
+
+            <hbox id="dialogActions" spacing="true" classNames="mt-m ms-auto">
+                <button id="submitButton" text="Xác nhận chuyển kệ" themeNames="primary" icon="CHECK"/>
+                <button id="cancelButton" text="Hủy bỏ" icon="BAN"/>
+            </hbox>
+        </vbox>
+    </layout>
+</view>

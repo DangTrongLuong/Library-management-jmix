@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="Library-Management-System">
+        <createIndex indexName="IDX_MEMBERS_ON_CODE" tableName="MEMBERS" unique="true">
+            <column name="MEMBER_CODE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="2" author="Library-Management-System">
+        <dropIndex indexName="IDX_MEMBERS_ID_NUMBER" tableName="members"/>
+    </changeSet>
+    <changeSet id="3" author="Library-Management-System">
+        <createIndex indexName="IDX_MEMBERS_ON_ID_NUMBER" tableName="MEMBERS">
+            <column name="ID_NUMBER"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="4" author="Library-Management-System">
+        <dropIndex indexName="IDX_MEMBERS_STATUS" tableName="members"/>
+    </changeSet>
+    <changeSet id="5" author="Library-Management-System">
+        <createIndex indexName="IDX_MEMBERS_ON_STATUS" tableName="MEMBERS">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

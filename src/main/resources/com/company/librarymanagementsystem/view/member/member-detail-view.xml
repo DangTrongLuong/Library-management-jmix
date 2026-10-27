@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Thông tin Độc giả"
+      focusComponent="fullNameField">
+    <data>
+        <instance id="memberDc"
+                  class="com.company.librarymanagementsystem.entity.Member">
+            <fetchPlan extends="_base">
+                <property name="user" fetchPlan="_base"/>
+                <property name="memberType" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="memberDl"/>
+        </instance>
+        <collection id="memberTypesDc"
+                    class="com.company.librarymanagementsystem.entity.MemberType">
+            <fetchPlan extends="_base"/>
+            <loader id="memberTypesDl" readOnly="true">
+                <query>
+                    <![CDATA[select t from MemberType t where t.deletedAt is null order by t.name]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="memberDc" width="100%">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+
+            <textField id="memberCodeField"
+                       property="memberCode"
+                       label="Mã thẻ độc giả"
+                       readOnly="true"
+                       colspan="1"/>
+
+            <textField id="fullNameField"
+                       property="fullName"
+                       label="Tên độc giả"
+                       required="true"
+                       requiredMessage="Vui lòng nhập tên độc giả"
+                       colspan="1"/>
+
+            <entityComboBox id="memberTypeField"
+                            property="memberType"
+                            label="Loại độc giả"
+                            itemsContainer="memberTypesDc"
+                            required="true"
+                            requiredMessage="Vui lòng chọn loại độc giả"
+                            colspan="1"/>
+
+            <comboBox id="genderField"
+                      property="gender"
+                      label="Giới tính"
+                      colspan="1"/>
+
+            <datePicker id="dateOfBirthField"
+                        property="dateOfBirth"
+                        label="Ngày sinh"
+                        colspan="1"/>
+
+            <textField id="idNumberField"
+                       property="idNumber"
+                       label="Số CCCD / Mã định danh"
+                       colspan="1"/>
+
+            <textArea id="addressField"
+                      property="address"
+                      label="Địa chỉ"
+                      colspan="2"
+                      height="4em"/>
+
+            <datePicker id="cardIssuedDateField"
+                        property="cardIssuedDate"
+                        label="Ngày cấp thẻ"
+                        colspan="1"/>
+
+            <datePicker id="cardExpiryDateField"
+                        property="cardExpiryDate"
+                        label="Ngày hết hạn thẻ"
+                        colspan="1"/>
+
+            <comboBox id="statusField"
+                      property="status"
+                      label="Trạng thái thẻ"
+                      readOnly="true"
+                      colspan="1"/>
+
+            <textArea id="statusReasonField"
+                      property="statusReason"
+                      label="Lý do trạng thái"
+                      colspan="2"
+                      height="3em"/>
+        </formLayout>
+
+        <hbox id="actionsPanel" spacing="true" padding="true">
+            <button id="saveCloseBtn" action="saveCloseAction" text="Lưu và Đóng" themeNames="primary" icon="CHECK"/>
+            <button id="closeBtn" action="closeAction" text="Đóng" icon="CLOSE"/>
+        </hbox>
+    </layout>
+</view>

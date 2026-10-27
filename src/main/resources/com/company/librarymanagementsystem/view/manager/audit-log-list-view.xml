@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Nhật Ký Kiểm Toán Nghiệp Vụ">
+    <data>
+        <collection id="auditLogsDc"
+                    class="com.company.librarymanagementsystem.entity.AuditLog">
+            <loader id="auditLogsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from AuditLog e order by e.createdAt desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout classNames="p-m flex flex-col gap-m" width="100%">
+        <!-- Header -->
+        <div classNames="flex justify-between items-center pb-s border-b border-contrast-10 w-full">
+            <div classNames="flex flex-col">
+                <div classNames="flex items-center gap-s">
+                    <span classNames="text-primary text-xl font-bold">Nhật Ký Kiểm Toán Nghiệp Vụ</span>
+                    <span classNames="badge info small">Audit Trail</span>
+                </div>
+                <span classNames="text-secondary text-s">Truy vết toàn bộ các quyết định phê duyệt, xử lý ngoại lệ và thay đổi cấu hình hệ thống</span>
+            </div>
+            <div classNames="flex items-center gap-s">
+                <button id="refreshBtn" text="Làm mới" icon="REFRESH" themeNames="tertiary"/>
+                <button id="exportBtn" text="Xuất báo cáo" icon="FILE_TEXT_O" themeNames="secondary"/>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div classNames="flex flex-wrap items-center gap-m p-m bg-contrast-5 rounded-m border border-contrast-10 w-full">
+            <textField id="searchField"
+                       placeholder="Tìm theo người thực hiện, đối tượng, nội dung..."
+                       width="380px"
+                       clearButtonVisible="true"/>
+            <select id="actionFilter"
+                    width="260px"/>
+            <span id="recordCountSpan" classNames="badge contrast ms-auto font-medium"/>
+        </div>
+
+        <!-- DataGrid -->
+        <dataGrid id="auditLogsDataGrid"
+                  dataContainer="auditLogsDc"
+                  width="100%"
+                  minHeight="500px"
+                  classNames="rounded-m border border-contrast-10">
+            <columns resizable="true">
+                <column property="createdAt" header="Thời gian" width="170px" flexGrow="0"/>
+                <column property="username" header="Tài khoản thực hiện" width="200px" flexGrow="0"/>
+                <column key="actionBadge" header="Hành động" width="220px" flexGrow="0"/>
+                <column property="entityName" header="Đối tượng" width="140px" flexGrow="0"/>
+                <column property="entityId" header="Mã đối tượng" width="160px" flexGrow="0"/>
+                <column property="details" header="Chi tiết kiểm toán / Lý do" flexGrow="1"/>
+            </columns>
+        </dataGrid>
+        <hbox width="100%" alignItems="CENTER" justifyContent="END">
+            <simplePagination id="pagination"
+                              dataLoader="auditLogsDl"
+                              itemsPerPageVisible="true"
+                              itemsPerPageDefaultValue="25"
+                              itemsPerPageOptions="25, 50, 100"/>
+        </hbox>
+    </layout>
+</view>

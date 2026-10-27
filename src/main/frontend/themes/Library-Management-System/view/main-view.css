@@ -1,0 +1,350 @@
+/* Predefined styles for the MainView */
+
+.jmix-main-view-header {
+  box-sizing: border-box;
+  display: flex;
+  height: var(--lumo-size-xl);
+  align-items: center;
+  width: 100%;
+}
+
+.jmix-main-view-drawer-toggle {
+  color: var(--lumo-secondary-text-color);
+}
+
+.jmix-main-view-title {
+  margin: 0;
+  font-size: var(--lumo-font-size-l);
+}
+
+.jmix-main-view-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-height: 100%;
+  min-height: 100%;
+}
+
+vaadin-app-layout {
+  --vaadin-app-layout-drawer-width: 18.5em;
+}
+
+.jmix-main-view-application-title {
+  display: flex;
+  align-items: center;
+  min-height: 4.25rem;
+  height: 4.25rem;
+  margin: 0;
+  padding-left: var(--lumo-space-m);
+  padding-right: var(--lumo-space-m);
+  border-bottom: 1px solid var(--lumo-contrast-10pct);
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.jmix-main-view-application-title-base-link {
+  color: var(--lumo-header-text-color);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+
+.jmix-main-view-application-title-base-link:hover {
+  text-decoration: none;
+  color: var(--lumo-primary-color);
+}
+
+.jmix-main-view-navigation {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid;
+  border-color: var(--lumo-contrast-10pct);
+  flex-grow: 1;
+  overflow: auto;
+  padding: 8px 10px !important;
+}
+
+/* ========================================================
+   UNIFIED SIDEBAR NAVIGATION MENU (THANH THOÁT, CÁCH ĐỀU NHAU NHẸ NHÀNG)
+   ======================================================== */
+.jmix-list-menu {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important; /* Khoảng cách đều nhau nhẹ nhàng */
+  padding: 0 !important;
+}
+
+/* Ẩn triệt để toàn bộ icon trong menu thanh điều hướng bên trái (sidebar) */
+.jmix-list-menu vaadin-icon,
+.jmix-list-menu .jmix-menu-item-icon,
+.jmix-list-menu .jmix-menubar-item-icon {
+  display: none !important;
+}
+
+/* 1. Tất cả menu item đơn (kể cả menu không có menu con như Dashboard, OPAC) */
+.jmix-list-menu .jmix-menu-item-link {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 2.35rem !important;
+  padding: 7px 12px !important;
+  margin: 1px 0 !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: #334155 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.jmix-list-menu .jmix-menu-item-link:hover {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+  color: #1d4ed8 !important;
+  transform: translateX(2px) !important;
+}
+
+/* Đang active / Highlight */
+.jmix-list-menu a[highlight][class*='jmix-menu-item-link'],
+.jmix-list-menu .jmix-menu-item-link[highlight] {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  font-weight: 600 !important;
+  border-left: 3px solid #2563eb !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+
+/* 2. Menu cha có menu con (jmix-menubar-item) */
+.jmix-list-menu .jmix-menubar-item {
+  padding: 0 !important;
+  margin: 1px 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.jmix-list-menu .jmix-menubar-item vaadin-details {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.jmix-list-menu .jmix-menubar-item vaadin-details-summary {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 2.35rem !important;
+  padding: 7px 10px !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  background: transparent !important;
+  transition: all 0.15s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.jmix-list-menu .jmix-menubar-item vaadin-details-summary:hover {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+  color: #1d4ed8 !important;
+  transform: translateX(2px) !important;
+}
+
+/* Mũi tên toggle mở rộng menu con */
+.jmix-list-menu vaadin-details-summary::part(toggle) {
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  margin-inline-end: 0.5rem !important;
+  transition: transform 0.18s ease !important;
+}
+
+.jmix-list-menu vaadin-details-summary:hover::part(toggle) {
+  color: #2563eb !important;
+}
+
+/* 3. Menu con cấp 2 (Thụt lề nhẹ nhàng, đường kẻ mờ trang nhã) */
+.jmix-list-menu .jmix-menubar-item .menubar-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  margin-inline-start: 14px !important;
+  padding-left: 8px !important;
+  border-left: 1.5px solid #e2e8f0 !important;
+  margin-top: 2px !important;
+  margin-bottom: 4px !important;
+}
+
+.jmix-list-menu .jmix-menubar-item .menubar-list .jmix-menu-item-link {
+  min-height: 2.1rem !important;
+  padding: 5px 10px !important;
+  font-size: 0.8125rem !important;
+  color: #64748b !important;
+}
+
+.jmix-list-menu .jmix-menubar-item .menubar-list .jmix-menu-item-link:hover {
+  color: #1d4ed8 !important;
+  background-color: rgba(37, 99, 235, 0.06) !important;
+}
+
+.jmix-main-view-footer {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--lumo-space-s);
+  margin-top: var(--lumo-space-s);
+  padding: var(--lumo-space-xs) var(--lumo-space-m);
+  gap: var(--lumo-space-m);
+}
+
+.jmix-main-view-footer .jmix-user-indicator {
+  flex-grow: 1;
+}
+
+/* User Menu */
+
+.jmix-main-view-footer :is(.jmix-user-menu-button-content, .user-menu-button-content) {
+    width: calc(var(--vaadin-app-layout-drawer-width, 16em) - var(--lumo-space-m) * 2);
+}
+
+.user-menu-button-content,
+.user-menu-header-content {
+    display: grid;
+    grid-template: "avatar text"
+                   "avatar subtext";
+    grid-template-columns: auto 1fr;
+    column-gap: var(--lumo-space-s);
+
+    width: max-content;
+    box-sizing: border-box;
+
+    color: var(--lumo-body-text-color);
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+.user-menu-header-content {
+    width: 100%;
+    padding-inline-end: var(--lumo-space-l);
+}
+
+.user-menu-button-content > .user-menu-avatar,
+.user-menu-header-content > .user-menu-avatar {
+    grid-area: avatar;
+    align-self: center;
+}
+
+.user-menu-button-content > .user-menu-text {
+    grid-row: text / subtext;
+}
+
+vaadin-menu-bar[jmix-role='jmix-user-menu'][theme~='substituted'] .user-menu-button-content > .user-menu-text {
+    grid-row: text;
+}
+
+.user-menu-header-content > .user-menu-text {
+    grid-area: text;
+
+    color: var(--lumo-body-text-color);
+    font-weight: 700;
+    font-size: var(--lumo-font-size-m);
+}
+
+.user-menu-header-content > .user-menu-text-subtext {
+    grid-row: text / subtext;
+}
+
+.user-menu-button-content > .user-menu-text,
+.user-menu-header-content > .user-menu-text {
+    align-self: center;
+    text-align: start;
+
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-menu-button-content > .user-menu-subtext,
+.user-menu-header-content > .user-menu-subtext {
+    grid-area: subtext;
+    align-self: center;
+    text-align: start;
+
+    color: var(--lumo-secondary-text-color);
+    font-size: var(--lumo-font-size-xs);
+
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+vaadin-menu-bar[jmix-role='jmix-user-menu']:not([theme~='substituted']) .user-menu-button-content > .user-menu-subtext {
+    display: none;
+}
+
+/* Initial Layout */
+
+.jmix-initial-layout {
+    --title-size: var(--lumo-font-size-xxxl);
+    --title-color: var(--lumo-secondary-text-color);
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    container-type: inline-size;
+    container-name: jmix-initial-layout;
+}
+
+.jmix-initial-layout-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 50rem;
+    padding: var(--lumo-space-xl);
+    box-sizing: border-box;
+}
+
+.jmix-initial-layout-title {
+    position: relative;
+
+    color: var(--title-color);
+    font-size: var(--title-size);
+    line-height: calc(4 * var(--title-size));
+    box-sizing: border-box;
+}
+
+.jmix-initial-layout-title:after {
+    position: absolute;
+    width: 100%;
+    height: 0.3rem;
+    content: '';
+    background: var(--title-color);
+    top: 0;
+    left: 0;
+}
+
+.jmix-initial-layout-logo {
+    --logo-size: calc(2.5 * var(--title-size));
+    width: var(--logo-size);
+    height: var(--logo-size);
+}
+
+@container jmix-initial-layout (max-width: 45rem) {
+    .jmix-initial-layout-content {
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: var(--lumo-space-l);
+    }
+
+    .jmix-initial-layout-title {
+        padding-top: var(--lumo-space-m);
+        line-height: var(--lumo-line-height-m);
+        text-align: center;
+    }
+}

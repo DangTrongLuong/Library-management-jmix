@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- ChangeSet 1: Create BOOK_COPIES table -->
+    <changeSet id="20261021-01-create-book-copies" author="Library-Management-System">
+        <createTable tableName="BOOK_COPIES">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="BOOK_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="FK_BOOK_COPIES_ON_BOOK" references="BOOKS(ID)"/>
+            </column>
+            <column name="BARCODE" type="VARCHAR(30)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UC_BOOK_COPIES_BARCODE"/>
+            </column>
+            <column name="LOCATION_ID" type="BIGINT">
+                <constraints foreignKeyName="FK_BOOK_COPIES_ON_LOCATION" references="LOCATIONS(ID)"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(20)" defaultValue="AVAILABLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONDITION_STATUS" type="VARCHAR(20)" defaultValue="GOOD">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACQUIRED_DATE" type="DATE"/>
+            <column name="ACQUISITION_PRICE" type="DECIMAL(12,2)"/>
+            <column name="ACQUISITION_SOURCE" type="VARCHAR(100)"/>
+            <column name="NOTE" type="VARCHAR(255)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="IDX_BOOK_COPIES_ON_BARCODE" tableName="BOOK_COPIES" unique="true">
+            <column name="BARCODE"/>
+        </createIndex>
+        <createIndex indexName="IDX_BOOK_COPIES_ON_BOOK_ID" tableName="BOOK_COPIES">
+            <column name="BOOK_ID"/>
+        </createIndex>
+        <createIndex indexName="IDX_BOOK_COPIES_ON_LOCATION_ID" tableName="BOOK_COPIES">
+            <column name="LOCATION_ID"/>
+        </createIndex>
+        <createIndex indexName="IDX_BOOK_COPIES_ON_STATUS" tableName="BOOK_COPIES">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 2: Seed realistic initial copies for first 25 books -->
+    <changeSet id="20261021-02-seed-initial-copies" author="Library-Management-System">
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="1"/>
+            <column name="BARCODE" value="BK000001-01"/>
+            <column name="LOCATION_ID" valueNumeric="1"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="1"/>
+            <column name="BARCODE" value="BK000001-02"/>
+            <column name="LOCATION_ID" valueNumeric="2"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="2"/>
+            <column name="BARCODE" value="BK000002-01"/>
+            <column name="LOCATION_ID" valueNumeric="2"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="2"/>
+            <column name="BARCODE" value="BK000002-02"/>
+            <column name="LOCATION_ID" valueNumeric="3"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="3"/>
+            <column name="BARCODE" value="BK000003-01"/>
+            <column name="LOCATION_ID" valueNumeric="3"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="3"/>
+            <column name="BARCODE" value="BK000003-02"/>
+            <column name="LOCATION_ID" valueNumeric="4"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="4"/>
+            <column name="BARCODE" value="BK000004-01"/>
+            <column name="LOCATION_ID" valueNumeric="4"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="4"/>
+            <column name="BARCODE" value="BK000004-02"/>
+            <column name="LOCATION_ID" valueNumeric="5"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="5"/>
+            <column name="BARCODE" value="BK000005-01"/>
+            <column name="LOCATION_ID" valueNumeric="5"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="5"/>
+            <column name="BARCODE" value="BK000005-02"/>
+            <column name="LOCATION_ID" valueNumeric="6"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="6"/>
+            <column name="BARCODE" value="BK000006-01"/>
+            <column name="LOCATION_ID" valueNumeric="6"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="6"/>
+            <column name="BARCODE" value="BK000006-02"/>
+            <column name="LOCATION_ID" valueNumeric="7"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="7"/>
+            <column name="BARCODE" value="BK000007-01"/>
+            <column name="LOCATION_ID" valueNumeric="7"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="7"/>
+            <column name="BARCODE" value="BK000007-02"/>
+            <column name="LOCATION_ID" valueNumeric="8"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="8"/>
+            <column name="BARCODE" value="BK000008-01"/>
+            <column name="LOCATION_ID" valueNumeric="8"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="8"/>
+            <column name="BARCODE" value="BK000008-02"/>
+            <column name="LOCATION_ID" valueNumeric="9"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="9"/>
+            <column name="BARCODE" value="BK000009-01"/>
+            <column name="LOCATION_ID" valueNumeric="9"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="9"/>
+            <column name="BARCODE" value="BK000009-02"/>
+            <column name="LOCATION_ID" valueNumeric="10"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="10"/>
+            <column name="BARCODE" value="BK000010-01"/>
+            <column name="LOCATION_ID" valueNumeric="10"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="10"/>
+            <column name="BARCODE" value="BK000010-02"/>
+            <column name="LOCATION_ID" valueNumeric="11"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="11"/>
+            <column name="BARCODE" value="BK000011-01"/>
+            <column name="LOCATION_ID" valueNumeric="11"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="11"/>
+            <column name="BARCODE" value="BK000011-02"/>
+            <column name="LOCATION_ID" valueNumeric="12"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="12"/>
+            <column name="BARCODE" value="BK000012-01"/>
+            <column name="LOCATION_ID" valueNumeric="12"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="12"/>
+            <column name="BARCODE" value="BK000012-02"/>
+            <column name="LOCATION_ID" valueNumeric="13"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="13"/>
+            <column name="BARCODE" value="BK000013-01"/>
+            <column name="LOCATION_ID" valueNumeric="13"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="13"/>
+            <column name="BARCODE" value="BK000013-02"/>
+            <column name="LOCATION_ID" valueNumeric="14"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="14"/>
+            <column name="BARCODE" value="BK000014-01"/>
+            <column name="LOCATION_ID" valueNumeric="14"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="14"/>
+            <column name="BARCODE" value="BK000014-02"/>
+            <column name="LOCATION_ID" valueNumeric="15"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="15"/>
+            <column name="BARCODE" value="BK000015-01"/>
+            <column name="LOCATION_ID" valueNumeric="15"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="15"/>
+            <column name="BARCODE" value="BK000015-02"/>
+            <column name="LOCATION_ID" valueNumeric="16"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="16"/>
+            <column name="BARCODE" value="BK000016-01"/>
+            <column name="LOCATION_ID" valueNumeric="16"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="16"/>
+            <column name="BARCODE" value="BK000016-02"/>
+            <column name="LOCATION_ID" valueNumeric="17"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="17"/>
+            <column name="BARCODE" value="BK000017-01"/>
+            <column name="LOCATION_ID" valueNumeric="17"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="17"/>
+            <column name="BARCODE" value="BK000017-02"/>
+            <column name="LOCATION_ID" valueNumeric="18"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="18"/>
+            <column name="BARCODE" value="BK000018-01"/>
+            <column name="LOCATION_ID" valueNumeric="18"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="18"/>
+            <column name="BARCODE" value="BK000018-02"/>
+            <column name="LOCATION_ID" valueNumeric="19"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="19"/>
+            <column name="BARCODE" value="BK000019-01"/>
+            <column name="LOCATION_ID" valueNumeric="19"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="19"/>
+            <column name="BARCODE" value="BK000019-02"/>
+            <column name="LOCATION_ID" valueNumeric="20"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="20"/>
+            <column name="BARCODE" value="BK000020-01"/>
+            <column name="LOCATION_ID" valueNumeric="20"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="20"/>
+            <column name="BARCODE" value="BK000020-02"/>
+            <column name="LOCATION_ID" valueNumeric="21"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="21"/>
+            <column name="BARCODE" value="BK000021-01"/>
+            <column name="LOCATION_ID" valueNumeric="21"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="21"/>
+            <column name="BARCODE" value="BK000021-02"/>
+            <column name="LOCATION_ID" valueNumeric="22"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="22"/>
+            <column name="BARCODE" value="BK000022-01"/>
+            <column name="LOCATION_ID" valueNumeric="22"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="22"/>
+            <column name="BARCODE" value="BK000022-02"/>
+            <column name="LOCATION_ID" valueNumeric="23"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="23"/>
+            <column name="BARCODE" value="BK000023-01"/>
+            <column name="LOCATION_ID" valueNumeric="23"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="23"/>
+            <column name="BARCODE" value="BK000023-02"/>
+            <column name="LOCATION_ID" valueNumeric="24"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="24"/>
+            <column name="BARCODE" value="BK000024-01"/>
+            <column name="LOCATION_ID" valueNumeric="24"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="24"/>
+            <column name="BARCODE" value="BK000024-02"/>
+            <column name="LOCATION_ID" valueNumeric="25"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="85000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="25"/>
+            <column name="BARCODE" value="BK000025-01"/>
+            <column name="LOCATION_ID" valueNumeric="25"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="NEW"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 1 - Sách mới"/>
+        </insert>
+        <insert tableName="BOOK_COPIES">
+            <column name="BOOK_ID" valueNumeric="25"/>
+            <column name="BARCODE" value="BK000025-02"/>
+            <column name="LOCATION_ID" valueNumeric="26"/>
+            <column name="STATUS" value="AVAILABLE"/>
+            <column name="CONDITION_STATUS" value="GOOD"/>
+            <column name="ACQUIRED_DATE" value="2026-10-01"/>
+            <column name="ACQUISITION_PRICE" valueNumeric="125000.00"/>
+            <column name="ACQUISITION_SOURCE" value="Nhập kho ban đầu"/>
+            <column name="NOTE" value="Bản sao số 2 - Tình trạng tốt"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

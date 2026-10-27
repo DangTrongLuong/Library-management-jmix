@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Dashboard Quản trị &amp; Điều hành Thư viện">
+    <layout classNames="p-m flex flex-col gap-m dashboard-view-layout" width="100%">
+        <!-- Header bar -->
+        <div id="headerSection" classNames="flex flex-wrap justify-between items-center pb-s border-b border-contrast-10 gap-s" width="100%">
+            <div classNames="flex flex-col">
+                <div classNames="flex items-center gap-s">
+                    <span classNames="text-primary text-2xl font-bold">Dashboard Quản trị &amp; Điều hành Thư viện</span>
+                    <span classNames="badge success small">Thời gian thực</span>
+                </div>
+                <span classNames="text-secondary text-s">Giám sát các chỉ số lưu thông, sách quá hạn, doanh thu phạt và hoạt động độc giả</span>
+            </div>
+            <div classNames="flex items-center gap-s">
+                <button id="refreshBtn" text="Làm mới dữ liệu" icon="REFRESH" themeNames="tertiary"/>
+                <button id="exportExcelBtn" text="Xuất báo cáo Excel" icon="DOWNLOAD" themeNames="primary success"/>
+            </div>
+        </div>
+
+        <!-- Quick Action Command Bar -->
+        <div id="quickActionsBar" classNames="flex flex-wrap items-center gap-s p-s bg-contrast-5 rounded-m border border-contrast-10" width="100%">
+            <span classNames="text-secondary text-xs font-bold uppercase tracking-wide">Lối tắt quản lý:</span>
+            <button id="navWaiveBtn" text="Duyệt miễn/giảm phạt" icon="CHECK_CIRCLE" themeNames="small primary"/>
+            <button id="navExceptionBtn" text="Xử lý ngoại lệ" icon="SHIELD" themeNames="small warning"/>
+            <button id="navSettingsBtn" text="Cấu hình tham số" icon="COG" themeNames="small"/>
+            <button id="navAuditBtn" text="Nhật ký kiểm toán" icon="RECORDS" themeNames="small tertiary"/>
+        </div>
+
+        <!-- 4 Primary KPI Cards Container -->
+        <div id="kpiCardsContainer" width="100%"/>
+
+        <!-- Charts Container -->
+        <div id="chartsContainer" classNames="grid grid-cols-1 lg:grid-cols-2 gap-m" width="100%"/>
+
+        <!-- Tables Section: Top Books & Overdue -->
+        <div id="tablesContainer" classNames="grid grid-cols-1 lg:grid-cols-2 gap-m" width="100%"/>
+    </layout>
+</view>

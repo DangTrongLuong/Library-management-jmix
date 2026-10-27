@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Vai trò">
+    <data>
+        <instance id="roleDc"
+                  class="com.company.librarymanagementsystem.entity.Role">
+            <fetchPlan extends="_base">
+                <property name="permissions" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+        <collection id="permissionsDc"
+                    class="com.company.librarymanagementsystem.entity.Permission">
+            <fetchPlan extends="_base"/>
+            <loader id="permissionsDl">
+                <query>
+                    <![CDATA[select p from Permission p order by p.module, p.code]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="roleDc">
+            <textField id="codeField"
+                       property="code"
+                       label="Mã vai trò"
+                       required="true"
+                       requiredMessage="Vui lòng nhập mã vai trò"/>
+            <textField id="nameField"
+                       property="name"
+                       label="Tên vai trò"
+                       required="true"
+                       requiredMessage="Vui lòng nhập tên vai trò"/>
+            <textField id="descriptionField"
+                       property="description"
+                       label="Mô tả vai trò"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Lịch Sử Mượn Trả Sách"
+      focusComponent="searchKeywordField">
+
+    <layout classNames="p-s bg-contrast-5" spacing="false" padding="false" width="100%">
+        <vbox width="100%" spacing="s" padding="false" classNames="mx-auto" maxWidth="100%">
+
+            <!-- Thanh công cụ bên phải -->
+            <hbox width="100%" justifyContent="END" alignItems="CENTER" classNames="mb-xs">
+                <button id="refreshBtn" text="Làm mới" icon="vaadin:refresh" themeNames="tertiary small"/>
+            </hbox>
+
+            <!-- Khung thống kê nhanh lịch sử -->
+            <div id="kpiContainer" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Bộ lọc tìm kiếm lịch sử -->
+            <hbox width="100%" spacing="true" alignItems="CENTER" classNames="bg-base rounded-m border border-contrast-10 p-s mb-s">
+                <textField id="searchKeywordField"
+                           placeholder="Tìm kiếm theo tên sách, tác giả, mã vạch..."
+                           clearButtonVisible="true"
+                           width="100%"/>
+                <comboBox id="statusFilter"
+                          placeholder="Tất cả trạng thái"
+                          clearButtonVisible="true"
+                          width="19em"/>
+                <button id="clearFilterBtn" text="Xóa lọc" icon="CLOSE"/>
+                <span id="historyCountLabel" classNames="text-secondary text-s ms-auto whitespace-nowrap"/>
+            </hbox>
+
+            <!-- Bảng DataGrid hiển thị danh sách lịch sử -->
+            <div id="historyGridWrapper" width="100%" classNames="bg-base rounded-m border border-contrast-10 shadow-s overflow-hidden"/>
+
+        </vbox>
+    </layout>
+</view>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Quản lý Đặt trước sách"
+      focusComponent="searchField">
+    <data>
+        <collection id="reservationsDc"
+                    class="com.company.librarymanagementsystem.entity.Reservation">
+            <fetchPlan extends="_base">
+                <property name="member" fetchPlan="_base">
+                    <property name="memberType" fetchPlan="_base"/>
+                </property>
+                <property name="book" fetchPlan="_base"/>
+                <property name="bookCopy" fetchPlan="_base">
+                    <property name="location" fetchPlan="_base"/>
+                </property>
+                <property name="fulfilledLoanItem" fetchPlan="_base"/>
+                <property name="cancelledBy" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="reservationsDl" readOnly="true">
+                <query>
+                    <![CDATA[select r from Reservation r
+                    left join r.member m
+                    left join r.book b
+                    left join r.bookCopy bc
+                    where (:statusFilter is null or r.status = :statusFilter)
+                    and (:searchText is null or :searchText = ''
+                         or lower(m.memberCode) like lower(concat('%', :searchText, '%'))
+                         or lower(m.fullName) like lower(concat('%', :searchText, '%'))
+                         or lower(b.title) like lower(concat('%', :searchText, '%'))
+                         or lower(bc.barcode) like lower(concat('%', :searchText, '%')))
+                    order by case when r.status = 'READY' then 1 when r.status = 'PENDING' then 2 else 3 end, r.reservedAt asc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="false"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout>
+        <vbox width="100%" spacing="true" padding="false">
+            <!-- Modern KPI Ribbon -->
+            <div id="kpiContainer" width="100%" classNames="mb-xs box-border"/>
+
+            <!-- Thanh tìm kiếm & Nút tác vụ -->
+            <hbox id="toolbarPanel" classNames="buttons-panel" alignItems="CENTER" width="100%" spacing="true">
+                <textField id="searchField"
+                           placeholder="Mã thẻ, tên độc giả, tên đầu sách, mã vạch..."
+                           width="28em"
+                           clearButtonVisible="true"/>
+                <select id="statusFilterSelect"
+                        placeholder="Lọc theo trạng thái..."
+                        width="14em"/>
+                <button id="searchBtn" text="Lọc" icon="SEARCH" themeNames="primary"/>
+                <button id="clearFilterBtn" text="Xóa lọc" icon="CLOSE"/>
+
+                <hbox width="100%" justifyContent="END" spacing="true">
+                    <button id="createReservationBtn" text="Đặt trước tại quầy" icon="PLUS_CIRCLE" themeNames="primary success"/>
+                    <button id="assignCopyBtn" text="Gán bản sao sẵn có" icon="BOOK" themeNames="primary contrast"/>
+                    <button id="loanBookBtn" text="Chuyển lập phiếu mượn" icon="FILE_TEXT" themeNames="primary"/>
+                    <button id="cancelReservationBtn" text="Hủy đặt trước" icon="CLOSE_CIRCLE" themeNames="error"/>
+                    <button id="processExpiredBtn" text="Quét hết hạn" icon="CLOCK"/>
+                    <button id="refreshBtn" text="Làm mới" icon="REFRESH"/>
+                </hbox>
+            </hbox>
+
+            <!-- Bảng danh sách đặt trước -->
+            <dataGrid id="reservationsDataGrid"
+                      width="100%"
+                      columnReorderingAllowed="true"
+                      minHeight="25em"
+                      dataContainer="reservationsDc">
+                <columns resizable="true">
+                    <column property="book.title" header="Tên đầu sách" autoWidth="true" flexGrow="2"/>
+                    <column property="member.memberCode" header="Mã thẻ" autoWidth="true"/>
+                    <column property="member.fullName" header="Họ và tên độc giả" autoWidth="true" flexGrow="1"/>
+                    <column key="reservedAtCol" header="Thời điểm đặt" autoWidth="true" textAlign="CENTER"/>
+                    <column key="bookCopyCol" header="Bản sao giữ chỗ" autoWidth="true" textAlign="CENTER"/>
+                    <column key="holdExpiresAtCol" header="Hạn nhận sách" autoWidth="true" textAlign="CENTER"/>
+                    <column key="statusCol" header="Trạng thái" autoWidth="true" textAlign="CENTER"/>
+                    <column key="actionCol" header="Thao tác" autoWidth="true" textAlign="CENTER"/>
+                    <column property="cancelReason" header="Ghi chú / Lý do hủy" autoWidth="true"/>
+                </columns>
+            </dataGrid>
+
+            <!-- Phân trang -->
+            <hbox width="100%" alignItems="CENTER" justifyContent="END">
+                <simplePagination id="pagination" dataLoader="reservationsDl" classNames="ms-auto"/>
+            </hbox>
+        </vbox>
+    </layout>
+</view>

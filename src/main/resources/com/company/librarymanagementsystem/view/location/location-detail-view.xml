@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Chi tiết Vị trí kệ sách">
+    <data>
+        <instance id="locationDc"
+                  class="com.company.librarymanagementsystem.entity.Location">
+            <fetchPlan extends="_base"/>
+            <loader id="locationDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose" text="Lưu và Đóng"/>
+        <action id="closeAction" type="detail_close" text="Đóng"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="locationDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+
+            <textField id="codeField"
+                       property="code"
+                       label="Mã vị trí kệ (Ví dụ: T2-IT-01)"
+                       required="true"
+                       requiredMessage="Vui lòng nhập mã vị trí kệ"/>
+
+            <textField id="nameField"
+                       property="name"
+                       label="Tên vị trí kệ"
+                       required="true"
+                       requiredMessage="Vui lòng nhập tên vị trí kệ"/>
+
+            <textField id="roomOrZoneField"
+                       property="roomOrZone"
+                       label="Khu vực (Ví dụ: Khu vực Tin học &amp; CNTT)"/>
+
+            <textField id="aisleField"
+                       property="aisle"
+                       label="Dãy kệ (Ví dụ: Dãy A, Dãy B)"/>
+
+            <hbox id="shelfCoordinatesBox" colspan="2" width="100%" spacing="true">
+                <integerField id="floorField"
+                              dataContainer="locationDc"
+                              property="floor"
+                              label="Tầng (Floor)"
+                              min="0"
+                              max="20"
+                              stepButtonsVisible="true"
+                              width="100%"/>
+
+                <integerField id="shelfLevelField"
+                              dataContainer="locationDc"
+                              property="shelfLevel"
+                              label="Ngăn / Tầng kệ (1, 2, 3...)"
+                              min="1"
+                              max="50"
+                              stepButtonsVisible="true"
+                              width="100%"/>
+
+                <integerField id="maxCapacityField"
+                              dataContainer="locationDc"
+                              property="maxCapacity"
+                              label="Sức chứa tối đa (Số bản sao sách)"
+                              min="1"
+                              stepButtonsVisible="true"
+                              width="100%"/>
+            </hbox>
+
+            <select id="statusField"
+                    property="status"
+                    label="Trạng thái kệ"
+                    required="true"
+                    requiredMessage="Vui lòng chọn trạng thái kệ"/>
+
+            <textField id="descriptionField"
+                       property="description"
+                       label="Mô tả chi tiết / Ghi chú dãy kệ"
+                       colspan="2"/>
+        </formLayout>
+
+        <hbox id="detailActions" spacing="true" classNames="mt-m">
+            <button id="saveAndCloseButton" action="saveCloseAction" themeNames="primary" icon="CHECK"/>
+            <button id="closeButton" action="closeAction" icon="BAN"/>
+        </hbox>
+    </layout>
+</view>

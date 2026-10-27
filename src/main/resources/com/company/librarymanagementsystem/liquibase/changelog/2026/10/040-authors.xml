@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- ChangeSet 1: Create AUTHORS table with CLOB biography and audit fields -->
+    <changeSet id="20261021-01-create-authors" author="Library-Management-System">
+        <createTable tableName="AUTHORS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="FULL_NAME" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BIRTH_YEAR" type="VARCHAR(50)"/>
+            <column name="NATIONALITY" type="VARCHAR(60)"/>
+            <column name="BIOGRAPHY" type="CLOB"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 2: Seed Authors from Authors_Test.xlsx -->
+    <changeSet id="20261021-02-seed-authors" author="Library-Management-System">
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="1"/>
+            <column name="FULL_NAME" value="Andrew Ng"/>
+            <column name="BIRTH_YEAR" value="1976"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Andrew Ng là chuyên gia AI hàng đầu thế giới, đồng sáng lập Coursera và Google Brain. Ông đóng góp to lớn vào việc phổ cập giáo dục học máy và trí tuệ nhân tạo cho toàn cầu."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="2"/>
+            <column name="FULL_NAME" value="Aurélien Géron"/>
+            <column name="BIRTH_YEAR" value="1977"/>
+            <column name="NATIONALITY" value="Pháp"/>
+            <column name="BIOGRAPHY" value="Aurélien Géron là cựu chuyên gia học máy tại Google. Ông là tác giả của cuốn sách thực hành Machine Learning và Deep Learning bằng Scikit-Learn và TensorFlow bán chạy nhất."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="3"/>
+            <column name="FULL_NAME" value="Austin Kleon"/>
+            <column name="BIRTH_YEAR" value="1983"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Austin Kleon là tác giả và họa sĩ chuyên viết về sáng tạo trong kỷ nguyên số. Các cuốn sách của ông ngắn gọn, giàu hình ảnh và truyền cảm hứng sáng tạo mạnh mẽ."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="4"/>
+            <column name="FULL_NAME" value="Benjamin Graham"/>
+            <column name="BIRTH_YEAR" value="1894 - 1976"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Benjamin Graham được mệnh danh là cha đẻ của phương pháp đầu tư giá trị. Ông là người thầy vĩ đại và có ảnh hưởng lớn nhất đến tỷ phú huyền thoại Warren Buffett."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="5"/>
+            <column name="FULL_NAME" value="Carl Sagan"/>
+            <column name="BIRTH_YEAR" value="1934 - 1996"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Carl Sagan là nhà thiên văn học, vũ trụ học và nhà truyền thông khoa học tài hoa. Ông đã truyền cảm hứng yêu khoa học cho hàng triệu người qua bộ phim và cuốn sách Cosmos."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="6"/>
+            <column name="FULL_NAME" value="Charles Darwin"/>
+            <column name="BIRTH_YEAR" value="1809 - 1882"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Charles Darwin là nhà thiên văn học và sinh học vĩ đại. Đề xuất của ông về Thuyết tiến hóa thông qua chọn lọc tự nhiên đã đặt nền móng cho toàn bộ ngành sinh học hiện đại."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="7"/>
+            <column name="FULL_NAME" value="Dale Carnegie"/>
+            <column name="BIRTH_YEAR" value="1888 - 1955"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Dale Carnegie là tác giả và nhà diễn diễn thuyết nổi tiếng người Mỹ. Ông là người đặt nền móng cho ngành phát triển bản thân với các cuốn sách bán chạy qua nhiều thập kỷ như Đắc Nhân Tâm."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="8"/>
+            <column name="FULL_NAME" value="Daniel Kahneman"/>
+            <column name="BIRTH_YEAR" value="1934 - 2024"/>
+            <column name="NATIONALITY" value="Isreal / Mỹ"/>
+            <column name="BIOGRAPHY" value="Daniel Kahneman là nhà tâm lý học nhận thức đoạt giải Nobel Kinh tế năm 2002. Công trình của ông đã mở ra ngành Kinh tế học hành vi và làm thay đổi hiểu biết về tư duy con người."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="9"/>
+            <column name="FULL_NAME" value="E. H. Gombrich"/>
+            <column name="BIRTH_YEAR" value="1909 - 2001"/>
+            <column name="NATIONALITY" value="Áo / Anh"/>
+            <column name="BIOGRAPHY" value="E. H. Gombrich là nhà nghiên cứu lịch sử nghệ thuật kiệt xuất thế giới. Cuốn Chuyện Nhỏ Lịch Sử Thế Giới của ông được dịch ra hàng chục ngôn ngữ cho nhiều thế hệ đọc giả."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="10"/>
+            <column name="FULL_NAME" value="Erich Gamma"/>
+            <column name="BIRTH_YEAR" value="1961"/>
+            <column name="NATIONALITY" value="Thụy Sĩ"/>
+            <column name="BIOGRAPHY" value="Erich Gamma là chuyên gia phần mềm nổi tiếng, đồng tác giả của cuốn sách Design Patterns (Gang of Four). Ông cũng là người dẫn dắt phát triển công cụ Eclipse và Visual Studio Code."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="11"/>
+            <column name="FULL_NAME" value="Gombrich Art"/>
+            <column name="BIRTH_YEAR" value="1909 - 2001"/>
+            <column name="NATIONALITY" value="Áo"/>
+            <column name="BIOGRAPHY" value="E. H. Gombrich là sử gia nghệ thuật lừng danh. Tác phẩm Câu Chuyện Nghệ Thuật của ông là cuốn sách nhập môn nghệ thuật bán chạy nhất mọi thời đại."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="12"/>
+            <column name="FULL_NAME" value="Gretchen Rubin"/>
+            <column name="BIRTH_YEAR" value="1965"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Gretchen Rubin là tác giả chuyên nghiên cứu về hạnh phúc, bản chất con người và thói quen. Các tác phẩm của bà kết hợp giữa nghiên cứu khoa học và trải nghiệm thực tế đời thường."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="13"/>
+            <column name="FULL_NAME" value="Huy Cận"/>
+            <column name="BIRTH_YEAR" value="1919 - 2005"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Huy Cận là một trong những nhà thơ xuất sắc nhất của phong trào Thơ Mới và văn học hiện đại Việt Nam. Thơ ông mang triết lý nhân sinh sâu sắc và không gian vũ trụ mênh mông."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="14"/>
+            <column name="FULL_NAME" value="Hàn Mặc Tử"/>
+            <column name="BIRTH_YEAR" value="1912 - 1940"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Hàn Mặc Tử là nhà thơ khởi đầu cho dòng thơ lãng mạn siêu thực Việt Nam. Dù cuộc đời ngắn ngủi và bi thương, ông để lại những vần thơ mãnh liệt, huyền bí và giàu cảm xúc."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="15"/>
+            <column name="FULL_NAME" value="Ian Goodfellow"/>
+            <column name="BIRTH_YEAR" value="1985"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Ian Goodfellow là nhà nghiên cứu trí tuệ nhân tạo hàng đầu, người phát minh ra Mạng đối kháng tạo (GANs). Ông từng làm việc tại Google Brain và Apple AI."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="16"/>
+            <column name="FULL_NAME" value="James Clear"/>
+            <column name="BIRTH_YEAR" value="1986"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="James Clear là tác giả, diễn giả chuyên nghiên cứu về thói quen và tư duy tối ưu hóa hiệu suất. Cuốn sách Thay Đổi Tí Hon Bằng Kết Quả Khổng Lồ của ông gây sốt toàn cầu."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="17"/>
+            <column name="FULL_NAME" value="Jim Collins"/>
+            <column name="BIRTH_YEAR" value="1958"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Jim Collins là nhà nghiên cứu quản trị kinh doanh hàng đầu thế giới. Các công trình nghiên cứu kéo dài nhiều thập kỷ của ông giúp giải mã công thức thành công bền vững của các tập đoàn vĩ đại."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="18"/>
+            <column name="FULL_NAME" value="Joshua Bloch"/>
+            <column name="BIRTH_YEAR" value="1961"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Joshua Bloch là cựu kiến trúc sư trưởng Java tại Sun Microsystems và Google. Ông là tác giả của thư viện Java Collections Framework và cuốn sách Java thành công nhất mọi thời đại."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="19"/>
+            <column name="FULL_NAME" value="Kim Lân"/>
+            <column name="BIRTH_YEAR" value="1920 - 2007"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Kim Lân là nhà văn chuyên viết truyện ngắn về làng quê và người nông dân Việt Nam. Văn phong của ông hóm hỉnh, mộc mạc nhưng chan chứa tình người và am hiểu phong tục kinh kỳ."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="20"/>
+            <column name="FULL_NAME" value="Marcus Aurelius"/>
+            <column name="BIRTH_YEAR" value="121 - 180"/>
+            <column name="NATIONALITY" value="La Mã"/>
+            <column name="BIOGRAPHY" value="Marcus Aurelius là Hoàng đế La Mã và là một triết gia đại biểu của trường phái Triết học Khắc kỷ (Stoicism). Cuốn Suy Tưởng của ông là tác phẩm triết học kinh điển."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="21"/>
+            <column name="FULL_NAME" value="Mark Manson"/>
+            <column name="BIRTH_YEAR" value="1984"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Mark Manson là blogger và tác giả viết sách phát triển bản thân theo phong cách thẳng thắn, thực tế. Các cuốn sách của ông luôn nằm trong danh sách bán chạy nhất của New York Times."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="22"/>
+            <column name="FULL_NAME" value="Martin Fowler"/>
+            <column name="BIRTH_YEAR" value="1963"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Martin Fowler là nhà tóm tắt kiến trúc phần mềm nổi tiếng và là đối tác chính tại ThoughtWorks. Ông đi đầu trong các khái niệm về Refactoring, Mã sạch và Microservices."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="23"/>
+            <column name="FULL_NAME" value="Matthew Walker"/>
+            <column name="BIRTH_YEAR" value="1973"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Matthew Walker là giáo sư thần kinh học và tâm lý học tại Đại học California, Berkeley. Ông là chuyên gia hàng đầu thế giới về nghiên cứu giấc ngủ và sức khỏe con người."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="24"/>
+            <column name="FULL_NAME" value="Michael Pollan"/>
+            <column name="BIRTH_YEAR" value="1955"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Michael Pollan là nhà báo, nhà nghiên cứu thực phẩm và sức khỏe nổi tiếng. Các cuốn sách của ông giúp thay đổi cách nhìn nhận của xã hội hiện đại về chế độ ăn uống lành mạnh."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="25"/>
+            <column name="FULL_NAME" value="Morgan Housel"/>
+            <column name="BIRTH_YEAR" value="1984"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Morgan Housel là đối tác tại Collaborative Fund và cựu nhà báo kinh tế của The Wall Street Journal. Ông nổi tiếng với những góc nhìn tâm lý học sâu sắc về tiền bạc và đầu tư."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="26"/>
+            <column name="FULL_NAME" value="Mortimer J. Adler"/>
+            <column name="BIRTH_YEAR" value="1902 - 2001"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Mortimer J. Adler là nhà triết học và giáo dục học người Mỹ. Ông nổi tiếng với tác phẩm Đọc Sách Như Một Nghệ Thuật hướng dẫn phương pháp đọc sâu và tư duy phản biện."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="27"/>
+            <column name="FULL_NAME" value="Nam Cao"/>
+            <column name="BIRTH_YEAR" value="1915 - 1951"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Nam Cao là nhà văn hiện thực xuất sắc của văn học Việt Nam thế kỷ 20. Tác phẩm của ông thể hiện cái nhìn sâu sắc về triết lý nhân sinh và nỗi đau của người trí thức nghèo."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="28"/>
+            <column name="FULL_NAME" value="Neil deGrasse Tyson"/>
+            <column name="BIRTH_YEAR" value="1958"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Neil deGrasse Tyson là nhà vật lý thiên văn và Giám đốc Đài thiên văn Hayden. Ông là gương mặt truyền thông khoa học đại chúng nổi tiếng nhất thế giới hiện nay."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="29"/>
+            <column name="FULL_NAME" value="Nguyễn Du"/>
+            <column name="BIRTH_YEAR" value="1765 - 1820"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Nguyễn Du là đại danh nhân văn hóa thế giới, đại thi hào của dân tộc Việt Nam. Tác phẩm Truyện Kiều của ông là kiệt tác đỉnh cao của nền văn học chữ Nôm."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="30"/>
+            <column name="FULL_NAME" value="Nguyễn Hiến Lê"/>
+            <column name="BIRTH_YEAR" value="1912 - 1984"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Nguyễn Hiến Lê là học giả, nhà văn, dịch giả uyên bác với hơn 100 tác phẩm thuộc nhiều lĩnh vực. Ông là người đầu tiên dịch Đắc Nhân Tâm sang tiếng Việt."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="31"/>
+            <column name="FULL_NAME" value="Nguyễn Nhật Ánh"/>
+            <column name="BIRTH_YEAR" value="1955"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Nguyễn Nhật Ánh là nhà văn nổi tiếng chuyên viết cho tuổi mới lớn tại Việt Nam. Các tác phẩm của ông gây sốt qua nhiều thế hệ độc giả nhờ giọng văn trong trẻo, hoài niệm và tràn đầy cảm xúc."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="32"/>
+            <column name="FULL_NAME" value="Nguyễn Tuân"/>
+            <column name="BIRTH_YEAR" value="1910 - 1987"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Nguyễn Tuân là bậc thầy sử dụng ngôn từ và là nhà văn tài hoa của nền văn học Việt Nam. Ông nổi tiếng với phong cách tùy bút độc đáo, luôn tìm kiếm cái đẹp ở góc độ văn hóa và nghệ thuật."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="33"/>
+            <column name="FULL_NAME" value="Ngô Tất Tố"/>
+            <column name="BIRTH_YEAR" value="1894 - 1954"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Ngô Tất Tố là nhà văn, nhà báo, nhà dịch thuật và nghiên cứu văn học hiện thực xuất sắc trước Cách mạng tháng Tám. Tác phẩm của ông phản ánh chân thực số phận bi kịch của người nông dân Việt Nam."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="34"/>
+            <column name="FULL_NAME" value="Oliver Sacks"/>
+            <column name="BIRTH_YEAR" value="1933 - 2015"/>
+            <column name="NATIONALITY" value="Anh / Mỹ"/>
+            <column name="BIOGRAPHY" value="Oliver Sacks là bác sĩ thần kinh và nhà văn tài hoa. Ông nổi tiếng với những câu chuyện lâm sàng ly kỳ về bộ não và các rối loạn tâm thần kỳ lạ của con người."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="35"/>
+            <column name="FULL_NAME" value="Peter Drucker"/>
+            <column name="BIRTH_YEAR" value="1909 - 2005"/>
+            <column name="NATIONALITY" value="Áo / Mỹ"/>
+            <column name="BIOGRAPHY" value="Peter Drucker được coi là triết gia và nhà sáng lập ra ngành quản trị kinh doanh hiện đại. Các tư tưởng của ông đã đặt nền móng cho cách vận hành doanh nghiệp trong kỷ nguyên tri thức."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="36"/>
+            <column name="FULL_NAME" value="Philip Kotler"/>
+            <column name="BIRTH_YEAR" value="1931"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Philip Kotler được vinh danh là huyền thoại tiếp thị và cha đẻ của Marketing hiện đại. Ông là tác giả của hàng chục cuốn giáo trình kinh điển được giảng dạy tại hầu hết các đại học kinh tế."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="37"/>
+            <column name="FULL_NAME" value="Raymond Murphy"/>
+            <column name="BIRTH_YEAR" value="1943"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Raymond Murphy là giáo viên ngữ pháp tiếng Anh danh tiếng. Bộ sách English Grammar in Use của ông là tài liệu học ngữ pháp tiếng Anh phổ biến nhất trên thế giới."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="38"/>
+            <column name="FULL_NAME" value="Richard Dawkins"/>
+            <column name="BIRTH_YEAR" value="1941"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Richard Dawkins là nhà sinh học tiến hóa và tác giả khoa học thường thức danh tiếng. Ông là người đưa ra góc nhìn tiến hóa lấy gen làm trung tâm qua tác phẩm Gen Vị Kỷ."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="39"/>
+            <column name="FULL_NAME" value="Robert C. Martin"/>
+            <column name="BIRTH_YEAR" value="1952"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Robert C. Martin (Uncle Bob) là chuyên gia phần mềm hàng đầu thế giới và là một trong những người khởi xướng Tuyên ngôn Agile. Ông là tác giả của nhiều cuốn sách kinh điển về kiến trúc và mã sạch."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="40"/>
+            <column name="FULL_NAME" value="Robert Kiyosaki"/>
+            <column name="BIRTH_YEAR" value="1947"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Robert Kiyosaki là nhà đầu tư, doanh nhân và tác giả của bộ sách Dạy Con Làm Giàu nổi tiếng toàn cầu. Ông đã thay đổi tư duy tài chính cá nhân của hàng triệu người thế giới."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="41"/>
+            <column name="FULL_NAME" value="Seneca"/>
+            <column name="BIRTH_YEAR" value="4 TCN - 65"/>
+            <column name="NATIONALITY" value="La Mã"/>
+            <column name="BIOGRAPHY" value="Seneca là nhà triết học Khắc kỷ, nhà kịch tác gia và chính khách La Mã nổi tiếng. Các bức thư triết học của ông bàn sâu về lẽ sống, thời gian và sự bình an tâm trí."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="42"/>
+            <column name="FULL_NAME" value="Stephen Covey"/>
+            <column name="BIRTH_YEAR" value="1932 - 2012"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Stephen Covey là chuyên gia quản trị và nhà tư vấn lãnh đạo danh tiếng. Tác phẩm 7 Thói Quản Để Thành Đạt của ông là một trong những cuốn sách quản trị bản thân ảnh hưởng nhất thế kỷ 20."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="43"/>
+            <column name="FULL_NAME" value="Stephen Hawking"/>
+            <column name="BIRTH_YEAR" value="1942 - 2018"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Stephen Hawking là nhà vật lý lý thuyết và vũ trụ học vĩ đại của thế giới. Dù bị bệnh hiểm nghèo, ông vẫn có những cống hiến kiệt xuất cho nghiên cứu lỗ đen và nguồn gốc vũ trụ."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="44"/>
+            <column name="FULL_NAME" value="Stuart Russell"/>
+            <column name="BIRTH_YEAR" value="1962"/>
+            <column name="NATIONALITY" value="Anh"/>
+            <column name="BIOGRAPHY" value="Stuart Russell là giáo sư khoa học máy tính tại Đại học California, Berkeley. Ông là đồng tác giả của cuốn giáo trình Trí tuệ nhân tạo chuẩn mực được giảng dạy rộng rãi nhất thế giới."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="45"/>
+            <column name="FULL_NAME" value="Thu Giang Nguyễn Duy Cần"/>
+            <column name="BIRTH_YEAR" value="1907 - 1998"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Thu Giang Nguyễn Duy Cần là học giả, nhà biên khảo và triết gia uyên bác của Việt Nam. Các sách tư duy, thuật xử thế của ông đến nay vẫn còn nguyên giá trị sắc bén."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="46"/>
+            <column name="FULL_NAME" value="Trần Trọng Kim"/>
+            <column name="BIRTH_YEAR" value="1883 - 1953"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Trần Trọng Kim là nhà giáo dục, nhà nghiên cứu lịch sử và văn hóa Việt Nam. Cuốn Việt Nam Sử Lược của ông là bộ thông sử bằng chữ Quốc ngữ đầu tiên của Việt Nam."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="47"/>
+            <column name="FULL_NAME" value="Tô Hoài"/>
+            <column name="BIRTH_YEAR" value="1920 - 2014"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Tô Hoài là nhà văn đại thụ của nền văn học hiện đại Việt Nam. Ông nổi tiếng với phong cách viết chân thực, am hiểu sâu sắc phong tục tập quán và có nhiều tác phẩm thiếu nhi sống mãi với thời gian."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="48"/>
+            <column name="FULL_NAME" value="Tố Hữu"/>
+            <column name="BIRTH_YEAR" value="1920 - 2002"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Tố Hữu là nhà thơ lớn của dòng thơ trữ tình chính trị Việt Nam. Các chặng đường thơ của ông luôn gắn liền với các giai đoạn lịch sử cách mạng trọng đại của dân tộc."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="49"/>
+            <column name="FULL_NAME" value="Vũ Trọng Phụng"/>
+            <column name="BIRTH_YEAR" value="1912 - 1939"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Vũ Trọng Phụng được mệnh danh là ông vua tào báo Bắc Kỳ. Ông nổi tiếng với phong cách trào phúng sắc bén, vạch trần sự hợm hĩnh và thối nát của xã hội thành thị đương thời."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="50"/>
+            <column name="FULL_NAME" value="Will Durant"/>
+            <column name="BIRTH_YEAR" value="1885 - 1981"/>
+            <column name="NATIONALITY" value="Mỹ"/>
+            <column name="BIOGRAPHY" value="Will Durant là nhà lịch sử học và triết gia đoạt giải Pulitzer. Ông cùng vợ dành cả đời biên soạn bộ công trình đồ sộ Lịch Sử Văn Minh Thế Giới gồm 11 tập."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="51"/>
+            <column name="FULL_NAME" value="Xuân Diệu"/>
+            <column name="BIRTH_YEAR" value="1916 - 1985"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Xuân Diệu được mệnh danh là ông hoàng thơ tình Việt Nam. Ông là nhà thơ nổi bật nhất trong Phong trào Thơ mới với giọng thơ sôi nổi, đắm đuối và tràn đầy nhựa sống."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="52"/>
+            <column name="FULL_NAME" value="Yuval Noah Harari"/>
+            <column name="BIRTH_YEAR" value="1976"/>
+            <column name="NATIONALITY" value="Israel"/>
+            <column name="BIOGRAPHY" value="Yuval Noah Harari là nhà lịch sử học và triết gia xuất sắc. Bộ ba tác phẩm Sapiens, Homo Deus và 21 Bài Học Cho Thế Kỷ 21 của ông tạo nên cơn sốt tư duy trên toàn cầu."/>
+        </insert>
+        <insert tableName="AUTHORS">
+            <column name="ID" valueNumeric="53"/>
+            <column name="FULL_NAME" value="Đào Duy Anh"/>
+            <column name="BIRTH_YEAR" value="1904 - 1988"/>
+            <column name="NATIONALITY" value="Việt Nam"/>
+            <column name="BIOGRAPHY" value="Đào Duy Anh là nhà sử học, địa lý học và từ điển học kiệt xuất của Việt Nam. Ông được coi là người đặt nền móng cho ngành nghiên cứu lịch sử và văn hóa Việt Nam hiện đại."/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

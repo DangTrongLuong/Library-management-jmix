@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Duyệt Miễn / Giảm Phạt">
+    <data>
+        <collection id="finesDc"
+                    class="com.company.librarymanagementsystem.entity.Fine">
+            <fetchPlan extends="_base">
+                <property name="member" fetchPlan="_base"/>
+                <property name="loanItem" fetchPlan="_base"/>
+                <property name="waivedBy" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="finesDl" readOnly="true">
+                <query>
+                    <![CDATA[select f from Fine f order by f.createdAt desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <layout classNames="p-m flex flex-col gap-m" width="100%">
+        <!-- Header -->
+        <div classNames="flex justify-between items-center pb-s border-b border-contrast-10 w-full">
+            <div classNames="flex flex-col">
+                <div classNames="flex items-center gap-s">
+                    <span classNames="text-primary text-xl font-bold">Duyệt Miễn / Giảm Tiền Phạt</span>
+                    <span classNames="badge warning small">Thẩm quyền Manager</span>
+                </div>
+                <span classNames="text-secondary text-s">Xét duyệt các đề xuất miễn giảm nợ phạt và lưu vết kiểm toán</span>
+            </div>
+            <div classNames="flex gap-s">
+                <button id="refreshBtn" text="Làm mới" icon="REFRESH" themeNames="tertiary"/>
+                <button id="waiveActionBtn" text="Duyệt Miễn Giảm Nợ" icon="CHECK_CIRCLE" themeNames="primary success"/>
+            </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div classNames="flex flex-wrap items-center gap-m p-m bg-contrast-5 rounded-m border border-contrast-10 w-full">
+            <textField id="searchField"
+                       placeholder="Tìm theo tên độc giả, mã thẻ, mã sách..."
+                       width="320px"
+                       clearButtonVisible="true"/>
+            <select id="statusFilter"
+                    width="220px"/>
+            <span id="summaryBadge" classNames="badge contrast ms-auto font-medium"/>
+        </div>
+
+        <!-- DataGrid of Fines -->
+        <dataGrid id="finesDataGrid"
+                  width="100%"
+                  minHeight="500px"
+                  columnReorderingAllowed="true"
+                  classNames="rounded-m border border-contrast-10"
+                  dataContainer="finesDc">
+            <columns resizable="true">
+                <column key="memberCol" header="Độc giả" width="200px" flexGrow="0"/>
+                <column key="typeCol" header="Loại phạt" width="140px" flexGrow="0"/>
+                <column key="amountCol" header="Tổng nợ phạt" width="130px" flexGrow="0"/>
+                <column key="paidCol" header="Đã trả" width="110px" flexGrow="0"/>
+                <column key="remainingCol" header="Còn phải thu" width="130px" flexGrow="0"/>
+                <column key="statusCol" header="Trạng thái" width="150px" flexGrow="0"/>
+                <column property="createdAt" header="Ngày tạo" width="140px" flexGrow="0"/>
+                <column key="waiveInfoCol" header="Thông tin miễn giảm / Lý do" flexGrow="1"/>
+            </columns>
+        </dataGrid>
+        <hbox width="100%" alignItems="CENTER" justifyContent="END">
+            <simplePagination id="pagination"
+                              dataLoader="finesDl"
+                              itemsPerPageVisible="true"
+                              itemsPerPageDefaultValue="20"
+                              itemsPerPageOptions="10, 20, 50"/>
+        </hbox>
+    </layout>
+</view>

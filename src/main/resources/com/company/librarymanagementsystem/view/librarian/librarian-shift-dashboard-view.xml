@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Dashboard Vận Hành Ca Thủ Thư">
+    <layout classNames="p-m flex flex-col gap-m dashboard-view-layout" width="100%">
+        <!-- Header bar -->
+        <div id="headerSection" classNames="flex flex-wrap justify-between items-center pb-s border-b border-contrast-10 gap-s" width="100%">
+            <div classNames="flex flex-col">
+                <div classNames="flex items-center gap-s">
+                    <span classNames="text-primary text-2xl font-bold">Dashboard Vận Hành Ca Của Thủ Thư</span>
+                    <span classNames="badge success small">Trực Ca Quầy</span>
+                </div>
+                <span classNames="text-secondary text-s">Bảng thống kê tóm tắt theo ca &amp; theo ngày: lượt mượn/trả, sách chờ nhận tại quầy, tiền phạt thu được</span>
+            </div>
+            <div classNames="flex items-center gap-s flex-wrap">
+                <datePicker id="shiftDatePicker" placeholder="Chọn ngày ca trực"/>
+                <button id="refreshBtn" text="Làm mới" icon="REFRESH" themeNames="tertiary"/>
+                <button id="autoMatchBtn" text="Ghép sách chờ" icon="CONNECT" themeNames="secondary"/>
+                <button id="cleanExpiredBtn" text="Quét hết hạn" icon="TIME_BACKWARD" themeNames="secondary"/>
+                <button id="exportHandoverBtn" text="Bàn giao ca (CSV)" icon="DOWNLOAD" themeNames="primary success"/>
+            </div>
+        </div>
+
+        <!-- Quick Action Command Bar -->
+        <div id="quickActionsBar" classNames="flex flex-wrap items-center gap-s p-s bg-contrast-5 rounded-m border border-contrast-10" width="100%">
+            <span classNames="text-secondary text-xs font-bold uppercase tracking-wide">Tác vụ quầy:</span>
+            <button id="navNewLoanBtn" text="Lập phiếu mượn" icon="PLUS_CIRCLE" themeNames="small primary"/>
+            <button id="navReturnBooksBtn" text="Nhận trả sách" icon="ARROW_DOWN" themeNames="small success"/>
+            <button id="navCollectFineBtn" text="Thu tiền phạt" icon="MONEY" themeNames="small warning"/>
+            <button id="navReservationBtn" text="Đặt trước sách" icon="BOOKMARK" themeNames="small"/>
+            <button id="navRegisterMemberBtn" text="Đăng ký độc giả" icon="USER_CHECK" themeNames="small tertiary"/>
+        </div>
+
+        <!-- 4 Primary KPI Cards Container -->
+        <div id="kpiCardsContainer" width="100%"/>
+
+        <!-- Ready Reservations Section -->
+        <div id="readyReservationsContainer" width="100%"/>
+
+        <!-- Bottom Grid: Activity Feed & Overdue Alerts -->
+        <div id="bottomGridContainer" classNames="grid grid-cols-1 lg:grid-cols-2 gap-m" width="100%"/>
+    </layout>
+</view>

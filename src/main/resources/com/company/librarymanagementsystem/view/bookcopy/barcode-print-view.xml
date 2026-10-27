@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="In tem nhãn mã vạch (Barcode)">
+    <layout>
+        <vbox width="100%" spacing="true">
+            <span classNames="text-secondary">
+                Xem trước tem nhãn mã vạch sách để in và dán lên bìa/gáy sách vật lý.
+            </span>
+
+            <scroller width="100%" height="28em" scrollDirection="VERTICAL">
+                <vbox id="barcodesContainer" width="100%" spacing="true"/>
+            </scroller>
+
+            <hbox id="actionsPanel" spacing="true" classNames="mt-m ms-auto">
+                <button id="printButton" text="In tem nhãn" themeNames="primary" icon="PRINT"/>
+                <button id="closeButton" text="Đóng" icon="BAN"/>
+            </hbox>
+        </vbox>
+    </layout>
+</view>

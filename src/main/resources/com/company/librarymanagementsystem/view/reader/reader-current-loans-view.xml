@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Sách Đang Mượn &amp; Gia Hạn"
+      focusComponent="refreshBtn">
+
+    <layout classNames="p-s bg-contrast-5 box-border overflow-x-hidden" spacing="false" padding="false" width="100%">
+        <vbox width="100%" spacing="s" padding="false" classNames="mx-auto box-border" maxWidth="100%">
+
+            <!-- Thanh công cụ bên phải -->
+            <hbox width="100%" justifyContent="END" alignItems="CENTER" classNames="mb-xs box-border">
+                <button id="refreshBtn" text="Làm mới" icon="vaadin:refresh" themeNames="tertiary small"/>
+                <button id="viewModeCardBtn" text="Dạng Thẻ" icon="vaadin:grid-big" themeNames="primary small"/>
+                <button id="viewModeTableBtn" text="Dạng Bảng" icon="vaadin:table" themeNames="tertiary small"/>
+            </hbox>
+
+            <!-- Khung thông tin Thẻ độc giả & Các chỉ số mượn sách -->
+            <div id="memberHeaderCard" width="100%" classNames="bg-base rounded-l border border-contrast-10 shadow-s p-m mb-s box-border">
+                <!-- Nội dung được render linh hoạt trong Java Controller -->
+            </div>
+
+            <!-- Vùng hiển thị DẠNG THẺ (Card Grid) -->
+            <vbox id="cardContainer" width="100%" spacing="true" padding="false" classNames="box-border">
+                <div id="cardsGrid" width="100%" classNames="box-border"/>
+            </vbox>
+
+            <!-- Vùng hiển thị DẠNG BẢNG (DataGrid) -->
+            <vbox id="tableContainer" width="100%" spacing="true" padding="false" visible="false">
+                <div id="tableWrapper" width="100%"/>
+            </vbox>
+
+        </vbox>
+    </layout>
+</view>

@@ -1,0 +1,38 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+main:
+  datasource:
+    url: jdbc:mysql://localhost:3306/library_management_system?useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: 230605
+  liquibase:
+    change-log: com/company/librarymanagementsystem/liquibase/changelog.xml
+
+jmix:
+  ui:
+    login-view-id: LoginView
+    main-view-id: MainView
+    menu-config: com/company/librarymanagementsystem/menu.xml
+    composite-menu: false
+  core:
+    available-locales: vi,en
+
+ui:
+  login:
+    defaultUsername: admin
+    defaultPassword: admin
+
+# Launch the default browser when starting the application in development mode
+vaadin:
+  launch-browser: false
+
+logging:
+  level:
+    org.atmosphere: warn
+    org.springframework.security: info
+    eclipselink.logging.sql: info
+    io.jmix: info
+    io.jmix.core.datastore: info
+    io.jmix.core.AccessLogger: debug

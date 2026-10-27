@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- ChangeSet 1: Create MEMBER_TYPES table -->
+    <changeSet id="20261022-01-create-member-types" author="Library-Management-System">
+        <createTable tableName="MEMBER_TYPES">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CODE" type="VARCHAR(30)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UC_MEMBER_TYPES_CODE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MAX_LOAN_BOOKS" type="INT" defaultValueNumeric="5">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOAN_DAYS" type="INT" defaultValueNumeric="14">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MAX_RENEWALS" type="INT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RENEW_DAYS" type="INT" defaultValueNumeric="7">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MAX_RESERVATIONS" type="INT" defaultValueNumeric="3">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FINE_PER_DAY" type="DECIMAL(12,2)" defaultValueNumeric="5000.00">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CARD_VALID_MONTHS" type="INT" defaultValueNumeric="12">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 2: Seed default Member Types -->
+    <changeSet id="20261022-02-seed-member-types" author="Library-Management-System">
+        <insert tableName="MEMBER_TYPES">
+            <column name="CODE" value="STUDENT"/>
+            <column name="NAME" value="Sinh viên"/>
+            <column name="MAX_LOAN_BOOKS" valueNumeric="5"/>
+            <column name="LOAN_DAYS" valueNumeric="14"/>
+            <column name="MAX_RENEWALS" valueNumeric="1"/>
+            <column name="RENEW_DAYS" valueNumeric="7"/>
+            <column name="MAX_RESERVATIONS" valueNumeric="3"/>
+            <column name="FINE_PER_DAY" valueNumeric="5000.00"/>
+            <column name="CARD_VALID_MONTHS" valueNumeric="12"/>
+            <column name="DESCRIPTION" value="Sinh viên đại học/cao đẳng chính quy, hạn mượn 14 ngày, tối đa 5 cuốn"/>
+        </insert>
+        <insert tableName="MEMBER_TYPES">
+            <column name="CODE" value="TEACHER"/>
+            <column name="NAME" value="Giảng viên / Nghiên cứu sinh"/>
+            <column name="MAX_LOAN_BOOKS" valueNumeric="10"/>
+            <column name="LOAN_DAYS" valueNumeric="30"/>
+            <column name="MAX_RENEWALS" valueNumeric="2"/>
+            <column name="RENEW_DAYS" valueNumeric="15"/>
+            <column name="MAX_RESERVATIONS" valueNumeric="5"/>
+            <column name="FINE_PER_DAY" valueNumeric="5000.00"/>
+            <column name="CARD_VALID_MONTHS" valueNumeric="24"/>
+            <column name="DESCRIPTION" value="Cán bộ giảng dạy và nghiên cứu, hạn mượn 30 ngày, tối đa 10 cuốn, thẻ 2 năm"/>
+        </insert>
+        <insert tableName="MEMBER_TYPES">
+            <column name="CODE" value="STAFF"/>
+            <column name="NAME" value="Cán bộ nhân viên"/>
+            <column name="MAX_LOAN_BOOKS" valueNumeric="7"/>
+            <column name="LOAN_DAYS" valueNumeric="21"/>
+            <column name="MAX_RENEWALS" valueNumeric="1"/>
+            <column name="RENEW_DAYS" valueNumeric="7"/>
+            <column name="MAX_RESERVATIONS" valueNumeric="3"/>
+            <column name="FINE_PER_DAY" valueNumeric="5000.00"/>
+            <column name="CARD_VALID_MONTHS" valueNumeric="12"/>
+            <column name="DESCRIPTION" value="Cán bộ nhân viên nhà trường/cơ quan, hạn mượn 21 ngày, tối đa 7 cuốn"/>
+        </insert>
+        <insert tableName="MEMBER_TYPES">
+            <column name="CODE" value="PUBLIC"/>
+            <column name="NAME" value="Bạn đọc vãng lai / Tự do"/>
+            <column name="MAX_LOAN_BOOKS" valueNumeric="3"/>
+            <column name="LOAN_DAYS" valueNumeric="7"/>
+            <column name="MAX_RENEWALS" valueNumeric="1"/>
+            <column name="RENEW_DAYS" valueNumeric="3"/>
+            <column name="MAX_RESERVATIONS" valueNumeric="2"/>
+            <column name="FINE_PER_DAY" valueNumeric="10000.00"/>
+            <column name="CARD_VALID_MONTHS" valueNumeric="6"/>
+            <column name="DESCRIPTION" value="Độc giả bên ngoài đăng ký thẻ thư viện, hạn mượn 7 ngày, tối đa 3 cuốn"/>
+        </insert>
+    </changeSet>
+
+    <!-- ChangeSet 3: Create MEMBERS table -->
+    <changeSet id="20261022-03-create-members" author="Library-Management-System">
+        <createTable tableName="MEMBERS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="${uuid.type}">
+                <constraints nullable="false"
+                             unique="true"
+                             uniqueConstraintName="UC_MEMBERS_USER_ID"
+                             foreignKeyName="FK_MEMBERS_ON_USER"
+                             references="USER_(ID)"/>
+            </column>
+            <column name="MEMBER_CODE" type="VARCHAR(20)">
+                <constraints nullable="false"
+                             unique="true"
+                             uniqueConstraintName="UC_MEMBERS_MEMBER_CODE"/>
+            </column>
+            <column name="MEMBER_TYPE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="FK_MEMBERS_ON_MEMBER_TYPE"
+                             references="MEMBER_TYPES(ID)"/>
+            </column>
+            <column name="DATE_OF_BIRTH" type="DATE"/>
+            <column name="GENDER" type="VARCHAR(10)"/>
+            <column name="ID_NUMBER" type="VARCHAR(20)"/>
+            <column name="ADDRESS" type="VARCHAR(255)"/>
+            <column name="CARD_ISSUED_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CARD_EXPIRY_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(20)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS_REASON" type="VARCHAR(255)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="IDX_MEMBERS_MEMBER_CODE" tableName="MEMBERS">
+            <column name="MEMBER_CODE"/>
+        </createIndex>
+        <createIndex indexName="IDX_MEMBERS_ID_NUMBER" tableName="MEMBERS">
+            <column name="ID_NUMBER"/>
+        </createIndex>
+        <createIndex indexName="IDX_MEMBERS_STATUS" tableName="MEMBERS">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="Trung Tâm Xử Lý Ngoại Lệ Nghiệp Vụ">
+    <layout classNames="p-m flex flex-col gap-m" width="100%">
+        <!-- Header -->
+        <div classNames="flex justify-between items-center pb-s border-b border-contrast-10 w-full">
+            <div classNames="flex flex-col">
+                <div classNames="flex items-center gap-s">
+                    <span classNames="text-primary text-xl font-bold">Trung Tâm Xử Lý Ngoại Lệ Nghiệp Vụ</span>
+                    <span classNames="badge warning small">Thẩm quyền Manager</span>
+                </div>
+                <span classNames="text-secondary text-s">Mở khóa độc giả bị BLOCKED, hủy phiếu mượn lập sai sót và phục hồi sách LOST tìm lại</span>
+            </div>
+            <button id="refreshBtn" text="Làm mới dữ liệu" icon="REFRESH" themeNames="tertiary"/>
+        </div>
+
+        <!-- TabSheet Navigation -->
+        <tabSheet id="exceptionTabSheet" width="100%">
+            <!-- Tab 1: Mở khóa thẻ độc giả -->
+            <tab id="unlockMemberTab" label="Mở Khóa Độc Giả Bị Chặn">
+                <div id="unlockTabContent" classNames="w-full pt-s"/>
+            </tab>
+            <!-- Tab 2: Hủy phiếu mượn sai sót -->
+            <tab id="cancelLoanTab" label="Hủy Phiếu Mượn Lập Sai">
+                <div id="cancelLoanTabContent" classNames="w-full pt-s"/>
+            </tab>
+            <!-- Tab 3: Phục hồi sách báo mất -->
+            <tab id="restoreLostBookTab" label="Phục Hồi Sách Mất Tìm Lại Được">
+                <div id="restoreBookTabContent" classNames="w-full pt-s"/>
+            </tab>
+        </tabSheet>
+    </layout>
+</view>

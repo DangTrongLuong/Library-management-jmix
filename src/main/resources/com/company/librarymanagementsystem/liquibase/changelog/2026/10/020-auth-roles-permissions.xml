@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- ChangeSet 1: Create ROLES table with audit fields -->
+    <changeSet id="20261020-01-create-roles" author="Library-Management-System">
+        <createTable tableName="ROLES">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CODE" type="VARCHAR(30)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UC_ROLES_CODE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="IDX_ROLES_ON_CODE" tableName="ROLES" unique="true">
+            <column name="CODE"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 2: Create PERMISSIONS table with NAME and audit fields -->
+    <changeSet id="20261020-02-create-permissions" author="Library-Management-System">
+        <createTable tableName="PERMISSIONS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CODE" type="VARCHAR(60)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UC_PERMISSIONS_CODE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(150)"/>
+            <column name="MODULE" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="IDX_PERMISSIONS_ON_CODE" tableName="PERMISSIONS" unique="true">
+            <column name="CODE"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 3: Create ROLE_PERMISSIONS join table -->
+    <changeSet id="20261020-03-create-role-permissions" author="Library-Management-System">
+        <createTable tableName="ROLE_PERMISSIONS">
+            <column name="ROLE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="FK_ROLPER_ON_ROLE"
+                             references="ROLES(ID)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="PERMISSION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="FK_ROLPER_ON_PERMISSION"
+                             references="PERMISSIONS(ID)"
+                             deleteCascade="true"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="ROLE_PERMISSIONS" columnNames="ROLE_ID, PERMISSION_ID" constraintName="PK_ROLE_PERMISSIONS"/>
+    </changeSet>
+
+    <!-- ChangeSet 4: Alter USER_ table with custom fields, unique indexes and foreign keys -->
+    <changeSet id="20261020-04-alter-user" author="Library-Management-System">
+        <validCheckSum>ANY</validCheckSum>
+        <addColumn tableName="USER_">
+            <column name="FULL_NAME" type="VARCHAR(150)"/>
+            <column name="PHONE" type="VARCHAR(20)"/>
+            <column name="ROLE_ID" type="BIGINT">
+                <constraints foreignKeyName="FK_USER__ON_ROLE" references="ROLES(ID)"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(20)" defaultValue="ACTIVE"/>
+            <column name="FAILED_LOGIN_COUNT" type="INT" defaultValueNumeric="0"/>
+            <column name="LOCKED_UNTIL" type="TIMESTAMP"/>
+            <column name="MUST_CHANGE_PASSWORD" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="LAST_LOGIN_AT" type="TIMESTAMP"/>
+            <column name="CREATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="UPDATED_AT" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="DELETED_AT" type="TIMESTAMP"/>
+        </addColumn>
+
+        <modifyDataType columnName="USERNAME" newDataType="VARCHAR(50)" tableName="USER_"/>
+        <addNotNullConstraint columnDataType="VARCHAR(50)" columnName="USERNAME" tableName="USER_" validate="true"/>
+        <modifyDataType columnName="EMAIL" newDataType="VARCHAR(150)" tableName="USER_"/>
+
+        <createIndex indexName="IDX_USER__ON_EMAIL" tableName="USER_" unique="true">
+            <column name="EMAIL"/>
+        </createIndex>
+        <createIndex indexName="IDX_USER__ON_PHONE" tableName="USER_" unique="true">
+            <column name="PHONE"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 5: Create USER_PERMISSIONS join table -->
+    <changeSet id="20261020-05-create-user-permissions" author="Library-Management-System">
+        <createTable tableName="USER_PERMISSIONS">
+            <column name="USER_ID" type="${uuid.type}">
+                <constraints nullable="false"
+                             foreignKeyName="FK_USEPER_ON_USER"
+                             references="USER_(ID)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="PERMISSION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="FK_USEPER_ON_PERMISSION"
+                             references="PERMISSIONS(ID)"
+                             deleteCascade="true"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="USER_PERMISSIONS" columnNames="USER_ID, PERMISSION_ID" constraintName="PK_USER_PERMISSIONS"/>
+    </changeSet>
+
+    <!-- ChangeSet 6: Seed default Roles -->
+    <changeSet id="20261020-06-seed-roles" author="Library-Management-System">
+        <insert tableName="ROLES">
+            <column name="CODE" value="ADMIN"/>
+            <column name="NAME" value="Quản trị hệ thống"/>
+            <column name="DESCRIPTION" value="Toàn quyền quản trị hệ thống, tài khoản và kỹ thuật"/>
+        </insert>
+        <insert tableName="ROLES">
+            <column name="CODE" value="MANAGER"/>
+            <column name="NAME" value="Quản lý thư viện"/>
+            <column name="DESCRIPTION" value="Quản lý chính sách, báo cáo, duyệt miễn giảm phạt và thanh lý sách"/>
+        </insert>
+        <insert tableName="ROLES">
+            <column name="CODE" value="LIBRARIAN"/>
+            <column name="NAME" value="Thủ thư"/>
+            <column name="DESCRIPTION" value="Vận hành mượn, trả sách, thu tiền phạt và xử lý bạn đọc tại quầy"/>
+        </insert>
+        <insert tableName="ROLES">
+            <column name="CODE" value="CATALOGER"/>
+            <column name="NAME" value="Nhân viên biên mục"/>
+            <column name="DESCRIPTION" value="Nhập dữ liệu sách, in mã vạch, phân loại kệ và kiểm kê kho"/>
+        </insert>
+        <insert tableName="ROLES">
+            <column name="CODE" value="READER"/>
+            <column name="NAME" value="Độc giả"/>
+            <column name="DESCRIPTION" value="Bạn đọc tra cứu, mượn sách, gia hạn và đặt trước trực tuyến"/>
+        </insert>
+    </changeSet>
+
+    <!-- ChangeSet 7: Seed all 43 System Permissions -->
+    <changeSet id="20261020-07-seed-permissions" author="Library-Management-System">
+        <sql splitStatements="true">
+            INSERT INTO PERMISSIONS (CODE, NAME, MODULE, DESCRIPTION) VALUES
+            ('BOOK_VIEW', 'Xem danh mục sách', 'BOOK', 'Xem danh sách và chi tiết thông tin đầu sách'),
+            ('BOOK_CREATE', 'Thêm mới đầu sách', 'BOOK', 'Thêm mới đầu sách vào thư viện'),
+            ('BOOK_EDIT', 'Cập nhật đầu sách', 'BOOK', 'Cập nhật, chỉnh sửa thông tin đầu sách'),
+            ('BOOK_DELETE', 'Xóa / ẩn đầu sách', 'BOOK', 'Xóa hoặc ẩn đầu sách khỏi danh mục'),
+            ('BOOK_IMPORT', 'Nhập sách từ Excel/CSV', 'BOOK', 'Nhập danh mục sách hàng loạt từ file Excel/CSV'),
+            ('BOOK_EXPORT', 'Xuất danh mục sách', 'BOOK', 'Xuất danh mục sách ra định dạng Excel/PDF'),
+            ('AUTHOR_MANAGE', 'Quản lý tác giả', 'BOOK', 'Quản lý danh sách tác giả và dịch giả'),
+            ('CATEGORY_MANAGE', 'Quản lý thể loại', 'BOOK', 'Quản lý cây thể loại và danh mục phân loại sách'),
+            ('PUBLISHER_MANAGE', 'Quản lý nhà xuất bản', 'BOOK', 'Quản lý thông tin nhà xuất bản'),
+            ('LOCATION_MANAGE', 'Quản lý vị trí kệ sách', 'BOOK', 'Quản lý vị trí giá kệ sách trong thư viện'),
+            ('COPY_VIEW', 'Xem bản sao sách', 'BOOK', 'Tra cứu và xem danh sách bản sao vật lý'),
+            ('COPY_CREATE', 'Thêm bản sao &amp; mã vạch', 'BOOK', 'Thêm bản sao vật lý và sinh mã vạch (Barcode/RFID)'),
+            ('COPY_EDIT', 'Cập nhật tình trạng bản sao', 'BOOK', 'Cập nhật tình trạng bản sao (bảo trì, mất, hỏng)'),
+            ('COPY_WITHDRAW', 'Thanh lý bản sao sách', 'BOOK', 'Đề xuất và phê duyệt thanh lý bản sao sách'),
+
+            ('MEMBER_VIEW', 'Xem danh sách độc giả', 'MEMBER', 'Xem danh sách và hồ sơ bạn đọc'),
+            ('MEMBER_CREATE', 'Thêm độc giả &amp; cấp thẻ', 'MEMBER', 'Đăng ký độc giả mới và cấp thẻ thư viện'),
+            ('MEMBER_EDIT', 'Cập nhật hồ sơ độc giả', 'MEMBER', 'Cập nhật thông tin độc giả và liên hệ'),
+            ('MEMBER_LOCK', 'Khóa / Mở khóa thẻ', 'MEMBER', 'Khóa hoặc mở khóa thẻ thư viện độc giả'),
+            ('MEMBER_CARD_RENEW', 'Gia hạn / Cấp lại thẻ', 'MEMBER', 'Gia hạn thời hạn thẻ hoặc cấp lại thẻ bị mất'),
+            ('MEMBER_TYPE_MANAGE', 'Quản lý loại độc giả', 'MEMBER', 'Quản lý các loại độc giả và chính sách hạn mức mượn'),
+
+            ('LOAN_VIEW', 'Xem phiếu mượn trả', 'LOAN', 'Xem danh sách và chi tiết phiếu mượn trả'),
+            ('LOAN_CREATE', 'Lập phiếu mượn sách', 'LOAN', 'Lập phiếu mượn sách cho độc giả tại quầy'),
+            ('LOAN_RETURN', 'Tiếp nhận trả sách', 'LOAN', 'Tiếp nhận trả sách và kiểm tra tình trạng sách trả'),
+            ('LOAN_RENEW', 'Gia hạn thời hạn mượn', 'LOAN', 'Gia hạn thời hạn mượn cho cuốn sách'),
+            ('RESERVATION_VIEW', 'Xem danh sách đặt trước', 'LOAN', 'Xem danh sách đặt trước và hàng đợi mượn sách'),
+            ('RESERVATION_MANAGE', 'Xử lý đặt trước sách', 'LOAN', 'Xử lý đặt trước và thông báo giữ sách tại quầy'),
+            ('RESERVATION_CANCEL', 'Hủy yêu cầu đặt trước', 'LOAN', 'Hủy yêu cầu đặt trước sách'),
+
+            ('FINE_VIEW', 'Xem danh sách tiền phạt', 'FINE', 'Xem danh sách các khoản phạt và công nợ'),
+            ('FINE_CREATE', 'Tạo khoản phạt', 'FINE', 'Tạo khoản phạt quá hạn, làm hỏng hoặc mất sách'),
+            ('FINE_PAYMENT', 'Thu tiền phạt &amp; in biên lai', 'FINE', 'Thu tiền phạt và xuất biên lai thanh toán'),
+            ('FINE_WAIVE', 'Miễn giảm khoản phạt', 'FINE', 'Miễn giảm hoặc hủy bỏ khoản phạt (cần phê duyệt)'),
+
+            ('REPORT_VIEW', 'Xem Dashboard thống kê', 'REPORT', 'Xem Dashboard thống kê và các chỉ số vận hành'),
+            ('REPORT_OVERDUE', 'Báo cáo sách quá hạn', 'REPORT', 'Xem và xuất danh sách sách quá hạn chưa trả'),
+            ('REPORT_REVENUE', 'Báo cáo doanh thu tiền phạt', 'REPORT', 'Báo cáo doanh thu thu tiền phạt và phí dịch vụ'),
+            ('REPORT_INVENTORY', 'Báo cáo kiểm kê kho', 'REPORT', 'Báo cáo thống kê kiểm kê kho và lưu thông sách'),
+            ('REPORT_EXPORT', 'Xuất file báo cáo', 'REPORT', 'Xuất các loại báo cáo thống kê ra Excel/PDF'),
+
+            ('USER_VIEW', 'Xem danh sách người dùng', 'SYSTEM', 'Xem danh sách tài khoản người dùng hệ thống'),
+            ('USER_MANAGE', 'Quản lý người dùng', 'SYSTEM', 'Thêm, sửa, khóa và đặt lại mật khẩu tài khoản'),
+            ('ROLE_MANAGE', 'Quản lý vai trò &amp; quyền', 'SYSTEM', 'Quản lý vai trò và phân quyền (Roles &amp; Permissions)'),
+            ('SETTING_MANAGE', 'Cấu hình tham số hệ thống', 'SYSTEM', 'Cấu hình tham số và chính sách thư viện'),
+            ('HOLIDAY_MANAGE', 'Quản lý lịch nghỉ lễ', 'SYSTEM', 'Quản lý lịch nghỉ lễ và ngày đóng cửa thư viện'),
+            ('NOTIFICATION_MANAGE', 'Quản lý thông báo hệ thống', 'SYSTEM', 'Quản lý và phát thông báo hệ thống'),
+            ('AUDIT_LOG_VIEW', 'Xem nhật ký thao tác', 'SYSTEM', 'Tra cứu nhật ký thao tác và audit log hệ thống');
+        </sql>
+    </changeSet>
+
+    <!-- ChangeSet 8: Assign permissions to roles and assign admin user -->
+    <changeSet id="20261020-08-assign-role-permissions" author="Library-Management-System">
+        <validCheckSum>ANY</validCheckSum>
+        <sql splitStatements="true">
+            INSERT INTO ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID)
+            SELECT r.ID, p.ID FROM ROLES r, PERMISSIONS p WHERE r.CODE = 'ADMIN';
+
+            INSERT INTO ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID)
+            SELECT r.ID, p.ID FROM ROLES r, PERMISSIONS p WHERE r.CODE = 'MANAGER'
+            AND p.CODE IN (
+                'BOOK_VIEW', 'BOOK_EXPORT', 'COPY_VIEW', 'COPY_WITHDRAW',
+                'MEMBER_VIEW', 'MEMBER_LOCK', 'MEMBER_TYPE_MANAGE',
+                'LOAN_VIEW', 'RESERVATION_VIEW',
+                'FINE_VIEW', 'FINE_WAIVE',
+                'REPORT_VIEW', 'REPORT_OVERDUE', 'REPORT_REVENUE', 'REPORT_INVENTORY', 'REPORT_EXPORT',
+                'USER_VIEW', 'USER_MANAGE', 'SETTING_MANAGE', 'HOLIDAY_MANAGE', 'AUDIT_LOG_VIEW'
+            );
+
+            INSERT INTO ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID)
+            SELECT r.ID, p.ID FROM ROLES r, PERMISSIONS p WHERE r.CODE = 'LIBRARIAN'
+            AND p.CODE IN (
+                'BOOK_VIEW', 'COPY_VIEW',
+                'MEMBER_VIEW', 'MEMBER_CREATE', 'MEMBER_EDIT', 'MEMBER_LOCK', 'MEMBER_CARD_RENEW',
+                'LOAN_VIEW', 'LOAN_CREATE', 'LOAN_RETURN', 'LOAN_RENEW', 'RESERVATION_VIEW', 'RESERVATION_MANAGE', 'RESERVATION_CANCEL',
+                'FINE_VIEW', 'FINE_CREATE', 'FINE_PAYMENT', 'FINE_WAIVE',
+                'REPORT_VIEW', 'REPORT_OVERDUE',
+                'NOTIFICATION_MANAGE'
+            );
+
+            INSERT INTO ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID)
+            SELECT r.ID, p.ID FROM ROLES r, PERMISSIONS p WHERE r.CODE = 'CATALOGER'
+            AND p.CODE IN (
+                'BOOK_VIEW', 'BOOK_CREATE', 'BOOK_EDIT', 'BOOK_DELETE', 'BOOK_IMPORT', 'BOOK_EXPORT',
+                'AUTHOR_MANAGE', 'CATEGORY_MANAGE', 'PUBLISHER_MANAGE', 'LOCATION_MANAGE',
+                'COPY_VIEW', 'COPY_CREATE', 'COPY_EDIT', 'COPY_WITHDRAW',
+                'REPORT_INVENTORY'
+            );
+
+            INSERT INTO ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID)
+            SELECT r.ID, p.ID FROM ROLES r, PERMISSIONS p WHERE r.CODE = 'READER'
+            AND p.CODE IN (
+                'BOOK_VIEW',
+                'LOAN_VIEW', 'LOAN_RENEW',
+                'RESERVATION_VIEW', 'RESERVATION_MANAGE', 'RESERVATION_CANCEL',
+                'FINE_VIEW'
+            );
+
+            UPDATE USER_ SET ROLE_ID = (SELECT ID FROM ROLES WHERE CODE = 'ADMIN') WHERE USERNAME = 'admin';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
